@@ -1,5 +1,6 @@
 package pianoman.futurecraft;
 
+import pianoman.futurecraft.block.BlockAlloyFurnace;
 import pianoman.futurecraft.block.BlockNavigator;
 import pianoman.futurecraft.block.BlockSimpleOre;
 import pianoman.futurecraft.block.BlockTeleporter;
@@ -46,6 +47,10 @@ public class BlockList
 	public static SimpleBlock desert_dirt;
 	public static SimpleBlock desert_cobblestone;
 	public static SimpleBlock desert_stonebrick;
+	
+	//machines
+	public static BlockAlloyFurnace alloy_furnace;
+	public static BlockAlloyFurnace alloy_furnace_lit;
 	
 	//misc
 	public static BlockNavigator navigator;

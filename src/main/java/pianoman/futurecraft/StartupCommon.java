@@ -1,5 +1,6 @@
 package pianoman.futurecraft;
 
+import pianoman.futurecraft.block.BlockAlloyFurnace;
 import pianoman.futurecraft.block.BlockNavigator;
 import pianoman.futurecraft.block.BlockSimpleOre;
 import pianoman.futurecraft.block.BlockTeleporter;
@@ -198,6 +199,13 @@ public class StartupCommon {
 						
 		BlockList.desert_stonebrick = new SimpleBlock(Material.rock, "desert_stonebrick");
 		GameRegistry.registerBlock(BlockList.desert_stonebrick, "desert_stonebrick");
+		
+		//machines
+		BlockList.alloy_furnace = new BlockAlloyFurnace(false, "alloy_furnace");
+		GameRegistry.registerBlock(BlockList.alloy_furnace, "alloy_furnace");
+		
+		BlockList.alloy_furnace_lit = new BlockAlloyFurnace(true, "alloy_furnace_lit");
+		GameRegistry.registerBlock(BlockList.alloy_furnace_lit, "alloy_furnace_lit");
 		
 		//misc
 		BlockList.navigator = new BlockNavigator("navigator");

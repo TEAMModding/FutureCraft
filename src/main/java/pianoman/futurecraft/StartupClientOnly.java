@@ -68,6 +68,10 @@ public class StartupClientOnly {
 		registerItemRendering("steel_pickaxe");
 		registerItemRendering("steel_hoe");
 		
+		//machines
+		registerItemRendering("alloy_furnace");
+		registerItemRendering("alloy_furnace_lit");
+		
 		//misc
 		registerItemRendering("stone_channel");
 		registerItemRendering("stone_cast");

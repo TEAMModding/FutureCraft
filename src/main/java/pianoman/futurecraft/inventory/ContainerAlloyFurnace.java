@@ -9,6 +9,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.inventory.SlotFurnaceFuel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -32,7 +33,7 @@ public class ContainerAlloyFurnace extends Container
         this.addSlotToContainer(new Slot(p_i1812_2_, 0, 35, 17));
         this.addSlotToContainer(new Slot(p_i1812_2_, 3, 53, 17));
         this.addSlotToContainer(new Slot(p_i1812_2_, 1, 44, 53));
-        this.addSlotToContainer(new SlotFurnace(p_i1812_1_.player, p_i1812_2_, 2, 116, 35));
+        this.addSlotToContainer(new SlotFurnaceFuel(p_i1812_1_.player, p_i1812_2_, 2, 116, 35));
         int i;
 
         for (i = 0; i < 3; ++i)
