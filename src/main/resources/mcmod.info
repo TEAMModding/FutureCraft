@@ -1,0 +1,16 @@
+[
+{
+  "modid": "futurecraft",
+  "name": "FutureCraft",
+  "description": "A Technology and space travel mod for minecraft.",
+  "version": "0.2",
+  "mcversion": "1.8",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["pianoman373"],
+  "credits": "Created by pianoman373.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

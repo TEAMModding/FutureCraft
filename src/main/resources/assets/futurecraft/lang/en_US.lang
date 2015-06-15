@@ -1,0 +1,66 @@
+
+tile.malachite.name=Malachite
+tile.cassiterite.name=Cassiterite
+tile.bauxite.name=Bauxite
+
+tile.selena_malachite.name=Malachite (Selena)
+tile.selena_cassiterite.name=Cassiterite (Selena)
+tile.selena_bauxite.name=Bauxite (Selena)
+
+tile.desert_malachite.name=Malachite (Desert)
+tile.desert_cassiterite.name=Cassiterite (Desert)
+tile.desert_bauxite.name=Bauxite (Desert)
+
+tile.selena_stone.name=Stone (Selena)
+tile.selena_dirt.name=Dirt (Selena)
+tile.selena_cobblestone.name=Cobblestone (Selena)
+tile.selena_stonebrick.name=Stone Bricks (Selena)
+
+tile.desert_stone.name=Stone (Desert)
+tile.desert_dirt.name=Dirt (Desert)
+tile.desert_cobblestone.name=Cobblestone (Desert)
+tile.desert_stonebrick.name=Stone Bricks (Desert)
+
+tile.alloy_furnace.name=Alloy Furnace
+tile.lit_alloy_furnace.name=Lit Alloy Furnace
+tile.insulated_copper_wire.name=Insulated Copper Wire
+tile.battery.name=Battery
+tile.creative_battery.name=Creative Battery
+tile.iron_ore.name=Iron Ore
+tile.steel_plating.name=Steel Plating
+tile.steel_vent.name=Steel Vent
+tile.navigator.name=Navigator
+tile.generator.name=Generator
+tile.generator_lit.name=Lit Generator
+
+
+item.copper_ingot.name=Copper Ingot
+item.tin_ingot.name=Tin Ingot
+item.bronze_ingot.name=Bronze Ingot
+item.steel_ingot.name=Steel Ingot
+item.stone_cast.name=Stone Cast
+item.stone_channel.name=Stone Channel
+item.blaster.name=Blaster
+item.wrench.name=Wrench
+item.space_suit_helmet.name=Spacesuit Helmet
+item.space_suit_chestplate.name=Spacesuit Chestpate
+item.space_suit_leggings.name=Spacesuit Leggings
+item.space_suit_boots.name=Spacesuit Boots
+item.bronze_sword.name=Bronze Sword
+item.bronze_shovel.name=Bronze Shovel
+item.bronze_axe.name=Bronze Axe
+item.bronze_pickaxe.name=Bronze Pickaxe
+item.bronze_hoe.name=Bronze Hoe
+item.steel_sword.name=Steel Sword
+item.steel_shovel.name=Steel Shovel
+item.steel_axe.name=Steel Axe
+item.steel_pickaxe.name=Steel Pickaxe
+item.steel_hoe.name=Steel Hoe
+item.multimeter.name=Multimeter
+
+
+container.alloy_furnace=Alloy Furnace
+container.battery=Battery
+container.generator=Generator
+
+itemGroup.futurecraft=Futurecraft
