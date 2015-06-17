@@ -1,61 +1,56 @@
 package com.team.futurecraft.inventory;
 
-import com.team.futurecraft.tileentity.TileEntityAlloyFurnace;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnaceFuel;
+import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Currently unused. Need to update the alloy furnace.
- * 
- * @author Joseph
- *
- */
 public class ContainerAlloyFurnace extends Container
 {
-    private TileEntityAlloyFurnace tileFurnace;
-    private int lastCookTime;
-    private int lastBurnTime;
-    private int lastItemBurnTime;
+    private final IInventory tileFurnace;
+    private int cookTime;
+    private int furnaceBurnTime;
+    private int currentItemBurnTime;
 
-    public ContainerAlloyFurnace(InventoryPlayer p_i1812_1_, TileEntityAlloyFurnace p_i1812_2_)
+    public ContainerAlloyFurnace(InventoryPlayer p_i45794_1_, IInventory furnaceInventory)
     {
-        this.tileFurnace = p_i1812_2_;
-        this.addSlotToContainer(new Slot(p_i1812_2_, 0, 35, 17));
-        this.addSlotToContainer(new Slot(p_i1812_2_, 3, 53, 17));
-        this.addSlotToContainer(new Slot(p_i1812_2_, 1, 44, 53));
-        //this.addSlotToContainer(new SlotFurnaceFuel(p_i1812_1_.player, p_i1812_2_, 2, 116, 35));
+        this.tileFurnace = furnaceInventory;
+        this.addSlotToContainer(new Slot(furnaceInventory, 0, 35, 17));
+        this.addSlotToContainer(new Slot(furnaceInventory, 1, 53, 17));
+        this.addSlotToContainer(new SlotFurnaceFuel(furnaceInventory, 2, 44, 53));
+        this.addSlotToContainer(new SlotFurnaceOutput(p_i45794_1_.player, furnaceInventory, 3, 116, 35));
         int i;
 
         for (i = 0; i < 3; ++i)
         {
             for (int j = 0; j < 9; ++j)
             {
-                this.addSlotToContainer(new Slot(p_i1812_1_, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                this.addSlotToContainer(new Slot(p_i45794_1_, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
         for (i = 0; i < 9; ++i)
         {
-            this.addSlotToContainer(new Slot(p_i1812_1_, i, 8 + i * 18, 142));
+            this.addSlotToContainer(new Slot(p_i45794_1_, i, 8 + i * 18, 142));
         }
     }
 
-    public void addCraftingToCrafters(ICrafting p_75132_1_)
+    /**
+     * Add the given Listener to the list of Listeners. Method name is for legacy.
+     */
+    public void addCraftingToCrafters(ICrafting listener)
     {
-        super.addCraftingToCrafters(p_75132_1_);
-        p_75132_1_.sendProgressBarUpdate(this, 0, this.tileFurnace.furnaceCookTime);
-        p_75132_1_.sendProgressBarUpdate(this, 1, this.tileFurnace.furnaceBurnTime);
-        p_75132_1_.sendProgressBarUpdate(this, 2, this.tileFurnace.currentItemBurnTime);
+        super.addCraftingToCrafters(listener);
+        listener.func_175173_a(this, this.tileFurnace);
     }
 
     /**
@@ -69,65 +64,52 @@ public class ContainerAlloyFurnace extends Container
         {
             ICrafting icrafting = (ICrafting)this.crafters.get(i);
 
-            if (this.lastCookTime != this.tileFurnace.furnaceCookTime)
+            if (this.cookTime != this.tileFurnace.getField(2))
             {
-                icrafting.sendProgressBarUpdate(this, 0, this.tileFurnace.furnaceCookTime);
+                icrafting.sendProgressBarUpdate(this, 2, this.tileFurnace.getField(2));
             }
 
-            if (this.lastBurnTime != this.tileFurnace.furnaceBurnTime)
+            if (this.furnaceBurnTime != this.tileFurnace.getField(0))
             {
-                icrafting.sendProgressBarUpdate(this, 1, this.tileFurnace.furnaceBurnTime);
+                icrafting.sendProgressBarUpdate(this, 0, this.tileFurnace.getField(0));
             }
 
-            if (this.lastItemBurnTime != this.tileFurnace.currentItemBurnTime)
+            if (this.currentItemBurnTime != this.tileFurnace.getField(1))
             {
-                icrafting.sendProgressBarUpdate(this, 2, this.tileFurnace.currentItemBurnTime);
+                icrafting.sendProgressBarUpdate(this, 1, this.tileFurnace.getField(1));
             }
         }
 
-        this.lastCookTime = this.tileFurnace.furnaceCookTime;
-        this.lastBurnTime = this.tileFurnace.furnaceBurnTime;
-        this.lastItemBurnTime = this.tileFurnace.currentItemBurnTime;
+        this.cookTime = this.tileFurnace.getField(2);
+        this.furnaceBurnTime = this.tileFurnace.getField(0);
+        this.currentItemBurnTime = this.tileFurnace.getField(1);
     }
 
     @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int p_75137_1_, int p_75137_2_)
+    public void updateProgressBar(int id, int data)
     {
-        if (p_75137_1_ == 0)
-        {
-            this.tileFurnace.furnaceCookTime = p_75137_2_;
-        }
-
-        if (p_75137_1_ == 1)
-        {
-            this.tileFurnace.furnaceBurnTime = p_75137_2_;
-        }
-
-        if (p_75137_1_ == 2)
-        {
-            this.tileFurnace.currentItemBurnTime = p_75137_2_;
-        }
+        this.tileFurnace.setField(id, data);
     }
 
-    public boolean canInteractWith(EntityPlayer p_75145_1_)
+    public boolean canInteractWith(EntityPlayer playerIn)
     {
-        return this.tileFurnace.isUseableByPlayer(p_75145_1_);
+        return this.tileFurnace.isUseableByPlayer(playerIn);
     }
 
     /**
-     * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
+     * Take a stack from the specified inventory slot.
      */
-    public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_)
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(p_82846_2_);
+        Slot slot = (Slot)this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (p_82846_2_ == 2)
+            if (index == 2)
             {
                 if (!this.mergeItemStack(itemstack1, 3, 39, true))
                 {
@@ -136,7 +118,7 @@ public class ContainerAlloyFurnace extends Container
 
                 slot.onSlotChange(itemstack1, itemstack);
             }
-            else if (p_82846_2_ != 1 && p_82846_2_ != 0)
+            else if (index != 1 && index != 0)
             {
                 if (FurnaceRecipes.instance().getSmeltingResult(itemstack1) != null)
                 {
@@ -152,14 +134,14 @@ public class ContainerAlloyFurnace extends Container
                         return null;
                     }
                 }
-                else if (p_82846_2_ >= 3 && p_82846_2_ < 30)
+                else if (index >= 3 && index < 30)
                 {
                     if (!this.mergeItemStack(itemstack1, 30, 39, false))
                     {
                         return null;
                     }
                 }
-                else if (p_82846_2_ >= 30 && p_82846_2_ < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
+                else if (index >= 30 && index < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
                 {
                     return null;
                 }
@@ -183,7 +165,7 @@ public class ContainerAlloyFurnace extends Container
                 return null;
             }
 
-            slot.onPickupFromSlot(p_82846_1_, itemstack1);
+            slot.onPickupFromSlot(playerIn, itemstack1);
         }
 
         return itemstack;

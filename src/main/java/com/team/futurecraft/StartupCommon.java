@@ -14,6 +14,7 @@ import com.team.futurecraft.item.SimpleAxe;
 import com.team.futurecraft.item.SimpleItem;
 import com.team.futurecraft.item.SimplePickaxe;
 import com.team.futurecraft.recipe.AlloyRegistry;
+import com.team.futurecraft.tileentity.TileEntityAlloyFurnace;
 import com.team.futurecraft.world.OreSpawn;
 import com.team.futurecraft.world.WorldProviderMars;
 import com.team.futurecraft.world.WorldProviderMoon;
@@ -55,6 +56,8 @@ public class StartupCommon {
 		CoreEventHandler events = new CoreEventHandler();
 		MinecraftForge.EVENT_BUS.register(events);
 		FMLCommonHandler.instance().bus().register(events);
+		
+		GameRegistry.registerTileEntity(TileEntityAlloyFurnace.class, "futurecraft:alloy_furnace");
 		
 		GameRegistry.registerWorldGenerator(new OreSpawn(), 1);
 	}

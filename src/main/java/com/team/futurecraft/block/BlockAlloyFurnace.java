@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.team.futurecraft.BlockList;
 import com.team.futurecraft.FutureCraft;
+import com.team.futurecraft.tileentity.TileEntityAlloyFurnace;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -16,7 +17,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
@@ -35,6 +36,7 @@ import net.minecraft.world.World;
  * @author Joseph
  *
  */
+
 public class BlockAlloyFurnace extends BlockContainer
 {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -132,13 +134,13 @@ public class BlockAlloyFurnace extends BlockContainer
 
         if (active)
         {
-            worldIn.setBlockState(pos, Blocks.lit_furnace.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-            worldIn.setBlockState(pos, Blocks.lit_furnace.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockList.alloy_furnace_lit.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockList.alloy_furnace_lit.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
         }
         else
         {
-            worldIn.setBlockState(pos, Blocks.furnace.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-            worldIn.setBlockState(pos, Blocks.furnace.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockList.alloy_furnace.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockList.alloy_furnace.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
         }
 
         keepInventory = false;
@@ -246,6 +248,12 @@ public class BlockAlloyFurnace extends BlockContainer
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return null;
+		return new TileEntityAlloyFurnace();
 	}
+	
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) 
+    {
+		player.openGui("futurecraft", 100, world, pos.getX(), pos.getY(), pos.getZ());
+        return true;
+    }
 }
