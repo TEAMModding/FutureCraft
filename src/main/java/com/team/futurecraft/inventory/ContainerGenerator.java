@@ -11,12 +11,6 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-/**
- * Currently unused. Need to update the generator.
- * 
- * @author Joseph
- *
- */
 public class ContainerGenerator extends Container
 {
 	private TileEntityGenerator tileEntity;

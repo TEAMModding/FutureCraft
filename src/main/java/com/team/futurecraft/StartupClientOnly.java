@@ -47,10 +47,15 @@ public class StartupClientOnly {
 		//machines
 		registerItemRendering("alloy_furnace");
 		registerItemRendering("alloy_furnace_lit");
+		registerItemRendering("generator");
+		registerItemRendering("generator_lit");
+		registerItemRendering("battery");
+		registerItemRendering("creative_battery");
 		
 		//misc
 		registerItemRendering("navigator");
 		
+		//<=======Items=======>
 		
 		//ingots
 		registerItemRendering("copper_ingot");

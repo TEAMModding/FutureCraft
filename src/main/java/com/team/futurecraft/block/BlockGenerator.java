@@ -3,92 +3,59 @@ package com.team.futurecraft.block;
 import com.team.futurecraft.BlockList;
 import com.team.futurecraft.FutureCraft;
 import com.team.futurecraft.tileentity.TileEntityGenerator;
-import com.team.futurecraft.tileentity.TileEntityMachine;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-/**
- * The generator class, currently updating.
- * Do not mess with this code until i've finished updating it.
- * 
- * @author Joseph
- *
- */
 public class BlockGenerator extends Machine
 {
-	private boolean isLit;
-	private IIcon front;
-	
-	public BlockGenerator(boolean lit) 
+	public BlockGenerator(boolean lit, String name) 
 	{
-		super();
-		this.isLit = lit;
+		super(false, name);
 		if (!lit)
 			this.setCreativeTab(FutureCraft.tabFutureCraft);
 	}
 	
-	public EnumMachineSetting getSide(int side, int meta)
+	public EnumMachineSetting getSide(EnumFacing side)
 	{
 		return EnumMachineSetting.energyOutput;
 	}
 	
-	public IIcon getFrontIcon(int side, int meta)
-	{
-		return front;
-	}
-	
-	public void registerBlockIcons(IIconRegister iconRegister)
-	{
-		super.registerBlockIcons(iconRegister);
-		if (isLit)
-			front = iconRegister.registerIcon("coal_generator_lit");
-		else
-			front = iconRegister.registerIcon("coal_generator");
-	}
-	
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) 
     {
-        if (world.isRemote)
-        {
-        	return true;
-        }
-        else
-        {
-        	player.openGui("futurecraft", 102, world, x, y, z);
-            return true;
-        }
+		player.openGui("futurecraft", 102, world, pos.getX(), pos.getY(), pos.getZ());
+        return true;
     }
 	
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) 
+	public TileEntity createNewTileEntity(World world, int meta) 
 	{
-		return new TileEntityGenerator(this);
+		return new TileEntityGenerator(this.getStateFromMeta(meta));
 	}
 	
-	public static void updateFurnaceBlockState(boolean p_149931_0_, World p_149931_1_, int p_149931_2_, int p_149931_3_, int p_149931_4_)
+	public static void setState(boolean active, World worldIn, BlockPos pos)
     {
-        int l = p_149931_1_.getBlockMetadata(p_149931_2_, p_149931_3_, p_149931_4_);
-        TileEntity tileentity = p_149931_1_.getTileEntity(p_149931_2_, p_149931_3_, p_149931_4_);
-        
-        if (p_149931_0_)
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+
+        if (active)
         {
-        	p_149931_1_.setBlock(p_149931_2_, p_149931_3_, p_149931_4_, GameRegistry.findBlock("futurecraft", "generator_lit"));
+            worldIn.setBlockState(pos, BlockList.generator_lit.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockList.generator_lit.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
         }
         else
         {
-            p_149931_1_.setBlock(p_149931_2_, p_149931_3_, p_149931_4_, GameRegistry.findBlock("futurecraft", "generator"));
+            worldIn.setBlockState(pos, BlockList.generator.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockList.generator.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
         }
-
-        p_149931_1_.setBlockMetadataWithNotify(p_149931_2_, p_149931_3_, p_149931_4_, l, 2);
 
         if (tileentity != null)
         {
             tileentity.validate();
-            p_149931_1_.setTileEntity(p_149931_2_, p_149931_3_, p_149931_4_, tileentity);
+            worldIn.setTileEntity(pos, tileentity);
         }
     }
 }

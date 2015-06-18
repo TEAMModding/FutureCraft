@@ -2,11 +2,11 @@ package com.team.futurecraft.tileentity;
 
 import com.team.futurecraft.block.BlockGenerator;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -17,18 +17,12 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 
-/**
- * Currently unused. Need to update the generator.
- * 
- * @author Joseph
- *
- */
 public class TileEntityGenerator extends TileEntityMachine
 {
 	public int burnTime;
 	public int currentItemBurnTime;
 	
-	public TileEntityGenerator(BlockGenerator block)
+	public TileEntityGenerator(IBlockState block)
 	{
 		super(10, 500, block, false, 1);
 	}
@@ -37,7 +31,7 @@ public class TileEntityGenerator extends TileEntityMachine
     {
 		super.readFromNBT(tag);
 		this.burnTime = tag.getInteger("BurnTime");
-		this.currentItemBurnTime = getItemBurnTime(this.slots[0]);
+		this.currentItemBurnTime = getItemBurnTime(this.getStackInSlot(0));
     }
 	
 	public void writeToNBT(NBTTagCompound tag)
@@ -46,26 +40,26 @@ public class TileEntityGenerator extends TileEntityMachine
 		tag.setInteger("BurnTime", burnTime);
     }
 	
-	public void updateEntity()
+	public void update()
 	{	
 		boolean flag = false;
-		super.updateEntity();
+		super.update();
 		
 		if (true)
         {
 			if (this.burnTime == 0)
 			{	
-				if (this.slots[0] != null)
+				if (this.getStackInSlot(0) != null)
 				{
-					if (getItemBurnTime(this.slots[0]) != 0)
+					if (getItemBurnTime(this.getStackInSlot(0)) != 0)
 					{
 						flag = true;
-						this.burnTime = getItemBurnTime(this.slots[0]);
-						--this.slots[0].stackSize;
+						this.burnTime = getItemBurnTime(this.getStackInSlot(0));
+						--this.getStackInSlot(0).stackSize;
 
-						if (this.slots[0].stackSize == 0)
+						if (this.getStackInSlot(0).stackSize == 0)
 						{
-							this.slots[0] = slots[0].getItem().getContainerItem(slots[0]);
+							this.setInventorySlotContents(0, this.getStackInSlot(0).getItem().getContainerItem(this.getStackInSlot(0)));
 						}
 					}
 				}
@@ -75,7 +69,7 @@ public class TileEntityGenerator extends TileEntityMachine
 				this.burnTime--;
 				if (!this.isFull())
 					this.energy++;
-				BlockGenerator.updateFurnaceBlockState(isBurning(), this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+				BlockGenerator.setState(isBurning(), this.worldObj, this.pos);
 				flag = true;
 			}
         }
@@ -85,21 +79,19 @@ public class TileEntityGenerator extends TileEntityMachine
 		}
     }
 	
-	private void useFuel()
-	{
-		if (this.slots[0].stackSize > 1)
-			this.slots[0].splitStack(1);
-	}
-	
-	public static int getItemBurnTime(ItemStack p_145952_0_)
+	/**
+     * Returns the number of ticks that the supplied fuel item will keep the furnace burning, or 0 if the item isn't
+     * fuel
+     */
+    public static int getItemBurnTime(ItemStack stack)
     {
-        if (p_145952_0_ == null)
+        if (stack == null)
         {
             return 0;
         }
         else
         {
-            Item item = p_145952_0_.getItem();
+            Item item = stack.getItem();
 
             if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air)
             {
@@ -123,13 +115,13 @@ public class TileEntityGenerator extends TileEntityMachine
 
             if (item instanceof ItemTool && ((ItemTool)item).getToolMaterialName().equals("WOOD")) return 200;
             if (item instanceof ItemSword && ((ItemSword)item).getToolMaterialName().equals("WOOD")) return 200;
-            if (item instanceof ItemHoe && ((ItemHoe)item).getToolMaterialName().equals("WOOD")) return 200;
+            if (item instanceof ItemHoe && ((ItemHoe)item).getMaterialName().equals("WOOD")) return 200;
             if (item == Items.stick) return 100;
             if (item == Items.coal) return 1600;
             if (item == Items.lava_bucket) return 20000;
             if (item == Item.getItemFromBlock(Blocks.sapling)) return 100;
             if (item == Items.blaze_rod) return 2400;
-            return GameRegistry.getFuelValue(p_145952_0_);
+            return net.minecraftforge.fml.common.registry.GameRegistry.getFuelValue(stack);
         }
     }
 	

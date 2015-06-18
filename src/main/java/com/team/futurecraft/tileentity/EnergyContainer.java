@@ -4,7 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 /**
- * Currently unused. Havent updated any energy blocks yet.
+ * This is the class that all energy-storing TileEntities extend.
  * 
  * @author Joseph
  *

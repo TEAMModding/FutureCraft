@@ -2,33 +2,25 @@ package com.team.futurecraft.block;
 
 import java.util.ArrayList;
 
-import com.team.futurecraft.CommonUtils;
 import com.team.futurecraft.FutureCraft;
-import com.team.futurecraft.tileentity.TileEntityMachine;
 import com.team.futurecraft.tileentity.TileEntityWire;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
-/**
- * The wire class, currently updating.
- * Do not mess with this code until i've finished updating it.
- * 
- * @author Joseph
- *
- */
+
 public class BlockWire extends BlockContainer implements IElectric
 {
 
-	public BlockWire() 
+	public BlockWire(String name) 
 	{
 		super(Material.cloth);
+		this.setUnlocalizedName(name);
 		this.setCreativeTab(FutureCraft.tabFutureCraft);
 		this.setStepSound(soundTypeCloth);
 	}
@@ -44,52 +36,22 @@ public class BlockWire extends BlockContainer implements IElectric
 		return false;
 	}
 	
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
+	public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing side) 
 	{
-		float x1 = 6F;
-		float y1 = 6F;
-		float z1 = 6F;
-		float x2 = 10F;
-		float y2 = 10F;
-		float z2 = 10F;
-		
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.NORTH))
-			z1 = 0F;
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.SOUTH))
-			z2 = 16F;
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.EAST))
-			x2 = 16F;
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.WEST))
-			x1 = 0F;
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.UP))
-			y2 = 16F;
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.DOWN))
-			y1 = 0F;
-		
-		this.setBlockBounds(x1 / 16F, y1 / 16F, z1 / 16F, x2 / 16F, y2 / 16F, z2 / 16F);
-	}
-	
-	public boolean renderAsNormalBlock()
-	{
-		return false;
-	}
-	
-	public boolean canConnectTo(IBlockAccess world, int x, int y, int z, ForgeDirection side) 
-	{
-		if (CommonUtils.getBlockNextTo(world, x, y, z, side) instanceof IElectric)
+		if (world.getBlockState(pos.offset(side)).getBlock() instanceof IElectric)
 			return true;
 		else
 			return false;
 	}
 
 	@Override
-	public int onPowered(World world, int x, int y, int z, int amount, ForgeDirection side) 
+	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side) 
 	{
-		return ((TileEntityWire)world.getTileEntity(x, y, z)).power(amount);
+		return ((TileEntityWire)world.getTileEntity(pos)).power(amount);
 	}
 	
 	/**
-	 * Returns the <code>ForgeDirection</code> equivelants of
+	 * Returns the <code>EnumFacing</code> equivelants of
 	 * the connected blocks.
 	 * 
 	 * @param world
@@ -98,22 +60,22 @@ public class BlockWire extends BlockContainer implements IElectric
 	 * @param z
 	 * @return
 	 */
-	public Object[] getConnectedBlocks(World world, int x, int y, int z)
+	public Object[] getConnectedBlocks(World world, BlockPos pos)
 	{
-		ArrayList<ForgeDirection> sides = new ArrayList();
+		ArrayList<EnumFacing> sides = new ArrayList<EnumFacing>();
 		
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.NORTH))
-			sides.add(ForgeDirection.NORTH);
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.SOUTH))
-			sides.add(ForgeDirection.SOUTH);
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.EAST))
-			sides.add(ForgeDirection.EAST);
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.WEST))
-			sides.add(ForgeDirection.WEST);
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.UP))
-			sides.add(ForgeDirection.UP);
-		if (this.canConnectTo(world, x, y, z, ForgeDirection.DOWN))
-			sides.add(ForgeDirection.DOWN);
+		if (this.canConnectTo(world, pos, EnumFacing.NORTH))
+			sides.add(EnumFacing.NORTH);
+		if (this.canConnectTo(world, pos, EnumFacing.SOUTH))
+			sides.add(EnumFacing.SOUTH);
+		if (this.canConnectTo(world, pos, EnumFacing.EAST))
+			sides.add(EnumFacing.EAST);
+		if (this.canConnectTo(world, pos, EnumFacing.WEST))
+			sides.add(EnumFacing.WEST);
+		if (this.canConnectTo(world, pos, EnumFacing.UP))
+			sides.add(EnumFacing.UP);
+		if (this.canConnectTo(world, pos, EnumFacing.DOWN))
+			sides.add(EnumFacing.DOWN);
 		sides.trimToSize();
 		return sides.toArray();
 	}
@@ -123,15 +85,9 @@ public class BlockWire extends BlockContainer implements IElectric
 	{
 		return new TileEntityWire(100, this);
 	}
-	
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_)
-    {
-		System.out.println(((TileEntityWire)world.getTileEntity(x, y, z)).getEnergy());
-		return true;
-    }
 
 	@Override
-	public int getEnergy(World world, int x, int y, int z) {
-		return ((TileEntityWire)world.getTileEntity(x, y, z)).energy;
+	public int getEnergy(World world, BlockPos pos) {
+		return ((TileEntityWire)world.getTileEntity(pos)).energy;
 	}
 }

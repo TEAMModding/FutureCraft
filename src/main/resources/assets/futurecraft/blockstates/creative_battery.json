@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "futurecraft:creative_battery" },
+        "facing=south": { "model": "futurecraft:creative_battery", "y": 180 },
+        "facing=west":  { "model": "futurecraft:creative_battery", "y": 270 },
+        "facing=east":  { "model": "futurecraft:creative_battery", "y": 90 }
+    }
+}

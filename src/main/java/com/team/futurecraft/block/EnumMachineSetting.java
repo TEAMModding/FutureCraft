@@ -1,8 +1,8 @@
 package com.team.futurecraft.block;
 
 /**
- * Used to specify in/out settings on machines, not sure if we'll
- * need it anymore.
+ * Used to specify in/out settings on machines.
+ * We'll probably add extra settings later for liquid transfer and such.
  * 
  * @author Joseph
  *

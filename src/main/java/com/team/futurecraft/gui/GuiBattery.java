@@ -9,15 +9,9 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-/**
- * Currently not in use.
- * 
- * @author Joseph
- *
- */
 public class GuiBattery extends GuiContainer
 {
-	private static final ResourceLocation guiTexture = new ResourceLocation("textures/gui/battery.png");
+	private static final ResourceLocation guiTexture = new ResourceLocation("futurecraft", "textures/gui/battery.png");
 	private TileEntityMachine tileEntity;
 	
 	public GuiBattery(TileEntityMachine tileEntity)

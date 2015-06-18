@@ -3,35 +3,42 @@ package com.team.futurecraft.tileentity;
 import com.team.futurecraft.block.EnumMachineSetting;
 import com.team.futurecraft.block.IElectric;
 import com.team.futurecraft.block.Machine;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 
 /**
- * Currently unused. Need to update the machine class.
+ * This is the class that implements EnergyContainer and adds functionality
+ * usually needed in machines without having to implement them yourself, such as handling
+ * in/out machine settings, transferring energy based on them, and dealing with inventory slots.
+ * It's a bit of a mess right now and I need to organize and comment it all to make it an easy to use
+ * api.
  * 
  * @author Joseph
  *
  */
-public class TileEntityMachine extends EnergyContainer implements ISidedInventory
+public class TileEntityMachine extends EnergyContainer implements IUpdatePlayerListBox, ISidedInventory
 {
-	public Machine theBlock;
-	public ItemStack[] slots;
+	private Machine theBlock;
+	private IBlockState state;
+	private ItemStack[] slots;
+	private String customName;
 	
-	public TileEntityMachine(int energyTransfer, int maxEnergy, Machine block, boolean isFull, int slots)
+	public TileEntityMachine(int energyTransfer, int maxEnergy, IBlockState state, boolean isFull, int slots)
 	{
 		super(maxEnergy, energyTransfer);
-		this.theBlock = block;
+		System.out.println("instantiating TilEntityMachine with parameters");
+		this.theBlock = (Machine)state.getBlock();
+		this.state = state;
 		if (isFull)
 		{
 			this.energy = maxEnergy;
@@ -77,11 +84,13 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 	    tag.setTag("Items", nbttaglist);
 	}
 	
-	public int tryToPower(int amount, ForgeDirection side)
+	public int tryToPower(int amount, EnumFacing side)
 	{
 		boolean flag = false;
 		
-		if (this.theBlock.getSide(side.flag, this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) == EnumMachineSetting.energyInput)
+		
+		
+		if (this.theBlock.getSide(rotatedFace(side, (EnumFacing)this.state.getValue(Machine.FACING))) == EnumMachineSetting.energyInput)
 		{
 			if (this.energy < this.getMaxEnergy())
 			{
@@ -106,29 +115,34 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 		}
 		return amount;
 	}
+	
+	private EnumFacing rotatedFace(EnumFacing face1, EnumFacing face2) {
+		if (face2 == EnumFacing.NORTH) return face1;
+		if (face2 == EnumFacing.SOUTH) return face1.getOpposite();
+		if (face2 == EnumFacing.WEST) return face1.rotateY();
+		if (face2 == EnumFacing.EAST) return face1.rotateY().rotateY().rotateY();
+		
+		return face1;
+	}
 
 	@Override
-	public void updateEntity() 
-	{
+	public void update() {
 		int i = 0;
-		while (this.energy > this.energyTransferred() && i < 6)
+		while (this.energy > this.energyTransferred() && i < 4)
 		{
-			if (this.theBlock.getSide(i, this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) == EnumMachineSetting.energyOutput)
+			if (this.theBlock.getSide(rotatedFace(EnumFacing.getHorizontal(i), (EnumFacing)this.state.getValue(Machine.FACING))) == EnumMachineSetting.energyOutput)
 			{
-				this.powerNeighbor(i);
+				this.powerNeighbor(EnumFacing.getHorizontal(i));
 				this.markDirty();
 			}
 			i++;
 		}
 	}
 	
-	private void powerNeighbor(int side)
+	private void powerNeighbor(EnumFacing side)
 	{
 		int energyToTransfer;
-		ForgeDirection dir = ForgeDirection.getOrientation(side);
-		int targetX = this.xCoord + dir.offsetX;
-		int targetY = this.yCoord + dir.offsetY;
-		int targetZ = this.zCoord + dir.offsetZ;
+		BlockPos dirPos = this.pos.offset(side);
 		
 		if (this.energy > 0)
 		{
@@ -140,53 +154,120 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 			{
 				energyToTransfer = this.energyTransferred();
 			}
-			if (this.theBlock.canConnectTo(this.worldObj, this.xCoord, this.yCoord, this.zCoord, dir))
+			if (this.theBlock.canConnectTo(this.worldObj, this.pos, side))
 			{
-				IElectric blockToPower = (IElectric)this.worldObj.getBlock(targetX, targetY, targetZ);
-				this.energy -= energyToTransfer - blockToPower.onPowered(this.worldObj, targetX, targetY, targetZ, energyToTransfer, dir.getOpposite());
+				IElectric blockToPower = (IElectric)this.worldObj.getBlockState(dirPos).getBlock();
+				this.energy -= energyToTransfer - blockToPower.onPowered(this.worldObj, dirPos, energyToTransfer, side.getOpposite());
 			}
 		}
 	}
 	
+	//<-------=======IInventory overrides=======------->
+	
 	/**
-     * Returns the number of slots in the inventory.
+     * Do not make give this method the name canInteractWith because it clashes with Container
      */
-    public int getSizeInventory()
+    public boolean isUseableByPlayer(EntityPlayer player)
     {
-        return slots.length;
+        return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
     }
 
+    public void openInventory(EntityPlayer player) {}
+
+    public void closeInventory(EntityPlayer player) {}
+
+    /**
+     * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot.
+     */
+    public boolean isItemValidForSlot(int index, ItemStack stack)
+    {
+        return true;
+    }
+
+    public int[] getSlotsForFace(EnumFacing side)
+    {
+        return new int[] {};
+    }
+
+    /**
+     * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
+     * side
+     */
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
+    {
+        return this.isItemValidForSlot(index, itemStackIn);
+    }
+
+    /**
+     * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
+     * side
+     */
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
+    {
+        return false;
+    }
+
+    public int getField(int id)
+    {
+        return 0;
+    }
+
+    public void setField(int id, int value)
+    {
+        
+    }
+
+    public int getFieldCount()
+    {
+        return 0;
+    }
+
+    public void clear()
+    {
+        for (int i = 0; i < this.slots.length; ++i)
+        {
+            this.slots[i] = null;
+        }
+    }
+    
+    /**
+     * Returns the number of slots in the inventory.
+     */
+    public int getSizeInventory() {
+        return this.slots.length;
+    }
+    
     /**
      * Returns the stack in slot i
      */
     public ItemStack getStackInSlot(int index)
     {
-        return slots[index];
+        return this.slots[index];
     }
 
     /**
      * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
      * new stack.
      */
-    public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
+    public ItemStack decrStackSize(int index, int count)
     {
-    	if (this.slots[p_70298_1_] != null)
+        if (this.slots[index] != null)
         {
             ItemStack itemstack;
 
-            if (this.slots[p_70298_1_].stackSize <= p_70298_2_)
+            if (this.slots[index].stackSize <= count)
             {
-                itemstack = this.slots[p_70298_1_];
-                this.slots[p_70298_1_] = null;
+                itemstack = this.slots[index];
+                this.slots[index] = null;
                 return itemstack;
             }
             else
             {
-                itemstack = this.slots[p_70298_1_].splitStack(p_70298_2_);
+                itemstack = this.slots[index].splitStack(count);
 
-                if (this.slots[p_70298_1_].stackSize == 0)
+                if (this.slots[index].stackSize == 0)
                 {
-                    this.slots[p_70298_1_] = null;
+                    this.slots[index] = null;
                 }
 
                 return itemstack;
@@ -197,17 +278,17 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
             return null;
         }
     }
-    
+
     /**
      * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem -
      * like when you close a workbench GUI.
      */
-    public ItemStack getStackInSlotOnClosing(int p_70304_1_)
+    public ItemStack getStackInSlotOnClosing(int index)
     {
-    	if (this.slots[p_70304_1_] != null)
+        if (this.slots[index] != null)
         {
-            ItemStack itemstack = this.slots[p_70304_1_];
-            this.slots[p_70304_1_] = null;
+            ItemStack itemstack = this.slots[index];
+            this.slots[index] = null;
             return itemstack;
         }
         else
@@ -219,84 +300,48 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      */
-    public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
+    public void setInventorySlotContents(int index, ItemStack stack)
     {
-    	this.slots[p_70299_1_] = p_70299_2_;
+        this.slots[index] = stack;
 
-        if (p_70299_2_ != null && p_70299_2_.stackSize > this.getInventoryStackLimit())
+        if (stack != null && stack.stackSize > this.getInventoryStackLimit())
         {
-            p_70299_2_.stackSize = this.getInventoryStackLimit();
+            stack.stackSize = this.getInventoryStackLimit();
         }
-    }
-
-    /**
-     * Returns the name of the inventory
-     */
-    public String getInventoryName()
-    {
-        return "machine";
-    }
-
-    /**
-     * Returns if the inventory is named
-     */
-    public boolean hasCustomInventoryName()
-    {
-        return false;
     }
     
     /**
-     * Returns the maximum stack size for a inventory slot.
+     * Gets the name of this command sender (usually username, but possibly "Rcon")
+     */
+    public String getName()
+    {
+        return this.hasCustomName() ? this.customName : "container.machine";
+    }
+
+    /**
+     * Returns true if this thing is named
+     */
+    public boolean hasCustomName()
+    {
+        return this.customName != null && this.customName.length() > 0;
+    }
+
+    public void setCustomInventoryName(String name)
+    {
+        this.customName = name;
+    }
+    
+    /**
+     * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
+     * this more of a set than a get?*
      */
     public int getInventoryStackLimit()
     {
         return 64;
     }
-    
-    /**
-     * Do not make give this method the name canInteractWith because it clashes with Container
-     */
-    public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
-    {
-        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : p_70300_1_.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
-    }
 
-    public void openInventory() {}
-
-    public void closeInventory() {}
-
-    /**
-     * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot.
-     */
-    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
-    {
-        return true;
-    }
-
-    /**
-     * Returns an array containing the indices of the slots that can be accessed by automation on the given side of this
-     * block.
-     */
-    public int[] getAccessibleSlotsFromSide(int p_94128_1_)
-    {
-        return new int[] {0};
-    }
-
-    /**
-     * Returns true if automation can insert the given item in the given slot from the given side. Args: Slot, item,
-     * side
-     */
-    public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, int p_102007_3_)
-    {
-        return false;
-    }
-
-    /**
-     * Returns true if automation can extract the given item in the given slot from the given side. Args: Slot, item,
-     * side
-     */
-    public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, int p_102008_3_)
-    {
-        return false;
-    }
+	@Override
+	public IChatComponent getDisplayName() {
+		return (IChatComponent)(this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatComponentTranslation(this.getName(), new Object[0]));
+	}
 }

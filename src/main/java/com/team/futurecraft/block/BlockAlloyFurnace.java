@@ -29,14 +29,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
-/**
- * The Alloy Furnace class, currently updating.
- * Do not mess with this code until i've finished updating it.
- * 
- * @author Joseph
- *
- */
-
 public class BlockAlloyFurnace extends BlockContainer
 {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -50,10 +42,12 @@ public class BlockAlloyFurnace extends BlockContainer
         this.setStepSound(soundTypePiston);
         this.setHardness(3.5F);
         this.isBurning = isLit;
-        this.setCreativeTab(FutureCraft.tabFutureCraft);
         
         if (isLit) {
         	this.setLightLevel(0.875F);
+        }
+        else {
+        	this.setCreativeTab(FutureCraft.tabFutureCraft);
         }
     }
 

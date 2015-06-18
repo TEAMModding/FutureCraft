@@ -4,14 +4,10 @@ import com.team.futurecraft.block.BlockWire;
 import com.team.futurecraft.block.IElectric;
 
 import net.minecraft.block.Block;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.util.EnumFacing;
 
-/**
- * Currently unused. Need to update the wire block.
- * 
- * @author Joseph
- *
- */
-public class TileEntityWire extends EnergyContainer
+public class TileEntityWire extends EnergyContainer implements IUpdatePlayerListBox
 {
 	private BlockWire theBlock;
 	
@@ -22,18 +18,18 @@ public class TileEntityWire extends EnergyContainer
 	}
 	
 	@Override
-	public void updateEntity() 
+	public void update() 
 	{
-		Object[] sides = theBlock.getConnectedBlocks(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+		Object[] sides = theBlock.getConnectedBlocks(this.worldObj, this.pos);
 		for (int i = 0; i < sides.length; i++)
 		{
 			int passesLeft = sides.length - i + 1;
-			ForgeDirection dir = (ForgeDirection)sides[i];
-			Block block = this.worldObj.getBlock(this.xCoord + dir.offsetX, this.yCoord + dir.offsetY, this.zCoord + dir.offsetZ);
+			EnumFacing dir = (EnumFacing)sides[i];
+			Block block = this.worldObj.getBlockState(this.pos.offset(dir)).getBlock();
 			if (block instanceof IElectric)
 			{
 				int energyToUse = this.energy / passesLeft;
-				this.energy -= energyToUse - ((IElectric)block).onPowered(worldObj, this.xCoord + dir.offsetX, this.yCoord + dir.offsetY, this.zCoord + dir.offsetZ, energyToUse, dir.getOpposite());
+				this.energy -= energyToUse - ((IElectric)block).onPowered(worldObj, this.pos.offset(dir), energyToUse, dir.getOpposite());
 			}
 		}
 	}

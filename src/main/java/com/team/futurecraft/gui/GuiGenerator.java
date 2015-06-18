@@ -10,15 +10,9 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-/**
- * Currently not in use.
- * 
- * @author Joseph
- *
- */
 public class GuiGenerator extends GuiContainer
 {
-	private static final ResourceLocation guiTexture = new ResourceLocation("textures/gui/generator.png");
+	private static final ResourceLocation guiTexture = new ResourceLocation("futurecraft", "textures/gui/generator.png");
 	private TileEntityGenerator tileGenerator;
 	
 	public GuiGenerator(InventoryPlayer p_i1091_1_, TileEntityGenerator tileEntityGenerator)
@@ -29,7 +23,7 @@ public class GuiGenerator extends GuiContainer
 	
 	protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_)
     {
-        String s = this.tileGenerator.hasCustomInventoryName() ? this.tileGenerator.getInventoryName() : I18n.format(this.tileGenerator.getInventoryName(), new Object[0]);
+        String s = this.tileGenerator.hasCustomName() ? this.tileGenerator.getInventoryName() : I18n.format(this.tileGenerator.getInventoryName(), new Object[0]);
         this.fontRendererObj.drawString(s, this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
         this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 96 + 2, 4210752);
     }
