@@ -13,11 +13,8 @@ import net.minecraft.world.World;
  * @author Joseph
  *
  */
-public class BiomeGenMoon extends BiomeGenPlanet
-{
-    
-    public BiomeGenMoon(int p_i1977_1_)
-    {
+public class BiomeGenMoon extends BiomeGenPlanet {
+    public BiomeGenMoon(int p_i1977_1_) {
         super(p_i1977_1_, BlockList.selena_stone);
         this.spawnableCreatureList.clear();
         this.topBlock = BlockList.selena_dirt.getDefaultState();
@@ -31,18 +28,14 @@ public class BiomeGenMoon extends BiomeGenPlanet
     }
 
 	@Override
-	public void decorate(World world, Random rand, BlockPos pos)
-    {
+	public void decorate(World world, Random rand, BlockPos pos) {
 		WorldGenCraters craters = new WorldGenCraters();
 		
-		for (int k = 0; k < 10; ++k)
-        {
+		for (int k = 0; k < 10; ++k) {
             int l = pos.getX() + rand.nextInt(16) + 8;
             int i1 = pos.getZ() + rand.nextInt(16) + 8;
             int j1 = rand.nextInt(world.getHorizon(new BlockPos(l, 0, i1)).getY() + 32);
             craters.generate(world, rand, new BlockPos(l, j1, i1));
         }
 	}
-	
-	
 }

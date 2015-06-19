@@ -5,8 +5,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class StartupClientOnly {
-	public static void preInit() {
-	}
+	public static void preInit() {}
 	
 	/**
 	 * Initializes the client side.
@@ -91,8 +90,7 @@ public class StartupClientOnly {
 	 * 
 	 * @param name The itemModel/block name
 	 */
-	private static void registerItemRendering(String name)
-	{
+	private static void registerItemRendering(String name) {
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(GameRegistry.findItem(FutureCraft.MODID, name), 0, new ModelResourceLocation(FutureCraft.MODID + ":" + name, "inventory"));
 	}
 }

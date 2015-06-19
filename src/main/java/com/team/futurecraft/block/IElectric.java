@@ -11,11 +11,12 @@ import net.minecraft.world.World;
  * @author Joseph
  *
  */
-public interface IElectric 
-{
-	
+public interface IElectric {
 	/**
-	 * Called when the block is trying to be powered.
+	 * Called when the block is trying to be powered. Any block implementing this interface should
+	 * compute what to do with the energy (most commonly sending it to the tileEntity to deal with), and return
+	 * any excess energy it cant hold. Also when you call this to power blocks, side must be the side of the block
+	 * you are powering, facing the block powering it.
 	 */
 	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side);
 	

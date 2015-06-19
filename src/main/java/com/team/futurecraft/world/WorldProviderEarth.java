@@ -9,22 +9,16 @@ import net.minecraft.world.chunk.IChunkProvider;
  * @author Joseph
  *
  */
-public class WorldProviderEarth extends WorldProviderPlanet
-{
+public class WorldProviderEarth extends WorldProviderPlanet {
 	@Override
-	public void registerWorldChunkManager()
-	{
-		
-	}
+	public void registerWorldChunkManager() {}
 	
-	public WorldProviderEarth()
-    {
+	public WorldProviderEarth() {
     	this.setDimension(1);
     }
 
 	@Override
-	public String getSaveFolder() 
-	{
+	public String getSaveFolder() {
 		return null;
 	}
 
@@ -47,5 +41,4 @@ public class WorldProviderEarth extends WorldProviderPlanet
 	public String getImage() {
 		return "textures/environment/earth.png";
 	}
-
 }

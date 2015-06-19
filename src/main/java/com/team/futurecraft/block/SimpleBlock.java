@@ -18,27 +18,23 @@ import net.minecraft.item.Item;
  * @author Joseph
  *
  */
-public class SimpleBlock extends Block
-{
+public class SimpleBlock extends Block {
 	private Item dropThis = Item.getItemFromBlock(this);
 	
-	public SimpleBlock(Material par1, String name)
-	{
+	public SimpleBlock(Material par1, String name) {
 		super(par1);
 		this.setCreativeTab(FutureCraft.tabFutureCraft);
 		this.setUnlocalizedName(name);
 	}
 	
-	public SimpleBlock(Material par1, Item drop, String name)
-	{
+	public SimpleBlock(Material par1, Item drop, String name) {
 		super(par1);
 		this.setCreativeTab(FutureCraft.tabFutureCraft);
 		this.dropThis = drop;
 		this.setUnlocalizedName(name);
 	}
 	
-	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
-	{
+	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
 		return this.dropThis;
 	}
 }

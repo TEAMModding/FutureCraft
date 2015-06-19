@@ -19,8 +19,7 @@ import com.team.futurecraft.block.SimpleBlock;
  * @author Joseph
  *
  */
-public class BlockList 
-{
+public class BlockList {
 	//metal blocks
 	public static SimpleBlock steel_plating;
 	public static SimpleBlock steel_vent;

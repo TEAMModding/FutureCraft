@@ -15,28 +15,22 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * @author Joseph
  *
  */
-public class CoreEventHandler
-{
+public class CoreEventHandler {
 	@SubscribeEvent
-	public void onUpdateEvent(LivingUpdateEvent event)
-	{
+	public void onUpdateEvent(LivingUpdateEvent event) {
 		EntityLivingBase entity = event.entityLiving;
 		EntityPlayer player;
 		WorldProvider provider = entity.worldObj.provider;
 		
-		if (entity instanceof EntityPlayer)
-		{
+		if (entity instanceof EntityPlayer) {
 			player = (EntityPlayer)entity;
-			if (player.capabilities.isFlying)
-				return;
+			if (player.capabilities.isFlying) return;
 		}
 		
-		if (provider instanceof WorldProviderPlanet)
-		{
+		if (provider instanceof WorldProviderPlanet) {
 			WorldProviderPlanet planet = (WorldProviderPlanet)provider;
 			
-			if (!entity.onGround)
-				entity.addVelocity(0, 0.1D - (planet.getGravity() * 0.1D), 0);
+			if (!entity.onGround) entity.addVelocity(0, 0.1D - (planet.getGravity() * 0.1D), 0);
 		}
 	}
 }

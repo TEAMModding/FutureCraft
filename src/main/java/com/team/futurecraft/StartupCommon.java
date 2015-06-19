@@ -50,7 +50,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  *
  */
 public class StartupCommon {
-	
 	/**
 	 * Initialize blocks, items, and just about everything else here.
 	 */

@@ -17,64 +17,51 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class TileEntityGenerator extends TileEntityMachine
-{
+public class TileEntityGenerator extends TileEntityMachine {
 	public int burnTime;
 	public int currentItemBurnTime;
 	
-	public TileEntityGenerator(IBlockState block)
-	{
+	public TileEntityGenerator(IBlockState block) {
 		super(10, 500, block, false, 1);
 	}
 	
-	public void readFromNBT(NBTTagCompound tag)
-    {
+	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		this.burnTime = tag.getInteger("BurnTime");
 		this.currentItemBurnTime = getItemBurnTime(this.getStackInSlot(0));
     }
 	
-	public void writeToNBT(NBTTagCompound tag)
-    {
+	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tag.setInteger("BurnTime", burnTime);
     }
 	
-	public void update()
-	{	
+	public void update() {	
 		boolean flag = false;
 		super.update();
 		
-		if (true)
-        {
-			if (this.burnTime == 0)
-			{	
-				if (this.getStackInSlot(0) != null)
-				{
-					if (getItemBurnTime(this.getStackInSlot(0)) != 0)
-					{
+		if (true) {
+			if (this.burnTime == 0) {	
+				if (this.getStackInSlot(0) != null) {
+					if (getItemBurnTime(this.getStackInSlot(0)) != 0) {
 						flag = true;
 						this.burnTime = getItemBurnTime(this.getStackInSlot(0));
 						--this.getStackInSlot(0).stackSize;
 
-						if (this.getStackInSlot(0).stackSize == 0)
-						{
+						if (this.getStackInSlot(0).stackSize == 0) {
 							this.setInventorySlotContents(0, this.getStackInSlot(0).getItem().getContainerItem(this.getStackInSlot(0)));
 						}
 					}
 				}
 			}
-			else
-			{
+			else {
 				this.burnTime--;
-				if (!this.isFull())
-					this.energy++;
+				if (!this.isFull()) this.addEnergy(1);
 				BlockGenerator.setState(isBurning(), this.worldObj, this.pos);
 				flag = true;
 			}
         }
-		if (flag)
-		{
+		if (flag) {
 			this.markDirty();
 		}
     }
@@ -83,32 +70,25 @@ public class TileEntityGenerator extends TileEntityMachine
      * Returns the number of ticks that the supplied fuel item will keep the furnace burning, or 0 if the item isn't
      * fuel
      */
-    public static int getItemBurnTime(ItemStack stack)
-    {
-        if (stack == null)
-        {
+    public static int getItemBurnTime(ItemStack stack) {
+        if (stack == null) {
             return 0;
         }
-        else
-        {
+        else {
             Item item = stack.getItem();
 
-            if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air)
-            {
+            if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air) {
                 Block block = Block.getBlockFromItem(item);
 
-                if (block == Blocks.wooden_slab)
-                {
+                if (block == Blocks.wooden_slab) {
                     return 150;
                 }
 
-                if (block.getMaterial() == Material.wood)
-                {
+                if (block.getMaterial() == Material.wood) {
                     return 300;
                 }
 
-                if (block == Blocks.coal_block)
-                {
+                if (block == Blocks.coal_block) {
                     return 16000;
                 }
             }
@@ -126,23 +106,19 @@ public class TileEntityGenerator extends TileEntityMachine
     }
 	
 	@SideOnly(Side.CLIENT)
-    public int getBurnTimeRemainingScaled(int p_145955_1_)
-    {
-        if (this.currentItemBurnTime == 0)
-        {
+    public int getBurnTimeRemainingScaled(int p_145955_1_) {
+        if (this.currentItemBurnTime == 0) {
             this.currentItemBurnTime = 200;
         }
 
         return this.burnTime * p_145955_1_ / this.currentItemBurnTime;
     }
 	
-	public boolean isBurning()
-    {
+	public boolean isBurning() {
         return this.burnTime > 0;
     }
 	
-	public String getInventoryName()
-    {
+	public String getInventoryName() {
         return "container.generator";
     }
 }

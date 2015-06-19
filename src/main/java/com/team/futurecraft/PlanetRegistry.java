@@ -17,16 +17,14 @@ import net.minecraftforge.common.DimensionManager;
  * @author Joseph
  *
  */
-public class PlanetRegistry 
-{
+public class PlanetRegistry {
 	private static ArrayList<WorldProviderPlanet> planets = new ArrayList<WorldProviderPlanet>();
 	
 	/**
 	 * Registers earth, instead of using the normal method, or else it would
 	 * make it's own dimension.
 	 */
-	public static void registerEarth()
-	{
+	public static void registerEarth() {
 		planets.add(new WorldProviderEarth());
 	}
 	
@@ -36,8 +34,7 @@ public class PlanetRegistry
 	 * @param id The Dimension Id
 	 * @param provider The WorldProviderPlanet class defining the planet
 	 */
-	public static void registerPlanet(int id, Class<?extends WorldProviderPlanet> provider)
-	{
+	public static void registerPlanet(int id, Class<?extends WorldProviderPlanet> provider) {
 		WorldProviderPlanet planet;
 		try {
 			planet = provider.newInstance();
@@ -53,8 +50,7 @@ public class PlanetRegistry
 	/**
 	 * Returns an ArrayList of all the registered planets.
 	 */
-	public static ArrayList<WorldProviderPlanet> getRegisteredPlanets()
-	{
+	public static ArrayList<WorldProviderPlanet> getRegisteredPlanets() {
 		return planets;
 	}
 }

@@ -14,11 +14,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 
-public class BlockWire extends BlockContainer implements IElectric
-{
+public class BlockWire extends BlockContainer implements IElectric {
 
-	public BlockWire(String name) 
-	{
+	public BlockWire(String name) {
 		super(Material.cloth);
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(FutureCraft.tabFutureCraft);
@@ -26,27 +24,21 @@ public class BlockWire extends BlockContainer implements IElectric
 	}
 
 	@Override
-	public int getRenderType() 
-	{
+	public int getRenderType() {
 		return 1000;
 	}
 	
-	public boolean isOpaqueCube()
-	{
+	public boolean isOpaqueCube() {
 		return false;
 	}
 	
-	public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing side) 
-	{
-		if (world.getBlockState(pos.offset(side)).getBlock() instanceof IElectric)
-			return true;
-		else
-			return false;
+	public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		if (world.getBlockState(pos.offset(side)).getBlock() instanceof IElectric) return true;
+		else return false;
 	}
 
 	@Override
-	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side) 
-	{
+	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side) {
 		return ((TileEntityWire)world.getTileEntity(pos)).power(amount);
 	}
 	
@@ -60,34 +52,27 @@ public class BlockWire extends BlockContainer implements IElectric
 	 * @param z
 	 * @return
 	 */
-	public Object[] getConnectedBlocks(World world, BlockPos pos)
-	{
+	public Object[] getConnectedBlocks(World world, BlockPos pos) {
 		ArrayList<EnumFacing> sides = new ArrayList<EnumFacing>();
 		
-		if (this.canConnectTo(world, pos, EnumFacing.NORTH))
-			sides.add(EnumFacing.NORTH);
-		if (this.canConnectTo(world, pos, EnumFacing.SOUTH))
-			sides.add(EnumFacing.SOUTH);
-		if (this.canConnectTo(world, pos, EnumFacing.EAST))
-			sides.add(EnumFacing.EAST);
-		if (this.canConnectTo(world, pos, EnumFacing.WEST))
-			sides.add(EnumFacing.WEST);
-		if (this.canConnectTo(world, pos, EnumFacing.UP))
-			sides.add(EnumFacing.UP);
-		if (this.canConnectTo(world, pos, EnumFacing.DOWN))
-			sides.add(EnumFacing.DOWN);
+		if (this.canConnectTo(world, pos, EnumFacing.NORTH)) sides.add(EnumFacing.NORTH);
+		if (this.canConnectTo(world, pos, EnumFacing.SOUTH)) sides.add(EnumFacing.SOUTH);
+		if (this.canConnectTo(world, pos, EnumFacing.EAST)) sides.add(EnumFacing.EAST);
+		if (this.canConnectTo(world, pos, EnumFacing.WEST)) sides.add(EnumFacing.WEST);
+		if (this.canConnectTo(world, pos, EnumFacing.UP)) sides.add(EnumFacing.UP);
+		if (this.canConnectTo(world, pos, EnumFacing.DOWN)) sides.add(EnumFacing.DOWN);
+		
 		sides.trimToSize();
 		return sides.toArray();
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) 
-	{
+	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 		return new TileEntityWire(100, this);
 	}
 
 	@Override
 	public int getEnergy(World world, BlockPos pos) {
-		return ((TileEntityWire)world.getTileEntity(pos)).energy;
+		return ((TileEntityWire)world.getTileEntity(pos)).getEnergy();
 	}
 }

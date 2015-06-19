@@ -11,48 +11,40 @@ import net.minecraft.world.chunk.IChunkProvider;
  * @author Joseph
  *
  */
-public class WorldProviderMars extends WorldProviderPlanet
-{
+public class WorldProviderMars extends WorldProviderPlanet {
 	/**
      * creates a new world chunk manager for WorldProvider
      */
-    public void registerWorldChunkManager()
-    {
+    public void registerWorldChunkManager() {
         this.worldChunkMgr = new PlanetChunkManager(BiomeList.mars, 0.0F);
     }
     
-    public WorldProviderMars()
-    {
+    public WorldProviderMars() {
     	this.setDimension(-11);
     }
     
     /**
      * Returns a new chunk provider which generates chunks for this world
      */
-    public IChunkProvider createChunkGenerator()
-    {
+    public IChunkProvider createChunkGenerator() {
         return new ChunkProviderPlanet(this.worldObj, this.worldObj.getSeed(), BlockList.desert_stone);
     }
     
-    public double getGravity()
-    {
+    public double getGravity() {
     	return 0.38D;
     }
     
-    public String getPlanetName()
-    {
+    public String getPlanetName() {
         return "Mars";
     }
 
 	@Override
-	public String getSaveFolder() 
-	{
+	public String getSaveFolder() {
 		return "mars";
 	}
 	
 	@Override
-	public String getImage() 
-	{
-		return "textures/blocks/mars_sand.png";
+	public String getImage() {
+		return "textures/blocks/desert_dirt.png";
 	}
 }

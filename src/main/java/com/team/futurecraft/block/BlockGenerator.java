@@ -11,49 +11,39 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class BlockGenerator extends Machine
-{
-	public BlockGenerator(boolean lit, String name) 
-	{
+public class BlockGenerator extends Machine {
+	public BlockGenerator(boolean lit, String name) {
 		super(false, name);
-		if (!lit)
-			this.setCreativeTab(FutureCraft.tabFutureCraft);
+		if (!lit) this.setCreativeTab(FutureCraft.tabFutureCraft);
 	}
 	
-	public EnumMachineSetting getSide(EnumFacing side)
-	{
+	public EnumMachineSetting getSide(EnumFacing side) {
 		return EnumMachineSetting.energyOutput;
 	}
 	
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) 
-    {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		player.openGui("futurecraft", 102, world, pos.getX(), pos.getY(), pos.getZ());
         return true;
     }
 	
-	public TileEntity createNewTileEntity(World world, int meta) 
-	{
+	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityGenerator(this.getStateFromMeta(meta));
 	}
 	
-	public static void setState(boolean active, World worldIn, BlockPos pos)
-    {
+	public static void setState(boolean active, World worldIn, BlockPos pos) {
         IBlockState iblockstate = worldIn.getBlockState(pos);
         TileEntity tileentity = worldIn.getTileEntity(pos);
 
-        if (active)
-        {
+        if (active) {
             worldIn.setBlockState(pos, BlockList.generator_lit.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
             worldIn.setBlockState(pos, BlockList.generator_lit.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
         }
-        else
-        {
+        else {
             worldIn.setBlockState(pos, BlockList.generator.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
             worldIn.setBlockState(pos, BlockList.generator.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
         }
 
-        if (tileentity != null)
-        {
+        if (tileentity != null) {
             tileentity.validate();
             worldIn.setTileEntity(pos, tileentity);
         }

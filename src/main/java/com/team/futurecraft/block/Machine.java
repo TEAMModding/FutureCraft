@@ -20,67 +20,82 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
- * The Machine class. I still need to organize and comment stuff on this.
+ * <p>This is an astract class that other blocks should extend to provide core
+ * machine functionality. <br>If you do not specify <code>public TileEntity createNewTileEntity(World world, int meta)</code>
+ * in your machine class, it will automatically create a TileEntityMachine instead, which has simple energy storage but no
+ * inventory slots. To have inventory slots you should override the createNewTileEntity method to return your own TileEntity
+ * class which extends TilEntityMachine, see TilEntityMachine.</p>
+ * 
+ * <p>If you want your machine to provide a gui for it's contents you will need something like this in your class:</p>
+ * <code>public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) 
+ *  {
+ *		player.openGui("futurecraft", --your gui id--, world, pos.getX(), pos.getY(), pos.getZ());
+ *      return true;
+ *   }</code> <p>see GuiHandler for more information on making Gui's and Containers for blocks.</p>
  * 
  * @author Joseph
  *
  */
-public abstract class Machine extends BlockContainer implements IElectric
-{
+public abstract class Machine extends BlockContainer implements IElectric {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	private boolean isFull;
 	
-	public Machine(boolean full, String name) 
-	{
+	public Machine(boolean full, String name) {
 		super(Material.iron);
 		this.setCreativeTab(FutureCraft.tabFutureCraft);
 		this.isFull = full;
 		this.setUnlocalizedName(name);
 	}
 	
-	public EnumMachineSetting getSide(EnumFacing side)
-	{
+	/**
+	 * Returns settings based on the side. TileEntityMachine calls this to figure out whether to send or recieve
+	 * energy, and computes the side even if the machine is turned sideways. Sides returned from here are based on
+	 * a machine facing north. so if the machine is facing south, a value returned north from here will be computed
+	 * as south in the TilEntityMachine.
+	 */
+	public EnumMachineSetting getSide(EnumFacing side) {
 		return EnumMachineSetting.energyInput;
 	}
 	
-	public int getRenderType()
-	{
+	/**
+	 * Dont override this, internal override fixing BlockContainers render type.
+	 */
+	public int getRenderType(){
 		return 3;
 	}
 
+	/**
+	 * You'll usually override this to return your machine's TE.
+	 */
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) 
-	{
+	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityMachine(10, 10000, this.getStateFromMeta(meta), isFull, 0);
 	}
 	
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
-    {
-    	if (!worldIn.isRemote)
-        {
+	/**
+	 * You wont usually ovveride this but if you do make sure you call super(worldIn, pos, state) or else the block
+	 * wont be able to have different directions.
+	 */
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+    	if (!worldIn.isRemote) {
             Block block = worldIn.getBlockState(pos.north()).getBlock();
             Block block1 = worldIn.getBlockState(pos.south()).getBlock();
             Block block2 = worldIn.getBlockState(pos.west()).getBlock();
             Block block3 = worldIn.getBlockState(pos.east()).getBlock();
             EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
 
-            if (enumfacing == EnumFacing.NORTH && block.isFullBlock() && !block1.isFullBlock())
-            {
+            if (enumfacing == EnumFacing.NORTH && block.isFullBlock() && !block1.isFullBlock()) {
                 enumfacing = EnumFacing.SOUTH;
             }
-            else if (enumfacing == EnumFacing.SOUTH && block1.isFullBlock() && !block.isFullBlock())
-            {
+            else if (enumfacing == EnumFacing.SOUTH && block1.isFullBlock() && !block.isFullBlock()) {
                 enumfacing = EnumFacing.NORTH;
             }
-            else if (enumfacing == EnumFacing.WEST && block2.isFullBlock() && !block3.isFullBlock())
-            {
+            else if (enumfacing == EnumFacing.WEST && block2.isFullBlock() && !block3.isFullBlock()) {
                 enumfacing = EnumFacing.EAST;
             }
-            else if (enumfacing == EnumFacing.EAST && block3.isFullBlock() && !block2.isFullBlock())
-            {
+            else if (enumfacing == EnumFacing.EAST && block3.isFullBlock() && !block2.isFullBlock()) {
                 enumfacing = EnumFacing.WEST;
             }
-
             worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
         }
     }
@@ -88,12 +103,10 @@ public abstract class Machine extends BlockContainer implements IElectric
 	/**
      * Convert the given metadata into a BlockState for this Block
      */
-    public IBlockState getStateFromMeta(int meta)
-    {
+    public IBlockState getStateFromMeta(int meta) {
         EnumFacing enumfacing = EnumFacing.getFront(meta);
 
-        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
-        {
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
             enumfacing = EnumFacing.NORTH;
         }
 
@@ -103,68 +116,70 @@ public abstract class Machine extends BlockContainer implements IElectric
     /**
      * Convert the BlockState into the correct metadata value
      */
-    public int getMetaFromState(IBlockState state)
-    {
+    public int getMetaFromState(IBlockState state) {
         return ((EnumFacing)state.getValue(FACING)).getIndex();
     }
 
-    protected BlockState createBlockState()
-    {
+    protected BlockState createBlockState() {
         return new BlockState(this, new IProperty[] {FACING});
     }
 	
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
+    /**
+     * dont override this
+     */
+	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
     
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-    {
+	/**
+	 * or this
+	 */
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
-        if (stack.hasDisplayName())
-        {
+        if (stack.hasDisplayName()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
 
-            if (tileentity instanceof TileEntityMachine)
-            {
+            if (tileentity instanceof TileEntityMachine) {
                 ((TileEntityMachine)tileentity).setCustomInventoryName(stack.getDisplayName());
             }
         }
     }
     
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-    {
+    /**
+     * or especially this
+     */
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         
         TileEntity tileentity = worldIn.getTileEntity(pos);
 
-        if (tileentity instanceof TileEntityMachine)
-        {
+        if (tileentity instanceof TileEntityMachine) {
             InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMachine)tileentity);
             worldIn.updateComparatorOutputLevel(pos, this);
         }
         super.breakBlock(worldIn, pos, state);
     }
-    
+    /**
+     * You wont normally override this but you certainly can if you're not using a TE for this block.
+     */
     @Override
-	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side) 
-	{
+	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side) {
 		TileEntityMachine tileEntity = (TileEntityMachine)world.getTileEntity(pos);
-		if (tileEntity != null)
-			return tileEntity.tryToPower(amount, side);
-		else
-			return amount;
+		if (tileEntity != null) return tileEntity.tryToPower(amount, side);
+		else return amount;
 	}
 	
+    
 	public int getEnergy(World world, BlockPos pos) {
-		return ((TileEntityMachine)world.getTileEntity(pos)).energy;
+		return ((TileEntityMachine)world.getTileEntity(pos)).getEnergy();
 	}
 	
+	/**
+	 * You probably dont want to mess with this one.
+	 */
 	public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing side) 
 	{
-		if (world.getBlockState(pos.offset(side)).getBlock() instanceof IElectric)
-			return true;
-		else
-			return false;
+		if (world.getBlockState(pos.offset(side)).getBlock() instanceof IElectric) return true;
+		else return false;
 	}
 }

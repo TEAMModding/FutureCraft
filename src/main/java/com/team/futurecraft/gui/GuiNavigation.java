@@ -24,9 +24,7 @@ import net.minecraft.util.ResourceLocation;
  * @author Joseph
  *
  */
-public class GuiNavigation extends GuiScreen
-{
-
+public class GuiNavigation extends GuiScreen {
 	private static final ResourceLocation background = new ResourceLocation("futurecraft", "textures/gui/star_background.png");
 	private ArrayList<WorldProviderPlanet> planets;
 	private WorldProviderPlanet currentPlanet;
@@ -34,8 +32,7 @@ public class GuiNavigation extends GuiScreen
 	private float planetRotation = 0;
 	private float zPos = 0;
 	
-	public GuiNavigation(EntityPlayer player)
-	{
+	public GuiNavigation(EntityPlayer player) {
 		this.planets = PlanetRegistry.getRegisteredPlanets();
 	}
 	
@@ -44,8 +41,7 @@ public class GuiNavigation extends GuiScreen
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void initGui() 
-	{
+	public void initGui() {
 		this.buttonList.clear();
 		this.buttonList.add(new GuiSpaceButton(0, 15, this.height - 25, 100, 15, I18n.format("gui.cancel", new Object[0])));
 		this.buttonList.add(new GuiSpaceButton(1, 135, this.height - 25, 100, 15, I18n.format("gui.travel", new Object[0])));
@@ -58,7 +54,7 @@ public class GuiNavigation extends GuiScreen
 	 * draws the buttons and planet. Called every tick.
 	 */
 	@Override
-	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_) {
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		Minecraft.getMinecraft().getResourceManager();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(background);
@@ -74,22 +70,20 @@ public class GuiNavigation extends GuiScreen
         
         renderPlanet(new ResourceLocation("futurecraft", currentPlanet.getImage()));
         this.drawComponents();
-        super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
+        super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	
 	/**
 	 * Draws the labels. Not sure why this cant be in drawScreen, but it just is.
 	 */
-	private void drawComponents()
-	{
+	private void drawComponents() {
 		this.drawCenteredString(this.fontRendererObj, currentPlanet.getPlanetName(), this.width / 2, 10, 16777215);
 	}
 	
 	/**
 	 * Renders the planet with the specified image.
 	 */
-	private void renderPlanet(ResourceLocation img)
-	{
+	private void renderPlanet(ResourceLocation img) {
 		GL11.glPushMatrix();
 		this.mc.getTextureManager().bindTexture(img);
         GL11.glScalef(150F, 150F, 150F);
@@ -106,40 +100,31 @@ public class GuiNavigation extends GuiScreen
 	/**
 	 * This gui pauses the game.
 	 */
-	public boolean doesGuiPauseGame()
-    {
+	public boolean doesGuiPauseGame() {
 		return true;
     }
 	
 	/**
 	 * Handles the buttons being pressed.
 	 */
-	protected void actionPerformed(GuiButton button)
-    {
-		if (button.enabled)
-		{
-			if (button.id == 0)
-			{
+	protected void actionPerformed(GuiButton button) {
+		if (button.enabled) {
+			if (button.id == 0) {
 				this.mc.displayGuiScreen((GuiScreen)null);
 			}
-			if (button.id == 2)
-			{
-				if (this.position + 1 < this.planets.size())
-				{
+			if (button.id == 2) {
+				if (this.position + 1 < this.planets.size()) {
 					this.position++;
 					this.currentPlanet = this.planets.get(position);
 				}
 			}
-			if (button.id == 3)
-			{
-				if (this.position > 0)
-				{
+			if (button.id == 3) {
+				if (this.position > 0) {
 					this.position--;
 					this.currentPlanet = this.planets.get(position);
 				}
 			}
-			if (button.id == 1)
-			{
+			if (button.id == 1) {
 				
 				System.out.println("travel was pressed, transferring to: " + this.currentPlanet.getDimensionId());
 			}

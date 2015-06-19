@@ -10,39 +10,26 @@ import net.minecraft.world.WorldServer;
  * or else it would check for nether portals and such.
  * 
  * @author Joseph
- *
  */
-public class TeleportHandler extends Teleporter
-{
+public class TeleportHandler extends Teleporter {
 
-	public TeleportHandler(WorldServer world) 
-	{
+	public TeleportHandler(WorldServer world) {
 		super(world);
 	}
 
 	@Override
-	public void placeInPortal(Entity entity, float rotationYaw)
-    {
-		
-	}
+	public void placeInPortal(Entity entity, float rotationYaw) {}
 
 	@Override
-	public boolean placeInExistingPortal(Entity entity, float rotationYaw)
-    {
+	public boolean placeInExistingPortal(Entity entity, float rotationYaw) {
 		return true;
 	}
 
 	@Override
-	public boolean makePortal(Entity entity)
-	{
+	public boolean makePortal(Entity entity) {
 		return true;
 	}
 
 	@Override
-	public void removeStalePortalLocations(long time) 
-	{
-		
-	}
-	
-	
+	public void removeStalePortalLocations(long time) {}
 }

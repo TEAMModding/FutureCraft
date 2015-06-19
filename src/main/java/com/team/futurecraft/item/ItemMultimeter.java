@@ -17,10 +17,8 @@ import net.minecraft.world.World;
  * @author Joseph
  *
  */
-public class ItemMultimeter extends SimpleItem
-{
-	public ItemMultimeter(String name)
-    {
+public class ItemMultimeter extends SimpleItem {
+	public ItemMultimeter(String name) {
 		super(name);
 		this.maxStackSize = 1;
 		this.setCreativeTab(FutureCraft.tabFutureCraft);
@@ -30,18 +28,13 @@ public class ItemMultimeter extends SimpleItem
      * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return
      * True if something happen and false if it don't. This is for ITEMS, not BLOCKS
      */
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
-    {
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
     	Block block = world.getBlockState(pos).getBlock();
     	
-    	if (block instanceof IElectric)
-    	{
-    		if (world.isRemote)
-    			player.addChatMessage(new ChatComponentText("Client Energy: " + ((IElectric)block).getEnergy(world, pos) + " Joules."));
-    		else
-    			player.addChatMessage(new ChatComponentText("Server Energy: " + ((IElectric)block).getEnergy(world, pos) + " Joules."));
+    	if (block instanceof IElectric) {
+    		if (world.isRemote) player.addChatMessage(new ChatComponentText("Client Energy: " + ((IElectric)block).getEnergy(world, pos) + " Joules."));
+    		else player.addChatMessage(new ChatComponentText("Server Energy: " + ((IElectric)block).getEnergy(world, pos) + " Joules."));
     	}
-    	
     	return true;
     }
 }

@@ -22,44 +22,29 @@ import net.minecraftforge.fml.common.IWorldGenerator;
  * @author Joseph
  *
  */
-public class OreSpawn implements IWorldGenerator
-{
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
-	{
-		switch (world.provider.getDimensionId())
-		{
-			case 0:
-			{
-				generateSurface(world, random, chunkX * 16, chunkZ * 16);
-			}
-			case -10:
-			{
-				generateMoon(world, random, chunkX * 16, chunkZ * 16);
-			}
-			case -11:
-			{
-				generateMars(world, random, chunkX * 16, chunkZ * 16);
-			}
+public class OreSpawn implements IWorldGenerator {
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+		switch (world.provider.getDimensionId()) {
+			case 0: generateSurface(world, random, chunkX * 16, chunkZ * 16);
+			case -10: generateMoon(world, random, chunkX * 16, chunkZ * 16);
+			case -11: generateMars(world, random, chunkX * 16, chunkZ * 16);
 		}
 	}
 
-	private void generateSurface(World world, Random random, int x, int z)
-	{
+	private void generateSurface(World world, Random random, int x, int z) {
 		this.addOreSpawn(BlockList.malachite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 1, 60, Blocks.stone);
 		this.addOreSpawn(BlockList.cassiterite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 1, 60, Blocks.stone);
 		this.addOreSpawn(BlockList.bauxite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 1, 50, Blocks.stone);
 		//this.addOreSpawn(BlockList.graphite_ore, world, random, x, z, 16, 16, 9 + random.nextInt(7), 8, 1, 40, Blocks.stone);
 	}
 	
-	private void generateMoon(World world, Random random, int x, int z)
-	{
+	private void generateMoon(World world, Random random, int x, int z) {
 		this.addOreSpawn(BlockList.selena_malachite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 15, 15, 60, BlockList.selena_stone);
 		this.addOreSpawn(BlockList.selena_cassiterite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 15, 15, 60, BlockList.selena_stone);
 		this.addOreSpawn(BlockList.selena_bauxite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 15, 15, 60, BlockList.selena_stone);
 	}
 	
-	private void generateMars(World world, Random random, int x, int z)
-	{
+	private void generateMars(World world, Random random, int x, int z) {
 		this.addOreSpawn(BlockList.desert_malachite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 15, 60, BlockList.desert_stone);
 		this.addOreSpawn(BlockList.desert_cassiterite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 15, 60, BlockList.desert_stone);
 		//this.addOreSpawn(GameRegistry.findBlock("futurecraft", "mars_iron_ore"), world, random, x, z, 16, 16, 9 + random.nextInt(7), 20, 15, 80, GameRegistry.findBlock("futurecraft", "mars_stone"));
@@ -81,8 +66,7 @@ public class OreSpawn implements IWorldGenerator
 	 * @param An int for the minimum Y-Coordinate height at which this block may spawn
 	 * @param An int for the maximum Y-Coordinate height at which this block may spawn
 	 **/
-	public void addOreSpawn(Block block, World world, Random random, int blockXPos, int blockZPos, int maxX, int maxZ, int maxVeinSize, int chancesToSpawn, int minY, int maxY, Block target)
-	{
+	public void addOreSpawn(Block block, World world, Random random, int blockXPos, int blockZPos, int maxX, int maxZ, int maxVeinSize, int chancesToSpawn, int minY, int maxY, Block target) {
 		assert maxY > minY : "The maximum Y must be greater than the Minimum Y";
 		assert maxX > 0 && maxX <= 16 : "addOreSpawn: The Maximum X must be greater than 0 and less than 16";
 		assert minY > 0 : "addOreSpawn: The Minimum Y must be greater than 0";
@@ -90,8 +74,7 @@ public class OreSpawn implements IWorldGenerator
 		assert maxZ > 0 && maxZ <= 16 : "addOreSpawn: The Maximum Z must be greater than 0 and less than 16";
 
 		int diffBtwnMinMaxY = maxY - minY;
-		for (int x = 0; x < chancesToSpawn; x++)
-		{
+		for (int x = 0; x < chancesToSpawn; x++) {
 			int posX = blockXPos + random.nextInt(maxX);
 			int posY = minY + random.nextInt(diffBtwnMinMaxY);
 			int posZ = blockZPos + random.nextInt(maxZ);

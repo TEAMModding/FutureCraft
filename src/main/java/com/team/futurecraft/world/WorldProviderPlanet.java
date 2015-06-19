@@ -15,19 +15,17 @@ import net.minecraft.world.chunk.IChunkProvider;
  * @author Joseph
  *
  */
-public abstract class WorldProviderPlanet extends WorldProvider
-{
-    
+public abstract class WorldProviderPlanet extends WorldProvider {
     public abstract void registerWorldChunkManager();
     
     public abstract String getSaveFolder();
     
     public abstract IChunkProvider createChunkGenerator();
+    
     /**
      * True if the player can respawn in this dimension (true = overworld, false = nether).
      */
-    public boolean canRespawnHere()
-    {
+    public boolean canRespawnHere() {
         return false;
     }
 
@@ -35,26 +33,22 @@ public abstract class WorldProviderPlanet extends WorldProvider
      * the y level at which clouds are rendered.
      */
     @SideOnly(Side.CLIENT)
-    public float getCloudHeight()
-    {
+    public float getCloudHeight() {
         return 8.0F;
     }
     
-    public boolean isSurfaceWorld()
-    {
+    public boolean isSurfaceWorld() {
         return false;
     }
 
-    public int getAverageGroundLevel()
-    {
+    public int getAverageGroundLevel() {
         return 50;
     }
 
     /**
      * Returns the dimension's name, e.g. "The End", "Nether", or "Overworld".
      */
-    public String getDimensionName()
-    {
+    public String getDimensionName() {
     	return getPlanetName();
     }
     
@@ -72,7 +66,6 @@ public abstract class WorldProviderPlanet extends WorldProvider
     
     @Override
 	public String getInternalNameSuffix() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }
