@@ -2,6 +2,7 @@ package com.team.futurecraft;
 
 
 import com.team.futurecraft.block.BlockAlloyFurnace;
+import com.team.futurecraft.block.BlockMovingSidewalk;
 import com.team.futurecraft.block.BlockNavigator;
 import com.team.futurecraft.block.BlockSimpleOre;
 import com.team.futurecraft.block.BlockTeleporter;
@@ -58,4 +59,5 @@ public class BlockList
 	public static BlockTeleporter earth_teleporter;
 	public static BlockTeleporter moon_teleporter;
 	public static BlockTeleporter mars_teleporter;
+	public static BlockMovingSidewalk moving_sidewalk;
 }

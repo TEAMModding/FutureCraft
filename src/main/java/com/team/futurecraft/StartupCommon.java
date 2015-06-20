@@ -2,6 +2,7 @@ package com.team.futurecraft;
 
 import com.team.futurecraft.BlockList;
 import com.team.futurecraft.block.BlockAlloyFurnace;
+import com.team.futurecraft.block.BlockMovingSidewalk;
 import com.team.futurecraft.block.BlockNavigator;
 import com.team.futurecraft.block.BlockSimpleOre;
 import com.team.futurecraft.block.BlockTeleporter;
@@ -224,6 +225,9 @@ public class StartupCommon {
 		
 		BlockList.mars_teleporter = new BlockTeleporter(-11, "mars_teleporter");
 		GameRegistry.registerBlock(BlockList.mars_teleporter, "mars_teleporter");
+		
+		BlockList.moving_sidewalk = new BlockMovingSidewalk();
+		GameRegistry.registerBlock(BlockList.moving_sidewalk, "moving_sidewalk");
 	}
 	
 	/**
