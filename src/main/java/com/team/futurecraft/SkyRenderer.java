@@ -21,16 +21,12 @@ import net.minecraftforge.client.IRenderHandler;
  * @author Joseph
  *
  */
-public class SkyRenderer extends IRenderHandler
-{
-
+public class SkyRenderer extends IRenderHandler {
 	private static final ResourceLocation locationSkyPng = new ResourceLocation("futurecraft","textures/environment/stars.png");
 	
 	@Override
-	public void render(float partialTicks, WorldClient world, Minecraft mc) 
-	{
+	public void render(float partialTicks, WorldClient world, Minecraft mc) {
 		TextureManager renderEngine = mc.getTextureManager();
-		
 		GL11.glDisable(GL11.GL_FOG);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_BLEND);
@@ -41,32 +37,26 @@ public class SkyRenderer extends IRenderHandler
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
 
-        for (int i = 0; i < 6; ++i)
-        {
+        for (int i = 0; i < 6; ++i) {
             GL11.glPushMatrix();
 
-            if (i == 1)
-            {
+            if (i == 1) {
                 GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
             }
 
-            if (i == 2)
-            {
+            if (i == 2) {
                 GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
             }
 
-            if (i == 3)
-            {
+            if (i == 3) {
                 GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
             }
 
-            if (i == 4)
-            {
+            if (i == 4) {
                 GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
             }
 
-            if (i == 5)
-            {
+            if (i == 5) {
                 GL11.glRotatef(-90.0F, 0.0F, 0.0F, 1.0F);
             }
 

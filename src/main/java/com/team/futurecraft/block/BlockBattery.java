@@ -1,54 +1,24 @@
 package com.team.futurecraft.block;
 
-/**
- * The battery block class, currently updating.
- * Do not mess with this code until i've finished updating it.
- * 
- * @author Joseph
- *
- */
-import com.team.futurecraft.tileentity.TileEntityMachine;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
-public class BlockBattery extends Machine
-{
-	private boolean isCreative;
+public class BlockBattery extends Machine {
 	
-	public BlockBattery(boolean full) 
-	{
-		super(full, "power_output");
-		isCreative = full;
+	public BlockBattery(boolean full, String name) {
+		super(full, name);
 	}
 	
-	public EnumMachineSetting getSide(int side, int meta)
-	{
-		return side == 1 ? EnumMachineSetting.energyInput : (side == 0 ? EnumMachineSetting.energyInput : (side != meta ? EnumMachineSetting.energyInput : EnumMachineSetting.energyOutput));
+	public EnumMachineSetting getSide(EnumFacing side) {
+		if (side == EnumFacing.NORTH) return EnumMachineSetting.energyOutput;
+		return EnumMachineSetting.energyInput;
 	}
 	
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_)
-    {
-		if (world.isRemote)
-        {
-        	return true;
-        }
-        else
-        {
-        	player.openGui("futurecraft", 103, world, x, y, z);
-            return true;
-        }
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+		player.openGui("futurecraft", 103, world, pos.getX(), pos.getY(), pos.getZ());
+        return true;
     }
-	
-	public void registerBlockIcons(IIconRegister iconRegister)
-	{
-		super.registerBlockIcons(iconRegister);
-		if (!isCreative)
-			this.blockIcon = iconRegister.registerIcon("battery");
-		else
-			this.blockIcon = iconRegister.registerIcon("creative_battery");
-	}
 }

@@ -16,15 +16,13 @@ import net.minecraft.world.World;
  * @author Joseph
  *
  */
-public class BlockNavigator extends SimpleBlock
-{
+public class BlockNavigator extends SimpleBlock {
 	public BlockNavigator(String name) {
 		super(Material.iron, name);
 		this.setCreativeTab(FutureCraft.tabFutureCraft);
 	}
 
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) 
-    {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		player.openGui("futurecraft", 101, world, pos.getX(), pos.getY(), pos.getZ());
         return true;
     }

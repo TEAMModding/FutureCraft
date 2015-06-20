@@ -6,7 +6,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -17,14 +16,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Joseph
  *
  */
-public class FutureCraft 
-{
+public class FutureCraft {
 	public static final String MODID = "futurecraft";
 	public static final String VERSION = "Alpha 0.2";
 	
 	//creative tab
-	public static final CreativeTabs tabFutureCraft = new CreativeTabs("futurecraft")
-	{
+	public static final CreativeTabs tabFutureCraft = new CreativeTabs("futurecraft") {
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
 			return Item.getItemFromBlock(BlockList.steel_plating);
@@ -43,19 +40,7 @@ public class FutureCraft
 	 * @param event info about the preInit event
 	 */
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) 
-	{
-		/*CoreEventHandler events = new CoreEventHandler();
-		
-		MinecraftForge.EVENT_BUS.register(events);
-		FMLCommonHandler.instance().bus().register(events);
-		Registry.RegisterRendering();
-		Registry.registerBlocks();
-		Registry.registerItems();
-		Registry.registerWorldHandlers();
-		Registry.registerTileEntities();
-		Registry.registerEntities();*/
-		
+	public void preInit(FMLPreInitializationEvent event) {
 		if (event.getSide() == Side.CLIENT) {
 			StartupClientOnly.preInit();
 		}
@@ -69,25 +54,10 @@ public class FutureCraft
 	 * @param event info about the init event
 	 */
 	@EventHandler
-	public void init(FMLInitializationEvent event) 
-	{
-		/*Registry.registerRecipes();
-		Registry.registerPlanets();
-		NetworkRegistry.INSTANCE.registerGuiHandler("futurecraft", new GuiHandler());
-		teleporter = NetworkRegistry.INSTANCE.newSimpleChannel("futurecraft:teleporter");
-		teleporter.registerMessage(TeleportPacketHandler.class, TeleportPacket.class, 1, Side.SERVER);*/
-		
+	public void init(FMLInitializationEvent event)  {
 		if (event.getSide() == Side.CLIENT) {
 			StartupClientOnly.init();
 		}
 		StartupCommon.init();
-	}
-	
-	@EventHandler
-	public void init(FMLServerStartingEvent event)
-	{
-		/*MinecraftServer minecraftserver = MinecraftServer.getServer();
-        WorldServer worldServer = minecraftserver.worldServerForDimension(-10);
-        worldServer.customTeleporters.add(new TeleportHandler(worldServer));*/
 	}
 }

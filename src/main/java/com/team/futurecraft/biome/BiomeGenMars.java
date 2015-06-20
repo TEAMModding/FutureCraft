@@ -7,10 +7,8 @@ import com.team.futurecraft.BlockList;
  * @author Joseph
  *
  */
-public class BiomeGenMars extends BiomeGenPlanet
-{
-	public BiomeGenMars(int p_i1977_1_)
-    {
+public class BiomeGenMars extends BiomeGenPlanet {
+	public BiomeGenMars(int p_i1977_1_) {
         super(p_i1977_1_, BlockList.desert_stone);
         this.spawnableCreatureList.clear();
         this.topBlock = BlockList.desert_dirt.getDefaultState();

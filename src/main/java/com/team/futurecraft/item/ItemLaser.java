@@ -15,25 +15,20 @@ import net.minecraft.world.World;
  * @author Joseph
  *
  */
-public class ItemLaser extends Item
-{
-	
-	public ItemLaser()
-	{
+public class ItemLaser extends Item {
+	public ItemLaser() {
 		this.maxStackSize = 1;
 		this.setMaxDamage(384);
 		this.setFull3D();
         this.setCreativeTab(FutureCraft.tabFutureCraft);
 	}
 	
-	public ItemStack onItemRightClick(ItemStack par1, World par2, EntityPlayer par3)
-    {
+	public ItemStack onItemRightClick(ItemStack par1, World par2, EntityPlayer par3) {
 		par1.damageItem(1, par3);
 		return par1;
     }
 	
-	public int getMaxItemUseDuration(ItemStack p_77626_1_)
-    {
+	public int getMaxItemUseDuration(ItemStack p_77626_1_) {
         return 1;
     }
 }

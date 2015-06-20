@@ -22,8 +22,7 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
  * @author Joseph
  *
  */
-public class GuiHandler implements IGuiHandler
-{
+public class GuiHandler implements IGuiHandler {
 	/**
      * Returns a Server side Container to be displayed to the user.
      *
@@ -36,25 +35,13 @@ public class GuiHandler implements IGuiHandler
      * @return A GuiScreen/Container to be displayed to the user, null if none.
      */
 	@Override
-	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) 
-	{
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
-		switch (ID)
-		{
-			case 100:
-			{
-				return new ContainerAlloyFurnace(player.inventory, (TileEntityAlloyFurnace)world.getTileEntity(pos));
-			}
-			case 102:
-			{
-				return new ContainerGenerator(player.inventory, (TileEntityGenerator)world.getTileEntity(pos));
-			}
-			case 103:
-			{
-				return new ContainerBattery((TileEntityMachine)world.getTileEntity(pos));
-			}
-			default:
-				return null;
+		switch (ID) {
+			case 100: return new ContainerAlloyFurnace(player.inventory, (TileEntityAlloyFurnace)world.getTileEntity(pos));
+			case 102: return new ContainerGenerator(player.inventory, (TileEntityGenerator)world.getTileEntity(pos));
+			case 103: return new ContainerBattery((TileEntityMachine)world.getTileEntity(pos));
+			default: return null;
 		}
 	}
 
@@ -75,26 +62,12 @@ public class GuiHandler implements IGuiHandler
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) 
 	{
 		BlockPos pos = new BlockPos(x, y, z);
-		switch (ID)
-		{
-			case 100:
-			{
-				return new GuiAlloyFurnace(player.inventory, (TileEntityAlloyFurnace)world.getTileEntity(pos));
-			}
-			case 101:
-			{
-				return new GuiNavigation(player);
-			}
-			case 102:
-			{
-				return new GuiGenerator(player.inventory, (TileEntityGenerator)world.getTileEntity(pos));
-			}
-			case 103:
-			{
-				return new GuiBattery((TileEntityMachine)world.getTileEntity(pos));
-			}
-			default:
-				return null;
+		switch (ID) {
+			case 100: return new GuiAlloyFurnace(player.inventory, (TileEntityAlloyFurnace)world.getTileEntity(pos));
+			case 101: return new GuiNavigation(player);
+			case 102: return new GuiGenerator(player.inventory, (TileEntityGenerator)world.getTileEntity(pos));
+			case 103: return new GuiBattery((TileEntityMachine)world.getTileEntity(pos));
+			default: return null;
 		}
 	}
 

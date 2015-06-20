@@ -9,8 +9,7 @@ import net.minecraft.world.biome.BiomeGenBase;
  * @author Joseph
  *
  */
-public class BiomeList 
-{
+public class BiomeList {
 	private static final BiomeGenBase.Height height_flat = new BiomeGenBase.Height(0.1F, 0.02F);
 	private static final BiomeGenBase.Height height_rough = new BiomeGenBase.Height(0.1F, 0.4F);
 	

@@ -1,6 +1,8 @@
 package com.team.futurecraft;
 
-
+import com.team.futurecraft.block.BlockWire;
+import com.team.futurecraft.block.BlockBattery;
+import com.team.futurecraft.block.BlockGenerator;
 import com.team.futurecraft.block.BlockAlloyFurnace;
 import com.team.futurecraft.block.BlockMovingSidewalk;
 import com.team.futurecraft.block.BlockNavigator;
@@ -17,8 +19,7 @@ import com.team.futurecraft.block.SimpleBlock;
  * @author Joseph
  *
  */
-public class BlockList 
-{
+public class BlockList  {
 	//metal blocks
 	public static SimpleBlock steel_plating;
 	public static SimpleBlock steel_vent;
@@ -53,6 +54,11 @@ public class BlockList
 	//machines
 	public static BlockAlloyFurnace alloy_furnace;
 	public static BlockAlloyFurnace alloy_furnace_lit;
+	public static BlockBattery battery;
+	public static BlockBattery creative_battery;
+	public static BlockWire wire;
+	public static BlockGenerator generator;
+	public static BlockGenerator generator_lit;
 	
 	//misc
 	public static BlockNavigator navigator;

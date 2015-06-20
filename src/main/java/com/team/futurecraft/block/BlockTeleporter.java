@@ -18,26 +18,21 @@ import net.minecraft.world.World;
  * @author Joseph
  *
  */
-public class BlockTeleporter extends SimpleBlock
-{
+public class BlockTeleporter extends SimpleBlock {
 	private int dim;
 	
 	/**
 	 * @param dimension The dimension this block teleports you when right clicking it.
 	 * @param name The name of the block item.
 	 */
-	public BlockTeleporter(int dimension, String name)
-	{
+	public BlockTeleporter(int dimension, String name) {
 		super(Material.rock, name);
 		this.dim = dimension;
 	}
 	
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) 
-    {
-		if (player.dimension == dim)
-			System.out.println("attempted to teleport in a dimension that you ar allready in!");
-		else if (!world.isRemote)
-		{
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (player.dimension == dim) System.out.println("attempted to teleport in a dimension that you ar allready in!");
+		else if (!world.isRemote) {
 			EntityPlayerMP newplayer = (EntityPlayerMP) player;
 			MinecraftServer mServer = MinecraftServer.getServer();
 			newplayer.mcServer.getConfigurationManager().transferPlayerToDimension(newplayer, dim, new TeleportHandler(mServer.worldServerForDimension(dim)));

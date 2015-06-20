@@ -16,8 +16,7 @@ import net.minecraft.world.biome.WorldChunkManager;
  * @author Joseph
  *
  */
-public class PlanetChunkManager extends WorldChunkManager
-{
+public class PlanetChunkManager extends WorldChunkManager {
     /** The biome generator object. */
     private BiomeGenBase biomeGenerator;
     /** The rainfall in the world */
@@ -27,8 +26,7 @@ public class PlanetChunkManager extends WorldChunkManager
      * @param biome the biome for the world to use
      * @aram rainfall the rainfall factor for this planet
      */
-    public PlanetChunkManager(BiomeGenBase biome, float rainfall)
-    {
+    public PlanetChunkManager(BiomeGenBase biome, float rainfall) {
         this.biomeGenerator = biome;
         this.rainfall = rainfall;
     }
@@ -36,21 +34,17 @@ public class PlanetChunkManager extends WorldChunkManager
     /**
      * Returns the BiomeGenBase related to the x, z position on the world.
      */
-    public BiomeGenBase getBiomeGenAt(int p_76935_1_, int p_76935_2_)
-    {
+    public BiomeGenBase getBiomeGenAt(int p_76935_1_, int p_76935_2_) {
         return this.biomeGenerator;
     }
 
     /**
      * Returns an array of biomes for the location input.
      */
-    public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] p_76937_1_, int p_76937_2_, int p_76937_3_, int p_76937_4_, int p_76937_5_)
-    {
-        if (p_76937_1_ == null || p_76937_1_.length < p_76937_4_ * p_76937_5_)
-        {
+    public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] p_76937_1_, int p_76937_2_, int p_76937_3_, int p_76937_4_, int p_76937_5_) {
+        if (p_76937_1_ == null || p_76937_1_.length < p_76937_4_ * p_76937_5_) {
             p_76937_1_ = new BiomeGenBase[p_76937_4_ * p_76937_5_];
         }
-
         Arrays.fill(p_76937_1_, 0, p_76937_4_ * p_76937_5_, this.biomeGenerator);
         return p_76937_1_;
     }
@@ -58,13 +52,10 @@ public class PlanetChunkManager extends WorldChunkManager
     /**
      * Returns a list of rainfall values for the specified blocks. Args: listToReuse, x, z, width, length.
      */
-    public float[] getRainfall(float[] p_76936_1_, int p_76936_2_, int p_76936_3_, int p_76936_4_, int p_76936_5_)
-    {
-        if (p_76936_1_ == null || p_76936_1_.length < p_76936_4_ * p_76936_5_)
-        {
+    public float[] getRainfall(float[] p_76936_1_, int p_76936_2_, int p_76936_3_, int p_76936_4_, int p_76936_5_) {
+        if (p_76936_1_ == null || p_76936_1_.length < p_76936_4_ * p_76936_5_) {
             p_76936_1_ = new float[p_76936_4_ * p_76936_5_];
         }
-
         Arrays.fill(p_76936_1_, 0, p_76936_4_ * p_76936_5_, this.rainfall);
         return p_76936_1_;
     }
@@ -73,13 +64,10 @@ public class PlanetChunkManager extends WorldChunkManager
      * Returns biomes to use for the blocks and loads the other data like temperature and humidity onto the
      * WorldChunkManager Args: oldBiomeList, x, z, width, depth
      */
-    public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] p_76933_1_, int p_76933_2_, int p_76933_3_, int p_76933_4_, int p_76933_5_)
-    {
-        if (p_76933_1_ == null || p_76933_1_.length < p_76933_4_ * p_76933_5_)
-        {
+    public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] p_76933_1_, int p_76933_2_, int p_76933_3_, int p_76933_4_, int p_76933_5_) {
+        if (p_76933_1_ == null || p_76933_1_.length < p_76933_4_ * p_76933_5_) {
             p_76933_1_ = new BiomeGenBase[p_76933_4_ * p_76933_5_];
         }
-
         Arrays.fill(p_76933_1_, 0, p_76933_4_ * p_76933_5_, this.biomeGenerator);
         return p_76933_1_;
     }
@@ -88,14 +76,12 @@ public class PlanetChunkManager extends WorldChunkManager
      * Return a list of biomes for the specified blocks. Args: listToReuse, x, y, width, length, cacheFlag (if false,
      * don't check biomeCache to avoid infinite loop in BiomeCacheBlock)
      */
-    public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] p_76931_1_, int p_76931_2_, int p_76931_3_, int p_76931_4_, int p_76931_5_, boolean p_76931_6_)
-    {
+    public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] p_76931_1_, int p_76931_2_, int p_76931_3_, int p_76931_4_, int p_76931_5_, boolean p_76931_6_) {
         return this.loadBlockGeneratorData(p_76931_1_, p_76931_2_, p_76931_3_, p_76931_4_, p_76931_5_);
     }
 
     @SuppressWarnings("rawtypes")
-    public BlockPos findBiomePosition(int x, int z, int range, List biomes, Random random)
-    {
+    public BlockPos findBiomePosition(int x, int z, int range, List biomes, Random random) {
         return biomes.contains(this.biomeGenerator) ? new BlockPos(x - range + random.nextInt(range * 2 + 1), 0, z - range + random.nextInt(range * 2 + 1)) : null;
     }
 
@@ -103,8 +89,7 @@ public class PlanetChunkManager extends WorldChunkManager
      * checks given Chunk's Biomes against List of allowed ones
      */
     @SuppressWarnings("rawtypes")
-    public boolean areBiomesViable(int p_76940_1_, int p_76940_2_, int p_76940_3_, List p_76940_4_)
-    {
+    public boolean areBiomesViable(int p_76940_1_, int p_76940_2_, int p_76940_3_, List p_76940_4_) {
         return p_76940_4_.contains(this.biomeGenerator);
     }
 }

@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "futurecraft:generator" },
+        "facing=south": { "model": "futurecraft:generator", "y": 180 },
+        "facing=west":  { "model": "futurecraft:generator", "y": 270 },
+        "facing=east":  { "model": "futurecraft:generator", "y": 90 }
+    }
+}

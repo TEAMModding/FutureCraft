@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "futurecraft:blocks/machine",
+        "front": "futurecraft:blocks/power_output",
+        "side": "futurecraft:blocks/battery"
+    }
+}

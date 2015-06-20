@@ -16,13 +16,12 @@ import net.minecraft.world.IBlockAccess;
  * @author Joseph
  *
  */
-public class BlockSimpleOre extends SimpleBlock
-{
+public class BlockSimpleOre extends SimpleBlock {
     private int xpLow;
     private int xpHigh;
+    private Random rand = new Random();
 
-    public BlockSimpleOre(int xpLow, int xpHigh, String name)
-    {
+    public BlockSimpleOre(int xpLow, int xpHigh, String name) {
         super(Material.rock, name);
         this.setCreativeTab(FutureCraft.tabFutureCraft);
         this.setStepSound(Block.soundTypePiston);
@@ -35,12 +34,9 @@ public class BlockSimpleOre extends SimpleBlock
     public BlockSimpleOre(String name) {
     	this(0, 5, name);
     }
-
-    private Random rand = new Random();
     
     @Override
-    public int getExpDrop(IBlockAccess world, BlockPos pos, int fortune)
-    {
+    public int getExpDrop(IBlockAccess world, BlockPos pos, int fortune) {
         return MathHelper.getRandomIntegerInRange(rand, xpLow, xpHigh);
     }
 }

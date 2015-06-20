@@ -3,9 +3,12 @@ package com.team.futurecraft;
 import com.team.futurecraft.BlockList;
 import com.team.futurecraft.block.BlockAlloyFurnace;
 import com.team.futurecraft.block.BlockMovingSidewalk;
+import com.team.futurecraft.block.BlockBattery;
+import com.team.futurecraft.block.BlockGenerator;
 import com.team.futurecraft.block.BlockNavigator;
 import com.team.futurecraft.block.BlockSimpleOre;
 import com.team.futurecraft.block.BlockTeleporter;
+import com.team.futurecraft.block.BlockWire;
 import com.team.futurecraft.block.SimpleBlock;
 import com.team.futurecraft.event.CoreEventHandler;
 import com.team.futurecraft.gui.GuiHandler;
@@ -15,6 +18,10 @@ import com.team.futurecraft.item.SimpleAxe;
 import com.team.futurecraft.item.SimpleItem;
 import com.team.futurecraft.item.SimplePickaxe;
 import com.team.futurecraft.recipe.AlloyRegistry;
+import com.team.futurecraft.tileentity.TileEntityAlloyFurnace;
+import com.team.futurecraft.tileentity.TileEntityGenerator;
+import com.team.futurecraft.tileentity.TileEntityMachine;
+import com.team.futurecraft.tileentity.TileEntityWire;
 import com.team.futurecraft.world.OreSpawn;
 import com.team.futurecraft.world.WorldProviderMars;
 import com.team.futurecraft.world.WorldProviderMoon;
@@ -56,6 +63,11 @@ public class StartupCommon {
 		CoreEventHandler events = new CoreEventHandler();
 		MinecraftForge.EVENT_BUS.register(events);
 		FMLCommonHandler.instance().bus().register(events);
+		
+		GameRegistry.registerTileEntity(TileEntityAlloyFurnace.class, "futurecraft:alloy_furnace");
+		GameRegistry.registerTileEntity(TileEntityMachine.class, "futurecraft:machine");
+		GameRegistry.registerTileEntity(TileEntityWire.class, "futurecraft:wire");
+		GameRegistry.registerTileEntity(TileEntityGenerator.class, "futurecraft:generator");
 		
 		GameRegistry.registerWorldGenerator(new OreSpawn(), 1);
 	}
@@ -212,6 +224,21 @@ public class StartupCommon {
 				
 		BlockList.alloy_furnace_lit = new BlockAlloyFurnace(true, "alloy_furnace_lit");
 		GameRegistry.registerBlock(BlockList.alloy_furnace_lit, "alloy_furnace_lit");
+		
+		BlockList.generator = new BlockGenerator(false, "generator");
+		GameRegistry.registerBlock(BlockList.generator, "generator");
+				
+		BlockList.generator_lit = new BlockGenerator(true, "generator_lit");
+		GameRegistry.registerBlock(BlockList.generator_lit, "generator_lit");
+		
+		BlockList.battery = new BlockBattery(false, "battery");
+		GameRegistry.registerBlock(BlockList.battery, "battery");
+		
+		BlockList.creative_battery = new BlockBattery(true, "creative_battery");
+		GameRegistry.registerBlock(BlockList.creative_battery, "creative_battery");
+		
+		BlockList.wire = new BlockWire("copper_wire");
+		GameRegistry.registerBlock(BlockList.wire, "copper_wire");
 		
 		//misc
 		BlockList.navigator = new BlockNavigator("navigator");
