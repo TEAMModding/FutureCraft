@@ -22,7 +22,13 @@ import net.minecraftforge.client.IRenderHandler;
  *
  */
 public class SkyRenderer extends IRenderHandler {
-	private static final ResourceLocation locationSkyPng = new ResourceLocation("futurecraft","textures/environment/stars.png");
+	private static final ResourceLocation SKY_POS_X = new ResourceLocation("futurecraft","textures/environment/sky_pos_x.png");
+	private static final ResourceLocation SKY_NEG_X = new ResourceLocation("futurecraft","textures/environment/sky_neg_x.png");
+	private static final ResourceLocation SKY_POS_Y = new ResourceLocation("futurecraft","textures/environment/sky_pos_y.png");
+	private static final ResourceLocation SKY_NEG_Y = new ResourceLocation("futurecraft","textures/environment/sky_neg_y.png");
+	private static final ResourceLocation SKY_POS_Z = new ResourceLocation("futurecraft","textures/environment/sky_pos_z.png");
+	private static final ResourceLocation SKY_NEG_Z = new ResourceLocation("futurecraft","textures/environment/sky_neg_z.png");
+	
 	
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
@@ -33,39 +39,48 @@ public class SkyRenderer extends IRenderHandler {
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         RenderHelper.disableStandardItemLighting();
         GL11.glDepthMask(false);
-        renderEngine.bindTexture(locationSkyPng);
+        renderEngine.bindTexture(SKY_NEG_Y);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
 
         for (int i = 0; i < 6; ++i) {
             GL11.glPushMatrix();
+            GL11.glRotatef(45.0F, 0.0F, 0.0F, 1.0F);
 
             if (i == 1) {
+            	renderEngine.bindTexture(SKY_POS_Z);
                 GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
             }
 
             if (i == 2) {
+            	renderEngine.bindTexture(SKY_NEG_Z);
+            	GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
                 GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
             }
 
             if (i == 3) {
+            	renderEngine.bindTexture(SKY_POS_Y);
                 GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
             }
 
             if (i == 4) {
+            	renderEngine.bindTexture(SKY_POS_X);
+            	GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
                 GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
             }
 
             if (i == 5) {
+            	renderEngine.bindTexture(SKY_NEG_X);
+            	GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
                 GL11.glRotatef(-90.0F, 0.0F, 0.0F, 1.0F);
             }
 
             renderer.startDrawingQuads();
-            renderer.setColorOpaque_I(2631720);
+            renderer.setColorOpaque_I(0xFFFFFF);
             renderer.addVertexWithUV(-100.0D, -100.0D, -100.0D, 0.0D, 0.0D);
-            renderer.addVertexWithUV(-100.0D, -100.0D, 100.0D, 0.0D, 8.0D);
-            renderer.addVertexWithUV(100.0D, -100.0D, 100.0D, 8.0D, 8.0D);
-            renderer.addVertexWithUV(100.0D, -100.0D, -100.0D, 8.0D, 0.0D);
+            renderer.addVertexWithUV(-100.0D, -100.0D, 100.0D, 0.0D, 1.0D);
+            renderer.addVertexWithUV(100.0D, -100.0D, 100.0D, 1.0D, 1.0D);
+            renderer.addVertexWithUV(100.0D, -100.0D, -100.0D, 1.0D, 0.0D);
             tessellator.draw();
             GL11.glPopMatrix();
         }

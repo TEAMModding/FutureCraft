@@ -10,6 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.SpawnerAnimals;
 import net.minecraft.world.World;
@@ -25,6 +26,7 @@ import net.minecraft.world.gen.MapGenRavine;
 import net.minecraft.world.gen.NoiseGenerator;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.MapGenStronghold;
@@ -51,6 +53,7 @@ public class ChunkProviderPlanet implements IChunkProvider {
     private NoiseGeneratorOctaves field_147432_k;
     private NoiseGeneratorOctaves field_147429_l;
     private NoiseGeneratorPerlin field_147430_m;
+    private static net.minecraft.world.gen.NoiseGeneratorSimplex noise;
     /** A NoiseGeneratorOctaves used in generating terrain */
     public NoiseGeneratorOctaves noiseGen5;
     /** A NoiseGeneratorOctaves used in generating terrain */
@@ -86,6 +89,7 @@ public class ChunkProviderPlanet implements IChunkProvider {
     double[] field_147426_g;
 
     public ChunkProviderPlanet(World worldIn, long p_i45636_2_, Block stoneblock) {
+    	this.noise = new NoiseGeneratorSimplex(new Random(worldIn.getSeed()));
         this.field_177476_s = Blocks.water;
         this.stoneBlock = stoneblock;
         this.stoneNoise = new double[256];
@@ -138,62 +142,39 @@ public class ChunkProviderPlanet implements IChunkProvider {
         this.noiseGen6 = (NoiseGeneratorOctaves)noiseGens[5];
         this.mobSpawnerNoise = (NoiseGeneratorOctaves)noiseGens[6];
     }
+    
+    private static float noise(Vec3 position, int octaves, float frequency, float persistence) {
+		float total = 0.0f;
+	    float maxAmplitude = 0.0f;
+	    float amplitude = 1.0f;
+	    
+	    for (int i = 0; i < octaves; i++) {
 
-    public void setBlocksInChunk(int p_180518_1_, int p_180518_2_, ChunkPrimer p_180518_3_) {
-        this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, p_180518_1_ * 4 - 2, p_180518_2_ * 4 - 2, 10, 10);
-        this.func_147423_a(p_180518_1_ * 4, 0, p_180518_2_ * 4);
+	        // Get the noise sample
+	        total += noise.func_151605_a(position.xCoord * frequency, position.zCoord * frequency) * amplitude;
 
-        for (int k = 0; k < 4; ++k) {
-            int l = k * 5;
-            int i1 = (k + 1) * 5;
+	        // Make the wavelength twice as small
+	        frequency *= 2.0;
 
-            for (int j1 = 0; j1 < 4; ++j1) {
-                int k1 = (l + j1) * 33;
-                int l1 = (l + j1 + 1) * 33;
-                int i2 = (i1 + j1) * 33;
-                int j2 = (i1 + j1 + 1) * 33;
+	        // Add to our maximum possible amplitude
+	        maxAmplitude += amplitude;
 
-                for (int k2 = 0; k2 < 32; ++k2) {
-                    double d0 = 0.125D;
-                    double d1 = this.field_147434_q[k1 + k2];
-                    double d2 = this.field_147434_q[l1 + k2];
-                    double d3 = this.field_147434_q[i2 + k2];
-                    double d4 = this.field_147434_q[j2 + k2];
-                    double d5 = (this.field_147434_q[k1 + k2 + 1] - d1) * d0;
-                    double d6 = (this.field_147434_q[l1 + k2 + 1] - d2) * d0;
-                    double d7 = (this.field_147434_q[i2 + k2 + 1] - d3) * d0;
-                    double d8 = (this.field_147434_q[j2 + k2 + 1] - d4) * d0;
+	        // Reduce amplitude according to persistence for the next octave
+	        amplitude *= persistence;
+	    }
 
-                    for (int l2 = 0; l2 < 8; ++l2) {
-                        double d9 = 0.25D;
-                        double d10 = d1;
-                        double d11 = d2;
-                        double d12 = (d3 - d1) * d9;
-                        double d13 = (d4 - d2) * d9;
+	    // Scale the result by the maximum amplitude
+	    return total / maxAmplitude;
+	}
 
-                        for (int i3 = 0; i3 < 4; ++i3) {
-                            double d14 = 0.25D;
-                            double d16 = (d11 - d10) * d14;
-                            double d15 = d10 - d16;
-
-                            for (int j3 = 0; j3 < 4; ++j3) {
-                                if ((d15 += d16) > 0.0D) {
-                                    p_180518_3_.setBlockState(k * 4 + i3, k2 * 8 + l2, j1 * 4 + j3, stoneBlock.getDefaultState());
-                                }
-                                else if (k2 * 8 + l2 < this.settings.seaLevel) {
-                                    p_180518_3_.setBlockState(k * 4 + i3, k2 * 8 + l2, j1 * 4 + j3, this.field_177476_s.getDefaultState());
-                                }
-                            }
-                            d10 += d12;
-                            d11 += d13;
-                        }
-                        d1 += d5;
-                        d2 += d6;
-                        d3 += d7;
-                        d4 += d8;
-                    }
-                }
-            }
+    public void setBlocksInChunk(int chunkX, int chunkZ, ChunkPrimer world) {
+        for (int x = 0; x < 16; x++) {
+        	for (int z = 0; z < 16; z++) {
+        		int height = (int)Math.floor(noise(new Vec3((chunkX * 16) + x, 0, (chunkZ * 16) + z), 3, 0.002f, 0.8f) * 35);
+        		for (int y = 0; y < height + 80; y++) {
+        			world.setBlockState(x, y, z, this.stoneBlock.getDefaultState());
+        		}
+        	}
         }
     }
 
@@ -260,105 +241,6 @@ public class ChunkProviderPlanet implements IChunkProvider {
         }
         chunk.generateSkylightMap();
         return chunk;
-    }
-
-    private void func_147423_a(int p_147423_1_, int p_147423_2_, int p_147423_3_) {
-        this.field_147426_g = this.noiseGen6.generateNoiseOctaves(this.field_147426_g, p_147423_1_, p_147423_3_, 5, 5, (double)this.settings.depthNoiseScaleX, (double)this.settings.depthNoiseScaleZ, (double)this.settings.depthNoiseScaleExponent);
-        float f = this.settings.coordinateScale;
-        float f1 = this.settings.heightScale;
-        this.field_147427_d = this.field_147429_l.generateNoiseOctaves(this.field_147427_d, p_147423_1_, p_147423_2_, p_147423_3_, 5, 33, 5, (double)(f / this.settings.mainNoiseScaleX), (double)(f1 / this.settings.mainNoiseScaleY), (double)(f / this.settings.mainNoiseScaleZ));
-        this.field_147428_e = this.field_147431_j.generateNoiseOctaves(this.field_147428_e, p_147423_1_, p_147423_2_, p_147423_3_, 5, 33, 5, (double)f, (double)f1, (double)f);
-        this.field_147425_f = this.field_147432_k.generateNoiseOctaves(this.field_147425_f, p_147423_1_, p_147423_2_, p_147423_3_, 5, 33, 5, (double)f, (double)f1, (double)f);
-        int l = 0;
-        int i1 = 0;
-
-        for (int j1 = 0; j1 < 5; ++j1) {
-            for (int k1 = 0; k1 < 5; ++k1) {
-                float f2 = 0.0F;
-                float f3 = 0.0F;
-                float f4 = 0.0F;
-                byte b0 = 2;
-                BiomeGenBase biomegenbase = this.biomesForGeneration[j1 + 2 + (k1 + 2) * 10];
-
-                for (int l1 = -b0; l1 <= b0; ++l1) {
-                    for (int i2 = -b0; i2 <= b0; ++i2) {
-                        BiomeGenBase biomegenbase1 = this.biomesForGeneration[j1 + l1 + 2 + (k1 + i2 + 2) * 10];
-                        float f5 = this.settings.biomeDepthOffSet + biomegenbase1.minHeight * this.settings.biomeDepthWeight;
-                        float f6 = this.settings.biomeScaleOffset + biomegenbase1.maxHeight * this.settings.biomeScaleWeight;
-
-                        if (this.field_177475_o == WorldType.AMPLIFIED && f5 > 0.0F) {
-                            f5 = 1.0F + f5 * 2.0F;
-                            f6 = 1.0F + f6 * 4.0F;
-                        }
-
-                        float f7 = this.parabolicField[l1 + 2 + (i2 + 2) * 5] / (f5 + 2.0F);
-
-                        if (biomegenbase1.minHeight > biomegenbase.minHeight) {
-                            f7 /= 2.0F;
-                        }
-                        f2 += f6 * f7;
-                        f3 += f5 * f7;
-                        f4 += f7;
-                    }
-                }
-                f2 /= f4;
-                f3 /= f4;
-                f2 = f2 * 0.9F + 0.1F;
-                f3 = (f3 * 4.0F - 1.0F) / 8.0F;
-                double d7 = this.field_147426_g[i1] / 8000.0D;
-
-                if (d7 < 0.0D) {
-                    d7 = -d7 * 0.3D;
-                }
-
-                d7 = d7 * 3.0D - 2.0D;
-
-                if (d7 < 0.0D) {
-                    d7 /= 2.0D;
-
-                    if (d7 < -1.0D) {
-                        d7 = -1.0D;
-                    }
-
-                    d7 /= 1.4D;
-                    d7 /= 2.0D;
-                }
-                else {
-                    if (d7 > 1.0D) {
-                        d7 = 1.0D;
-                    }
-                    d7 /= 8.0D;
-                }
-
-                ++i1;
-                double d8 = (double)f3;
-                double d9 = (double)f2;
-                d8 += d7 * 0.2D;
-                d8 = d8 * (double)this.settings.baseSize / 8.0D;
-                double d0 = (double)this.settings.baseSize + d8 * 4.0D;
-
-                for (int j2 = 0; j2 < 33; ++j2) {
-                    double d1 = ((double)j2 - d0) * (double)this.settings.stretchY * 128.0D / 256.0D / d9;
-
-                    if (d1 < 0.0D) {
-                        d1 *= 4.0D;
-                    }
-
-                    double d2 = this.field_147428_e[l] / (double)this.settings.lowerLimitScale;
-                    double d3 = this.field_147425_f[l] / (double)this.settings.upperLimitScale;
-                    double d4 = (this.field_147427_d[l] / 10.0D + 1.0D) / 2.0D;
-                    double d5 = MathHelper.denormalizeClamp(d2, d3, d4) - d1;
-
-                    if (j2 > 29) {
-                        double d6 = (double)((float)(j2 - 29) / 3.0F);
-                        d5 = d5 * (1.0D - d6) + -10.0D * d6;
-                    }
-
-                    this.field_147434_q[l] = d5;
-                    ++l;
-                }
-            }
-        }
     }
 
     /**
