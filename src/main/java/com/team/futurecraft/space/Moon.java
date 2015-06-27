@@ -2,54 +2,49 @@ package com.team.futurecraft.space;
 
 import net.minecraft.util.Vec3;
 
-public class Earth extends Planet {
+public class Moon extends Planet {
 
-	public Earth(CelestialObject parent) {
+	public Moon(CelestialObject parent) {
 		super(parent);
-		this.add(new Moon(this));
 	}
 
 	@Override
 	public WorldType getWorldType() {
-		return null;
+		return new WorldTypeSelena();
 	}
 
 	@Override
 	public Vec3 getAtmosphericColor() {
-		return new Vec3(0, 0, 0);
+		return new Vec3(1, 1, 1);
 	}
 
 	@Override
 	public float getAtmosphericDensity() {
-		return 0f;
+		return 0.0f;
 	}
 
 	@Override
 	public String getName() {
-		return "Earth";
+		return "Moon";
 	}
 
 	@Override
 	public String getTexture() {
-		return "earth.png";
+		return "moon.png";
 	}
 
 	@Override
 	public float getGravity() {
-		return 1.0f;
+		return 0.3f;
 	}
 
 	@Override
 	public float getDiameter() {
-		return 0.1f;
+		return 0.04f;
 	}
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(200.0f, 1.0f);
-	}
-
-	public int getDimension() {
-		return 0;
+		return new OrbitalParameters(1.0f, 10.0f);
 	}
 }

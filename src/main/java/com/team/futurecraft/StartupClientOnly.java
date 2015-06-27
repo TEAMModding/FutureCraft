@@ -5,7 +5,9 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class StartupClientOnly {
-	public static void preInit() {}
+	public static void preInit() {
+		
+	}
 	
 	/**
 	 * Initializes the client side.

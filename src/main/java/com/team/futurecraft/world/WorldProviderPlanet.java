@@ -1,5 +1,9 @@
 package com.team.futurecraft.world;
 
+import com.team.futurecraft.SkyRenderer;
+import com.team.futurecraft.SpaceRegistry;
+import com.team.futurecraft.space.Planet;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.world.WorldProvider;
@@ -15,12 +19,30 @@ import net.minecraft.world.chunk.IChunkProvider;
  * @author Joseph
  *
  */
-public abstract class WorldProviderPlanet extends WorldProvider {
-    public abstract void registerWorldChunkManager();
+public class WorldProviderPlanet extends WorldProvider {
+	private Planet planet;
+	
+	
+	
+    @Override
+	public void setDimension(int dim) {
+    	super.setDimension(dim);
+		this.planet = SpaceRegistry.getPlanetForDimension(dim);
+		System.out.println("loaded dimension for: " + planet.getName());
+	}
+
+	public void registerWorldChunkManager() {
+		this.worldChunkMgr = new PlanetChunkManager(this.planet.getWorldType().getBiome(), 0.0F);
+        this.setSkyRenderer(new SkyRenderer(this.planet));
+	}
     
-    public abstract String getSaveFolder();
+    public String getSaveFolder() {
+    	return this.planet.getName();
+    }
     
-    public abstract IChunkProvider createChunkGenerator();
+    public IChunkProvider createChunkGenerator() {
+    	return new ChunkProviderPlanet(this.worldObj, this.worldObj.getSeed(), this.planet.getWorldType().getStoneBlock());
+    }
     
     /**
      * True if the player can respawn in this dimension (true = overworld, false = nether).
@@ -49,10 +71,8 @@ public abstract class WorldProviderPlanet extends WorldProvider {
      * Returns the dimension's name, e.g. "The End", "Nether", or "Overworld".
      */
     public String getDimensionName() {
-    	return getPlanetName();
+    	return this.planet.getName();
     }
-    
-    public abstract String getPlanetName();
     
     /**
      * gets the gravity for this planet 1.0 is earth gravity.
@@ -60,9 +80,13 @@ public abstract class WorldProviderPlanet extends WorldProvider {
      * 
      * @return the gravity for this planet
      */
-    public abstract double getGravity();
+    public double getGravity() {
+    	return this.planet.getGravity();
+    }
     
-    public abstract String getImage();
+    public String getImage() {
+    	return this.planet.getTexture();
+    }
     
     @Override
 	public String getInternalNameSuffix() {

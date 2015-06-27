@@ -6,7 +6,6 @@ import com.team.futurecraft.block.BlockBattery;
 import com.team.futurecraft.block.BlockGenerator;
 import com.team.futurecraft.block.BlockNavigator;
 import com.team.futurecraft.block.BlockSimpleOre;
-import com.team.futurecraft.block.BlockTeleporter;
 import com.team.futurecraft.block.BlockWire;
 import com.team.futurecraft.block.SimpleBlock;
 import com.team.futurecraft.event.CoreEventHandler;
@@ -16,14 +15,15 @@ import com.team.futurecraft.item.ItemMultimeter;
 import com.team.futurecraft.item.SimpleAxe;
 import com.team.futurecraft.item.SimpleItem;
 import com.team.futurecraft.item.SimplePickaxe;
+import com.team.futurecraft.network.TeleportMessage;
+import com.team.futurecraft.network.TeleportMessageHandler;
 import com.team.futurecraft.recipe.AlloyRegistry;
+import com.team.futurecraft.space.Sol;
 import com.team.futurecraft.tileentity.TileEntityAlloyFurnace;
 import com.team.futurecraft.tileentity.TileEntityGenerator;
 import com.team.futurecraft.tileentity.TileEntityMachine;
 import com.team.futurecraft.tileentity.TileEntityWire;
 import com.team.futurecraft.world.OreSpawn;
-import com.team.futurecraft.world.WorldProviderMars;
-import com.team.futurecraft.world.WorldProviderMoon;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -40,7 +40,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is for initializing objects on the server-side and client-side
@@ -50,6 +52,11 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  *
  */
 public class StartupCommon {
+	public static SimpleNetworkWrapper simpleNetworkWrapper;    // used to transmit your network messages
+	public static final Sol SOL = new Sol(null);
+
+	public static final int TELEPORT_MESSAGE_ID = 35;      // a unique ID for this message type.  It helps detect errors if you don't use zero!
+	
 	/**
 	 * Initialize blocks, items, and just about everything else here.
 	 */
@@ -68,6 +75,9 @@ public class StartupCommon {
 		GameRegistry.registerTileEntity(TileEntityGenerator.class, "futurecraft:generator");
 		
 		GameRegistry.registerWorldGenerator(new OreSpawn(), 1);
+		
+		simpleNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("MBEchannel");
+	    simpleNetworkWrapper.registerMessage(TeleportMessageHandler.class, TeleportMessage.class, TELEPORT_MESSAGE_ID, Side.SERVER);
 	}
 	
 	/**
@@ -79,9 +89,7 @@ public class StartupCommon {
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler("futurecraft", new GuiHandler());
 		
-		PlanetRegistry.registerEarth();
-		PlanetRegistry.registerPlanet(-10, WorldProviderMoon.class);
-		PlanetRegistry.registerPlanet(-11, WorldProviderMars.class);
+		SpaceRegistry.registerSystem(SOL);
 	}
 	
 	/**
@@ -241,15 +249,6 @@ public class StartupCommon {
 		//misc
 		BlockList.navigator = new BlockNavigator("navigator");
 		GameRegistry.registerBlock(BlockList.navigator, "navigator");
-		
-		BlockList.earth_teleporter = new BlockTeleporter(0, "earth_teleporter");
-		GameRegistry.registerBlock(BlockList.earth_teleporter, "earth_teleporter");
-		
-		BlockList.moon_teleporter = new BlockTeleporter(-10, "moon_teleporter");
-		GameRegistry.registerBlock(BlockList.moon_teleporter, "moon_teleporter");
-		
-		BlockList.mars_teleporter = new BlockTeleporter(-11, "mars_teleporter");
-		GameRegistry.registerBlock(BlockList.mars_teleporter, "mars_teleporter");
 	}
 	
 	/**

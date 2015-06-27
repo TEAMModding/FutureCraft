@@ -30,7 +30,12 @@ public class CoreEventHandler {
 		if (provider instanceof WorldProviderPlanet) {
 			WorldProviderPlanet planet = (WorldProviderPlanet)provider;
 			
+			if (entity.stepHeight != 1f) entity.stepHeight = 1f;
+			
 			if (!entity.onGround) entity.addVelocity(0, 0.1D - (planet.getGravity() * 0.1D), 0);
+		}
+		else if (entity.stepHeight != 0.6f) {
+			entity.stepHeight = 0.6f;
 		}
 	}
 }

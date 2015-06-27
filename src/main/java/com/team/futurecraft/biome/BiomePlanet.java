@@ -21,10 +21,10 @@ import net.minecraft.world.chunk.ChunkPrimer;
  * @author Joseph
  *
  */
-public class BiomeGenPlanet extends BiomeGenBase {
+public class BiomePlanet extends BiomeGenBase {
 	private Block stoneBlock;
 	
-	public BiomeGenPlanet(int p_i1971_1_, Block stoneBlock) {
+	public BiomePlanet(int p_i1971_1_, Block stoneBlock) {
 		super(p_i1971_1_);
 		this.stoneBlock = stoneBlock;
 	}

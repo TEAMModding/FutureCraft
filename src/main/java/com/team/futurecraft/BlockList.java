@@ -6,7 +6,6 @@ import com.team.futurecraft.block.BlockBattery;
 import com.team.futurecraft.block.BlockGenerator;
 import com.team.futurecraft.block.BlockNavigator;
 import com.team.futurecraft.block.BlockSimpleOre;
-import com.team.futurecraft.block.BlockTeleporter;
 import com.team.futurecraft.block.BlockWire;
 import com.team.futurecraft.block.SimpleBlock;
 
@@ -62,7 +61,4 @@ public class BlockList {
 	
 	//misc
 	public static BlockNavigator navigator;
-	public static BlockTeleporter earth_teleporter;
-	public static BlockTeleporter moon_teleporter;
-	public static BlockTeleporter mars_teleporter;
 }

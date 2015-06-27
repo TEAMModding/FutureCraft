@@ -14,7 +14,6 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.SpawnerAnimals;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -53,7 +52,7 @@ public class ChunkProviderPlanet implements IChunkProvider {
     private NoiseGeneratorOctaves field_147432_k;
     private NoiseGeneratorOctaves field_147429_l;
     private NoiseGeneratorPerlin field_147430_m;
-    private static net.minecraft.world.gen.NoiseGeneratorSimplex noise;
+    private net.minecraft.world.gen.NoiseGeneratorSimplex noise;
     /** A NoiseGeneratorOctaves used in generating terrain */
     public NoiseGeneratorOctaves noiseGen5;
     /** A NoiseGeneratorOctaves used in generating terrain */
@@ -63,11 +62,8 @@ public class ChunkProviderPlanet implements IChunkProvider {
     private World worldObj;
     /** are map structures going to be generated (e.g. strongholds) */
     private final boolean mapFeaturesEnabled;
-    private WorldType field_177475_o;
-    private final double[] field_147434_q;
     private final float[] parabolicField;
     private ChunkProviderSettings settings;
-    private Block field_177476_s;
     private double[] stoneNoise;
     private MapGenBase caveGenerator;
     /** Holds Stronghold Generator */
@@ -90,7 +86,6 @@ public class ChunkProviderPlanet implements IChunkProvider {
 
     public ChunkProviderPlanet(World worldIn, long p_i45636_2_, Block stoneblock) {
     	this.noise = new NoiseGeneratorSimplex(new Random(worldIn.getSeed()));
-        this.field_177476_s = Blocks.water;
         this.stoneBlock = stoneblock;
         this.stoneNoise = new double[256];
         this.caveGenerator = new MapGenCaves();
@@ -110,7 +105,6 @@ public class ChunkProviderPlanet implements IChunkProvider {
         }
         this.worldObj = worldIn;
         this.mapFeaturesEnabled = false;
-        this.field_177475_o = worldIn.getWorldInfo().getTerrainType();
         this.rand = new Random(p_i45636_2_);
         this.field_147431_j = new NoiseGeneratorOctaves(this.rand, 16);
         this.field_147432_k = new NoiseGeneratorOctaves(this.rand, 16);
@@ -119,7 +113,6 @@ public class ChunkProviderPlanet implements IChunkProvider {
         this.noiseGen5 = new NoiseGeneratorOctaves(this.rand, 10);
         this.noiseGen6 = new NoiseGeneratorOctaves(this.rand, 16);
         this.mobSpawnerNoise = new NoiseGeneratorOctaves(this.rand, 8);
-        this.field_147434_q = new double[825];
         this.parabolicField = new float[25];
 
         for (int j = -2; j <= 2; ++j) {
@@ -130,7 +123,6 @@ public class ChunkProviderPlanet implements IChunkProvider {
         }
 
         this.settings = ChunkProviderSettings.Factory.func_177865_a(worldIn.getWorldInfo().getGeneratorOptions()).func_177864_b();
-        this.field_177476_s = Blocks.air;
 
         NoiseGenerator[] noiseGens = {field_147431_j, field_147432_k, field_147429_l, field_147430_m, noiseGen5, noiseGen6, mobSpawnerNoise};
         noiseGens = TerrainGen.getModdedNoiseGenerators(worldIn, this.rand, noiseGens);
@@ -143,7 +135,7 @@ public class ChunkProviderPlanet implements IChunkProvider {
         this.mobSpawnerNoise = (NoiseGeneratorOctaves)noiseGens[6];
     }
     
-    private static float noise(Vec3 position, int octaves, float frequency, float persistence) {
+    private float noise(Vec3 position, int octaves, float frequency, float persistence) {
 		float total = 0.0f;
 	    float maxAmplitude = 0.0f;
 	    float amplitude = 1.0f;

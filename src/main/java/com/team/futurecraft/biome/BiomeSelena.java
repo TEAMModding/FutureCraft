@@ -13,8 +13,8 @@ import net.minecraft.world.World;
  * @author Joseph
  *
  */
-public class BiomeGenMoon extends BiomeGenPlanet {
-    public BiomeGenMoon(int p_i1977_1_) {
+public class BiomeSelena extends BiomePlanet {
+    public BiomeSelena(int p_i1977_1_) {
         super(p_i1977_1_, BlockList.selena_stone);
         this.spawnableCreatureList.clear();
         this.topBlock = BlockList.selena_dirt.getDefaultState();

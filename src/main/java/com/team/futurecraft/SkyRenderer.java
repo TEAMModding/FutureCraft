@@ -1,15 +1,25 @@
 package com.team.futurecraft;
 
+import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.glu.Sphere;
+
+import com.team.futurecraft.space.Planet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IRenderHandler;
 
 /**
@@ -28,7 +38,11 @@ public class SkyRenderer extends IRenderHandler {
 	private static final ResourceLocation SKY_NEG_Y = new ResourceLocation("futurecraft","textures/environment/sky_neg_y.png");
 	private static final ResourceLocation SKY_POS_Z = new ResourceLocation("futurecraft","textures/environment/sky_pos_z.png");
 	private static final ResourceLocation SKY_NEG_Z = new ResourceLocation("futurecraft","textures/environment/sky_neg_z.png");
+	private Planet planet;
 	
+	public SkyRenderer(Planet planet) {
+		this.planet = planet;
+	}
 	
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
@@ -84,8 +98,70 @@ public class SkyRenderer extends IRenderHandler {
             tessellator.draw();
             GL11.glPopMatrix();
         }
+        renderAtmosphere();
+        
+        GL11.glTranslatef(0, -100010, 0);
+        renderPlanet(new ResourceLocation("futurecraft", "textures/environment/" + this.planet.getTexture()), 100000, mc);
+        GL11.glTranslatef(0, 100010, 0);
+        
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
+	}
+	
+	private void renderAtmosphere() {
+		Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer renderer = tessellator.getWorldRenderer();
+		Vec3 colors = this.planet.getAtmosphericColor();
+        
+        for (int i = 0; i < 4; i++) {
+        	GL11.glPushMatrix();
+        	
+        	if (i == 1) GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+        	if (i == 2) GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+        	if (i == 3) GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+        	
+        	GlStateManager.disableTexture2D();
+        	GlStateManager.enableBlend();
+        	GlStateManager.disableAlpha();
+        	GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        	GlStateManager.shadeModel(7425);
+        	renderer.startDrawingQuads();
+        	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, this.planet.getAtmosphericDensity());
+        	renderer.addVertex(-100.0D, -100.0D, -100.0D);
+        	renderer.addVertex(100.0D, -100.0D, -100.0D);
+        	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, this.planet.getAtmosphericDensity() - 0.5f);
+        	renderer.addVertex(100.0D, 100.0D, -100.0D);
+        	renderer.addVertex(-100.0D, 100.0D, -100.0D);
+        	tessellator.draw();
+        	GL11.glPopMatrix();
+        }
+        renderer.startDrawingQuads();
+    	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, this.planet.getAtmosphericDensity() - 0.5f);
+    	renderer.addVertex(-99.0D, 99.0D, -99.0D);
+    	renderer.addVertex(99.0D, 99.0D, -99.0D);
+    	renderer.addVertex(99.0D, 99.0D, 99.0D);
+    	renderer.addVertex(-99.0D, 99.0D, 99.0D);
+    	tessellator.draw();
+        
+        GlStateManager.enableTexture2D();
+	}
+	
+	/**
+	 * Renders the planet with the specified image.
+	 */
+	private void renderPlanet(ResourceLocation img, float size, Minecraft mc) {
+		glPushMatrix();
+        mc.getTextureManager().bindTexture(img);
+		glColor3f(1, 1, 1);
+        
+        
+        mc.getTextureManager().bindTexture(img);
+        glColor3f(1, 1, 1);
+        Sphere sphere = new Sphere();
+        sphere.setTextureFlag(true);
+        sphere.setNormals(GLU.GLU_SMOOTH);
+        sphere.draw(size, 100, 100);
+        glPopMatrix();
 	}
 }

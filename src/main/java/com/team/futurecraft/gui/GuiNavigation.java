@@ -9,97 +9,127 @@ import java.util.ArrayList;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.Disk;
 import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Sphere;
 
-import com.team.futurecraft.PlanetRegistry;
-import com.team.futurecraft.world.WorldProviderPlanet;
+import com.team.futurecraft.SpaceRegistry;
+import com.team.futurecraft.StartupCommon;
+import com.team.futurecraft.network.TeleportMessage;
+import com.team.futurecraft.space.CelestialObject;
+import com.team.futurecraft.space.Planet;
+import com.team.futurecraft.space.Sol;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 
 /**
  * This is the gui screen class of the navigation gui.
  * 
  * @author Joseph
- *
  */
 public class GuiNavigation extends GuiScreen {
-	private ArrayList<WorldProviderPlanet> planets;
-	private WorldProviderPlanet currentPlanet;
-	private int position = 0;
-	private float planetRotation = 0;
-	private float zPos = -3;
-	private float xPos = 0;
-	private float yPos = 0;
+	private float time = 0;
+	private float zPos = -400;
+	private float xPos = -10;
+	private float yPos = -200;
 	private float xRot = 0;
-	private float yRot = 0;
-	private float zRot = 0;
+	private float yRot = 30;
 	private static FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
+	private ArrayList<Planet> planets = new ArrayList<Planet>();
+	private float speed = 0.01f;
 	
+	/**
+	 * No idea why this is even here, i guess we might need it someday.
+	 * 
+	 * @param player
+	 */
 	public GuiNavigation(EntityPlayer player) {
-		this.planets = PlanetRegistry.getRegisteredPlanets();
+		
 	}
 	
 	/**
-	 * Adds the buttons and sets the planet.
+	 * Adds the buttons.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui() {
-		this.currentPlanet = planets.get(0);
+		CelestialObject[] objects = StartupCommon.SOL.getChildren();
+		int buttonCount = 0;
+		for (int i = 0; i < objects.length; i++) {
+			this.buttonList.add(new GuiSpaceButton(buttonCount, 10, 10 + buttonCount * 30, 100, 20, objects[i].getName()));
+			planets.add((Planet)objects[i]);
+			buttonCount++;
+			
+			CelestialObject[] moons = objects[i].getChildren();
+			for (int j = 0; j < moons.length; j++) {
+				this.buttonList.add(new GuiSpaceButton(buttonCount, 50, 10 + buttonCount * 30, 100, 20, moons[i].getName()));
+				planets.add((Planet)moons[i]);
+				buttonCount++;
+			}
+		}
 	}
 	
+	/**
+	 * Handles the mouse input to rotate the camera.
+	 */
 	public void handleMouseInput() throws IOException
     {
-		if (Mouse.isButtonDown(0)) {
+		if (Mouse.isGrabbed()) {
 			float mouseSpeed = 0.1f;
 			double mouseX = Mouse.getEventX();
 			double mouseY = Mouse.getEventY();
 			xRot -= (float) (mouseSpeed * (this.mc.displayWidth /2 - mouseX));
 			yRot += (float) (mouseSpeed * (this.mc.displayHeight /2 - mouseY));
-			Mouse.setGrabbed(true);
-			//System.out.println(xRot + ", " + yRot);
 			Mouse.setCursorPosition(this.mc.displayWidth / 2, this.mc.displayHeight / 2);
 		}
-		if (!Mouse.isButtonDown(0)) {
-			//System.out.println("test");
-			Mouse.setGrabbed(false);
-		}
+		super.handleMouseInput();
     }
 	
+	/**
+	 * Handles keyboard input to move the player.
+	 */
 	public void handleKeyboardInput() throws IOException
     {
 		Keyboard.enableRepeatEvents(true);
 		double radians = Math.toRadians(xRot);
 		if (Keyboard.getEventKey() == Keyboard.KEY_S) {
-			xPos += Math.sin(radians) * 0.01;
-			zPos -= Math.cos(radians) * 0.01;
+			xPos += Math.sin(radians) * speed;
+			zPos -= Math.cos(radians) * speed;
 		}
 		if (Keyboard.getEventKey() == Keyboard.KEY_W) {
-			xPos -= Math.sin(radians) * 0.01;
-			zPos += Math.cos(radians) * 0.01;
+			xPos -= Math.sin(radians) * speed;
+			zPos += Math.cos(radians) * speed;
 		}
 		if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-			zPos += Math.sin(radians) * 0.01;
-			xPos += Math.cos(radians) * 0.01;
+			zPos += Math.sin(radians) * speed;
+			xPos += Math.cos(radians) * speed;
 		}
 		if (Keyboard.getEventKey() == Keyboard.KEY_D) {
-			zPos -= Math.sin(radians) * 0.01;
-			xPos -= Math.cos(radians) * 0.01;
+			zPos -= Math.sin(radians) * speed;
+			xPos -= Math.cos(radians) * speed;
 		}
 		if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
-			yPos -= 0.01;
+			yPos -= speed;
 		}
 		if (Keyboard.getEventKey() == Keyboard.KEY_LSHIFT) {
-			yPos += 0.01;
+			yPos += speed;
+		}
+		if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
+			speed *= 2;
+		}
+		if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
+			speed /= 2;
+		}
+		if (Keyboard.getEventKey() == Keyboard.KEY_Q) {
+			Mouse.setGrabbed(false);
+		}
+		if (Keyboard.getEventKey() == Keyboard.KEY_E) {
+			Mouse.setGrabbed(true);
 		}
 		super.handleKeyboardInput();
     }
@@ -109,114 +139,67 @@ public class GuiNavigation extends GuiScreen {
 	 */
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GlStateManager.matrixMode(5889);
-        GlStateManager.pushMatrix();
-        GlStateManager.loadIdentity();
-        GLU.gluPerspective(45.0F, this.mc.displayWidth / this.mc.displayHeight, 0.001F, 10000000.0F);
-        GL11.glRotatef(yRot, 1F, 0F, 0F);
-        GL11.glRotatef(xRot, 0F, 1F, 0F);
-        GL11.glTranslatef(xPos, yPos, zPos);
-        GlStateManager.matrixMode(5888);
-        GlStateManager.pushMatrix();
-        GlStateManager.loadIdentity();
-        glScalef(0.6f, 1f, 0.6f);
+		setupRendering();
+		new Sol(null).render(this.mc, this.time);
+		revertRendering();
         
-        glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
-
-        GlStateManager.pushMatrix();
-        
-        renderSkybox();
-        
-        GlStateManager.enableLighting();
-        GlStateManager.enableLight(0);
-        GlStateManager.enableColorMaterial();
-        GlStateManager.colorMaterial(1032, 5634);
-        float f = 0.0F;
-        float f1 = 0.6F;
-        float f2 = 0.0F;
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, setColorBuffer(1f, 0f, 0f, 0.0f));
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, setColorBuffer(f1, f1, f1, 1.0F));
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_AMBIENT, setColorBuffer(0.0F, 0.0F, 0.0F, 1.0F));
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, setColorBuffer(f2, f2, f2, 1.0F));
-        
-        GlStateManager.shadeModel(GL_SMOOTH);
-        GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, setColorBuffer(f, f, f, 1.0F));
-        
-        glTranslatef(0, 0, -3);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        renderPlanet(new ResourceLocation("futurecraft", "textures/environment/earth.png"), 0, 0, 0.2f);
-        renderPlanet(new ResourceLocation("futurecraft", "textures/blocks/selena_dirt.png"), 1, 0, 0.1f);
-        renderStar(100, 0, 2);
-        GlStateManager.popMatrix();
-        
-        GlStateManager.matrixMode(5889);
-        GlStateManager.popMatrix();
-        GlStateManager.matrixMode(5888);
-        GlStateManager.popMatrix();
-
+        time += 0.001f;
         super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	
 	/**
-	 * Renders the planet with the specified image.
+	 * Sets up 3d projection, shadowing, skybox, all that good stuff.
 	 */
-	private void renderPlanet(ResourceLocation img, float x, float y, float size) {
-		Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer renderer = tessellator.getWorldRenderer();
-		
-		glPushMatrix();
-        this.mc.getTextureManager().bindTexture(img);
-		glColor3f(1, 1, 1);
+	private void setupRendering() {
+		//sets up the camera projection and position
+		GlStateManager.matrixMode(GL_PROJECTION);
+        GlStateManager.pushMatrix();
+        GlStateManager.loadIdentity();
+        GLU.gluPerspective(45.0F, 1, 0.001F, 10000000.0F);
+        GL11.glRotatef(yRot, 1F, 0F, 0F);
+        GL11.glRotatef(xRot, 0F, 1F, 0F);
+        GL11.glTranslatef(xPos, yPos, zPos);
+        //sets up the model space
+        GlStateManager.matrixMode(GL_MODELVIEW);
+        GlStateManager.pushMatrix();
+        GlStateManager.loadIdentity();
+        glScalef(0.6f, 1f, 0.6f);
         
-		GL11.glRotatef(10, 0F, 0F, 1F);
-        GL11.glRotatef(planetRotation, 0F, 1F, 0F);
-        GL11.glTranslatef(x, y, 0);
+        //enables depth
+        glEnable(GL_DEPTH_TEST);
         
-        this.mc.getTextureManager().bindTexture(img);
-        glColor3f(1, 1, 1);
-        Sphere sphere = new Sphere();
-        sphere.setTextureFlag(true);
-        sphere.setNormals(GLU.GLU_SMOOTH);
-        sphere.draw(size, 100, 100);
-        glPopMatrix();
+        GlStateManager.pushMatrix();
         
-        glPushMatrix();
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableLighting();
-        GL11.glRotatef(10, 0F, 0F, 1F);
+        renderSkybox();
         
-        glColor3f(1, 0, 0);
-        glLineWidth(3);
-        renderer.startDrawing(3);
-        for (int i = 0; i < 370; i++) {
-        	double radians = Math.toRadians(i);
-        	renderer.addVertex(Math.cos(radians) * 1, 0, Math.sin(radians) * 1);
-        }
-        tessellator.draw();
+        //sets up shadowing
         GlStateManager.enableLighting();
-        GlStateManager.enableTexture2D();
+        GlStateManager.enableLight(0);
         
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, setColorBuffer(-1f, 0f, 0f, 0.0f));
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, setColorBuffer(0.6f, 0.6f, 0.6f, 1.0F));
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_AMBIENT, setColorBuffer(0.0F, 0.0F, 0.0F, 1.0F));
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, setColorBuffer(0f, 0f, 0f, 1.0F));
         
-        planetRotation += 0.01F;
-        glPopMatrix();
+        GlStateManager.shadeModel(GL_SMOOTH);
+        GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, setColorBuffer(0f, 0f, 0f, 1.0F));
 	}
 	
-	private void renderStar(float x, float y, float size) {
+	/**
+	 * Gets rid of all our good stuff so minecraft can go happilly along with bad graphics.
+	 */
+	private void revertRendering() {
 		GlStateManager.disableLighting();
-		glPushMatrix();
-		glTranslatef(x, y, 0);
-		glColor3f(2.0f, 2.0f, 2.0f);
-        Sphere sphere = new Sphere();
-        sphere.setTextureFlag(false);
-        sphere.setNormals(GLU.GLU_SMOOTH);
-        sphere.draw(size, 100, 100);
-        
-        glPopMatrix();
-        GlStateManager.enableLighting();
+		glPopMatrix();
+        GlStateManager.matrixMode(GL_PROJECTION);
+        GlStateManager.popMatrix();
+        GlStateManager.matrixMode(GL_MODELVIEW);
+        GlStateManager.popMatrix();
 	}
 	
+	/**
+	 * Renders the skybox.....
+	 */
 	private void renderSkybox() {
 		ResourceLocation SKY_POS_X = new ResourceLocation("futurecraft","textures/environment/sky_pos_x.png");
 		ResourceLocation SKY_NEG_X = new ResourceLocation("futurecraft","textures/environment/sky_neg_x.png");
@@ -279,6 +262,9 @@ public class GuiNavigation extends GuiScreen {
 		return true;
     }
 	
+	/**
+	 * Turns an RGBA color into a buffer for use in shadowing.
+	 */
 	private static FloatBuffer setColorBuffer(float p_74521_0_, float p_74521_1_, float p_74521_2_, float p_74521_3_)
     {
         colorBuffer.clear();
@@ -287,4 +273,15 @@ public class GuiNavigation extends GuiScreen {
         /** Float buffer used to set OpenGL material colors */
         return colorBuffer;
     }
+
+	/**
+	 * Sends a teleport message to the server when a button is pressed.
+	 */
+	@Override
+	protected void actionPerformed(GuiButton button) throws IOException {
+		super.actionPerformed(button);
+		
+		TeleportMessage airstrikeMessageToServer = new TeleportMessage(SpaceRegistry.getDimensionForPlanet(planets.get(button.id)));
+	    StartupCommon.simpleNetworkWrapper.sendToServer(airstrikeMessageToServer);
+	}
 }
