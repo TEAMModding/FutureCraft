@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 
 /**
  * This is the gui screen class of the navigation gui.
@@ -34,14 +35,13 @@ import net.minecraft.util.ResourceLocation;
  */
 public class GuiNavigation extends GuiScreen {
 	private float time = 0;
-	private float zPos = -400;
-	private float xPos = -10;
-	private float yPos = -200;
+	private float zPos = -0.3f;
 	private float xRot = 0;
 	private float yRot = 30;
 	private static FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
 	private ArrayList<Planet> planets = new ArrayList<Planet>();
-	private float speed = 0.01f;
+	private static final float YEAR_SCALE = 0.1f;
+	private int selectedPlanet = 0;
 	
 	/**
 	 * No idea why this is even here, i guess we might need it someday.
@@ -72,6 +72,7 @@ public class GuiNavigation extends GuiScreen {
 				buttonCount++;
 			}
 		}
+		this.buttonList.add(new GuiSpaceButton(1000, this.width - 110, this.height - 30, 100, 20, "travel"));
 	}
 	
 	/**
@@ -79,7 +80,8 @@ public class GuiNavigation extends GuiScreen {
 	 */
 	public void handleMouseInput() throws IOException
     {
-		if (Mouse.isGrabbed()) {
+		if (Mouse.isButtonDown(1)) {
+			Mouse.setGrabbed(true);
 			float mouseSpeed = 0.1f;
 			double mouseX = Mouse.getEventX();
 			double mouseY = Mouse.getEventY();
@@ -87,50 +89,21 @@ public class GuiNavigation extends GuiScreen {
 			yRot += (float) (mouseSpeed * (this.mc.displayHeight /2 - mouseY));
 			Mouse.setCursorPosition(this.mc.displayWidth / 2, this.mc.displayHeight / 2);
 		}
+		else {
+			Mouse.setGrabbed(false);
+		}
+		this.zPos -= Mouse.getEventDWheel() * 0.001 * zPos;
+		
 		super.handleMouseInput();
     }
+	
+	
 	
 	/**
 	 * Handles keyboard input to move the player.
 	 */
 	public void handleKeyboardInput() throws IOException
     {
-		Keyboard.enableRepeatEvents(true);
-		double radians = Math.toRadians(xRot);
-		if (Keyboard.getEventKey() == Keyboard.KEY_S) {
-			xPos += Math.sin(radians) * speed;
-			zPos -= Math.cos(radians) * speed;
-		}
-		if (Keyboard.getEventKey() == Keyboard.KEY_W) {
-			xPos -= Math.sin(radians) * speed;
-			zPos += Math.cos(radians) * speed;
-		}
-		if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-			zPos += Math.sin(radians) * speed;
-			xPos += Math.cos(radians) * speed;
-		}
-		if (Keyboard.getEventKey() == Keyboard.KEY_D) {
-			zPos -= Math.sin(radians) * speed;
-			xPos -= Math.cos(radians) * speed;
-		}
-		if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
-			yPos -= speed;
-		}
-		if (Keyboard.getEventKey() == Keyboard.KEY_LSHIFT) {
-			yPos += speed;
-		}
-		if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
-			speed *= 2;
-		}
-		if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
-			speed /= 2;
-		}
-		if (Keyboard.getEventKey() == Keyboard.KEY_Q) {
-			Mouse.setGrabbed(false);
-		}
-		if (Keyboard.getEventKey() == Keyboard.KEY_E) {
-			Mouse.setGrabbed(true);
-		}
 		super.handleKeyboardInput();
     }
 	
@@ -143,7 +116,7 @@ public class GuiNavigation extends GuiScreen {
 		new Sol(null).render(this.mc, this.time);
 		revertRendering();
         
-        time += 0.001f;
+        time += YEAR_SCALE;
         super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	
@@ -156,17 +129,22 @@ public class GuiNavigation extends GuiScreen {
         GlStateManager.pushMatrix();
         GlStateManager.loadIdentity();
         GLU.gluPerspective(45.0F, 1, 0.001F, 10000000.0F);
+        GL11.glTranslatef(0, 0, zPos);
         GL11.glRotatef(yRot, 1F, 0F, 0F);
         GL11.glRotatef(xRot, 0F, 1F, 0F);
-        GL11.glTranslatef(xPos, yPos, zPos);
         //sets up the model space
         GlStateManager.matrixMode(GL_MODELVIEW);
         GlStateManager.pushMatrix();
         GlStateManager.loadIdentity();
         glScalef(0.6f, 1f, 0.6f);
         
+        Vec3 pos = planets.get(this.selectedPlanet).getPosition(time);
+        GL11.glTranslatef(-(float)pos.xCoord, -(float)pos.yCoord, -(float)pos.zCoord);
+        
         //enables depth
         glEnable(GL_DEPTH_TEST);
+        GlStateManager.enableAlpha();
+        GlStateManager.enableBlend();
         
         GlStateManager.pushMatrix();
         
@@ -176,7 +154,7 @@ public class GuiNavigation extends GuiScreen {
         GlStateManager.enableLighting();
         GlStateManager.enableLight(0);
         
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, setColorBuffer(-1f, 0f, 0f, 0.0f));
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, setColorBuffer(0f, 0f, 0f, 1f));
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, setColorBuffer(0.6f, 0.6f, 0.6f, 1.0F));
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_AMBIENT, setColorBuffer(0.0F, 0.0F, 0.0F, 1.0F));
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, setColorBuffer(0f, 0f, 0f, 1.0F));
@@ -281,7 +259,12 @@ public class GuiNavigation extends GuiScreen {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		super.actionPerformed(button);
 		
-		TeleportMessage airstrikeMessageToServer = new TeleportMessage(SpaceRegistry.getDimensionForPlanet(planets.get(button.id)));
-	    StartupCommon.simpleNetworkWrapper.sendToServer(airstrikeMessageToServer);
+		if (button.id == 1000) {
+			TeleportMessage airstrikeMessageToServer = new TeleportMessage(SpaceRegistry.getDimensionForPlanet(planets.get(this.selectedPlanet)));
+		    StartupCommon.simpleNetworkWrapper.sendToServer(airstrikeMessageToServer);
+		}
+		else {
+			this.selectedPlanet = button.id;
+		}
 	}
 }

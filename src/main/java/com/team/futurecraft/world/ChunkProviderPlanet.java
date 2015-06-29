@@ -197,13 +197,9 @@ public class ChunkProviderPlanet implements IChunkProvider {
         this.biomesForGeneration = this.worldObj.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
         this.func_180517_a(x, z, chunkprimer, this.biomesForGeneration);
 
-        if (this.settings.useCaves) {
-            this.caveGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
-        }
+        this.caveGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
 
-        if (this.settings.useRavines) {
-            this.ravineGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
-        }
+        this.ravineGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
 
         if (this.settings.useMineShafts && this.mapFeaturesEnabled) {
             this.mineshaftGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);

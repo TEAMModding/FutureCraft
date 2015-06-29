@@ -3,6 +3,7 @@ package com.team.futurecraft.space;
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Vec3;
 
 /**
  * Represents any celestial object (stars, planets, moons, asteroids, etc).
@@ -67,6 +68,17 @@ public abstract class CelestialObject {
 		for (int i = 0; i < children.length; i++) {
 			children[i].render(mc, time);
 		}
+	}
+	
+	public Vec3 getPosition(float time) {
+		Vec3 offsetPos = new Vec3(0, 0, 0);
+		if (this.getOrbit() != null && this.parent != null) {
+			double radians = Math.toRadians(-time * this.getOrbit().getYearScale());
+			Vec3 orbitPos = new Vec3(Math.cos(radians) * this.getOrbit().getDistance(), 0, Math.sin(radians) * this.getOrbit().getDistance());
+			offsetPos = this.parent.getPosition(time);
+			return orbitPos.add(offsetPos);
+		}
+		return offsetPos;
 	}
 	
 	/**

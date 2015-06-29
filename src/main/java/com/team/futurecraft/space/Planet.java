@@ -77,10 +77,13 @@ public abstract class Planet extends CelestialObject {
         mc.getTextureManager().bindTexture(img);
 		glColor3f(1, 1, 1);
         
-        GL11.glRotatef(time * this.getOrbit().getYearScale(), 0F, 1F, 0F);
-        GL11.glTranslatef(this.getOrbit().getDistance(), 0, 0);
+        //GL11.glRotatef(time * this.getOrbit().getYearScale(), 0F, 1F, 0F);
+        //GL11.glTranslatef(this.getOrbit().getDistance(), 0, 0);
         this.renderChildren(mc, time);
+        Vec3 pos = this.getPosition(time);
+        GL11.glTranslated(pos.xCoord, pos.yCoord, pos.zCoord);
         GL11.glRotatef(time * 100, 0F, 1F, 0F);
+        GL11.glRotatef(90, 1F, 0F, 0F);
         
         mc.getTextureManager().bindTexture(img);
         glColor3f(1, 1, 1);
@@ -94,6 +97,8 @@ public abstract class Planet extends CelestialObject {
         GlStateManager.disableTexture2D();
         GlStateManager.disableLighting();
         
+        Vec3 parentPos = this.getParent().getPosition(time);
+        GL11.glTranslated(parentPos.xCoord, parentPos.yCoord, parentPos.zCoord);
         GL11.glRotatef(time * this.getOrbit().getYearScale(), 0F, 1F, 0F);
         GlStateManager.enableAlpha();
         glLineWidth(1);

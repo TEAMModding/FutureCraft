@@ -98,7 +98,7 @@ public class SkyRenderer extends IRenderHandler {
             tessellator.draw();
             GL11.glPopMatrix();
         }
-        renderAtmosphere();
+        renderAtmosphere(mc);
         
         GL11.glTranslatef(0, -100010, 0);
         renderPlanet(new ResourceLocation("futurecraft", "textures/environment/" + this.planet.getTexture()), 100000, mc);
@@ -109,17 +109,18 @@ public class SkyRenderer extends IRenderHandler {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
 	
-	private void renderAtmosphere() {
+	private void renderAtmosphere(Minecraft mc) {
 		Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
 		Vec3 colors = this.planet.getAtmosphericColor();
         
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 2; i++) {
         	GL11.glPushMatrix();
+        	GL11.glRotatef(-mc.thePlayer.rotationYaw, 0, 1, 0);
         	
-        	if (i == 1) GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-        	if (i == 2) GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
-        	if (i == 3) GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+        	//if (i == 1) GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+        	if (i == 1) GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+        	//if (i == 3) GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
         	
         	GlStateManager.disableTexture2D();
         	GlStateManager.enableBlend();
@@ -127,22 +128,25 @@ public class SkyRenderer extends IRenderHandler {
         	GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         	GlStateManager.shadeModel(7425);
         	renderer.startDrawingQuads();
+        	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, this.planet.getAtmosphericDensity() + 0.5f);
+        	renderer.addVertex(-500.0D, -100.0D, -100.0D);
+        	renderer.addVertex(500.0D, -100.0D, -100.0D);
         	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, this.planet.getAtmosphericDensity());
-        	renderer.addVertex(-100.0D, -100.0D, -100.0D);
-        	renderer.addVertex(100.0D, -100.0D, -100.0D);
-        	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, this.planet.getAtmosphericDensity() - 0.5f);
-        	renderer.addVertex(100.0D, 100.0D, -100.0D);
-        	renderer.addVertex(-100.0D, 100.0D, -100.0D);
+        	renderer.addVertex(500.0D, 100.0D, -100.0D);
+        	renderer.addVertex(-500.0D, 100.0D, -100.0D);
         	tessellator.draw();
         	GL11.glPopMatrix();
         }
+        GL11.glPushMatrix();
+        GL11.glRotatef(-mc.thePlayer.rotationYaw, 0, 1, 0);
         renderer.startDrawingQuads();
-    	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, this.planet.getAtmosphericDensity() - 0.5f);
-    	renderer.addVertex(-99.0D, 99.0D, -99.0D);
-    	renderer.addVertex(99.0D, 99.0D, -99.0D);
-    	renderer.addVertex(99.0D, 99.0D, 99.0D);
-    	renderer.addVertex(-99.0D, 99.0D, 99.0D);
+    	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, this.planet.getAtmosphericDensity());
+    	renderer.addVertex(-500.0D, 100.0D, -100.0D);
+    	renderer.addVertex(500.0D, 100.0D, -100.0D);
+    	renderer.addVertex(500.0D, 100.0D, 100.0D);
+    	renderer.addVertex(-500.0D, 100.0D, 100.0D);
     	tessellator.draw();
+    	GL11.glPopMatrix();
         
         GlStateManager.enableTexture2D();
 	}

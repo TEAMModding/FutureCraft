@@ -20,7 +20,7 @@ public class Mars extends Planet {
 
 	@Override
 	public float getAtmosphericDensity() {
-		return 0.4f;
+		return 0.7f;
 	}
 
 	@Override
