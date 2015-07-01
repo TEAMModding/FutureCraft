@@ -1,20 +1,18 @@
 package com.team.futurecraft.world;
 
-import com.team.futurecraft.SkyRenderer;
 import com.team.futurecraft.SpaceRegistry;
+import com.team.futurecraft.rendering.PlanetSkyRenderer;
 import com.team.futurecraft.space.Planet;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.IChunkProvider;
 
 /**
- * This is the Base class for all planets.
- * Any planet's WorldProvider class that extends this one is to be
- * used as the starting point for a new planet. Here you specify gravity, the chunkManager (for biomes),
- * and the ChunkProvider (for generation). 
- * see: WorldProviderMoon and WorldProviderMars.
+ * This represents the dimension for a certain planet.
+ * Simply takes data from the Planet object and generates accordingly.
  * 
  * @author Joseph
  *
@@ -25,6 +23,19 @@ public class WorldProviderPlanet extends WorldProvider {
 	
 	
     @Override
+	public Vec3 getFogColor(float p_76562_1_, float p_76562_2_) {
+    	if (this.planet.getAtmosphericDensity() > 0)
+    		return this.planet.getAtmosphericColor();
+    	else
+    		return new Vec3(0.5, 0.5, 0.5);
+	}
+    
+    public boolean hasAtmosphere() {
+    	if (this.planet.getAtmosphericDensity() == 0.0f) return false;
+    	return true;
+    }
+
+	@Override
 	public void setDimension(int dim) {
     	super.setDimension(dim);
 		this.planet = SpaceRegistry.getPlanetForDimension(dim);
@@ -33,7 +44,7 @@ public class WorldProviderPlanet extends WorldProvider {
 
 	public void registerWorldChunkManager() {
 		this.worldChunkMgr = new PlanetChunkManager(this.planet.getWorldType().getBiome(), 0.0F);
-        this.setSkyRenderer(new SkyRenderer(this.planet));
+        this.setSkyRenderer(new PlanetSkyRenderer(this.planet));
 	}
     
     public String getSaveFolder() {

@@ -68,7 +68,7 @@ public abstract class Planet extends CelestialObject {
 	 * 
 	 * Also renders the orbit path, probably need to put that somewhere else.
 	 */
-	public void render(Minecraft mc, float time) {
+	public void render(Minecraft mc, float time, boolean showOrbit) {
 		Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
         ResourceLocation img = new ResourceLocation("futurecraft", "textures/environment/" + this.getTexture());
@@ -76,13 +76,11 @@ public abstract class Planet extends CelestialObject {
 		glPushMatrix();
         mc.getTextureManager().bindTexture(img);
 		glColor3f(1, 1, 1);
-        
-        //GL11.glRotatef(time * this.getOrbit().getYearScale(), 0F, 1F, 0F);
-        //GL11.glTranslatef(this.getOrbit().getDistance(), 0, 0);
-        this.renderChildren(mc, time);
+		
+        this.renderChildren(mc, time, showOrbit);
         Vec3 pos = this.getPosition(time);
         GL11.glTranslated(pos.xCoord, pos.yCoord, pos.zCoord);
-        GL11.glRotatef(time * 100, 0F, 1F, 0F);
+        GL11.glRotatef(time * this.getOrbit().getRotation(), 0F, 1F, 0F);
         GL11.glRotatef(90, 1F, 0F, 0F);
         
         mc.getTextureManager().bindTexture(img);
@@ -93,25 +91,27 @@ public abstract class Planet extends CelestialObject {
         sphere.draw(this.getDiameter(), 100, 100);
         glPopMatrix();
         
-        glPushMatrix();
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableLighting();
+        if (showOrbit) {
+        	glPushMatrix();
+        	GlStateManager.disableTexture2D();
+        	GlStateManager.disableLighting();
         
-        Vec3 parentPos = this.getParent().getPosition(time);
-        GL11.glTranslated(parentPos.xCoord, parentPos.yCoord, parentPos.zCoord);
-        GL11.glRotatef(time * this.getOrbit().getYearScale(), 0F, 1F, 0F);
-        GlStateManager.enableAlpha();
-        glLineWidth(1);
-        renderer.startDrawing(3);
-        for (int i = 0; i < 360; i++) {
-        	renderer.setColorRGBA(255, 0, 0, (int)(((360 - i) / 200.0f) * 255));
-        	double radians = Math.toRadians(i);
-        	renderer.addVertex(Math.cos(radians) * this.getOrbit().getDistance(), 0, Math.sin(radians) * this.getOrbit().getDistance());
+        	Vec3 parentPos = this.getParent().getPosition(time);
+        	GL11.glTranslated(parentPos.xCoord, parentPos.yCoord, parentPos.zCoord);
+        	GL11.glRotatef(time * this.getOrbit().getYearScale(), 0F, 1F, 0F);
+        	GlStateManager.enableAlpha();
+        	glLineWidth(1);
+        	renderer.startDrawing(3);
+        	for (int i = 0; i < 360; i++) {
+        		renderer.setColorRGBA(255, 0, 0, (int)(((360 - i) / 200.0f) * 255));
+        		double radians = Math.toRadians(i);
+        		renderer.addVertex(Math.cos(radians) * this.getOrbit().getDistance(), 0, Math.sin(radians) * this.getOrbit().getDistance());
+        	}
+        	tessellator.draw();
+        	GlStateManager.enableLighting();
+        	GlStateManager.enableTexture2D();
+        
+        	glPopMatrix();
         }
-        tessellator.draw();
-        GlStateManager.enableLighting();
-        GlStateManager.enableTexture2D();
-        
-        glPopMatrix();
 	}
 }

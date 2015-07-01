@@ -18,7 +18,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class FutureCraft {
 	public static final String MODID = "futurecraft";
-	public static final String VERSION = "Alpha 0.2";
+	public static final String VERSION = "0.2";
+	public static float timeOffset = 0;
 	
 	//creative tab
 	public static final CreativeTabs tabFutureCraft = new CreativeTabs("futurecraft") {

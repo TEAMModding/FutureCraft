@@ -43,7 +43,7 @@ public abstract class Star extends CelestialObject {
 	/**
 	 * Render's a boring white ball.
 	 */
-	public void render(Minecraft mc, float time) {
+	public void render(Minecraft mc, float time, boolean showOrbit) {
 		Tessellator tessellator = Tessellator.getInstance();
         /*WorldRenderer renderer = tessellator.getWorldRenderer();
         ResourceLocation img = new ResourceLocation("futurecraft", "textures/environment/star_glow.png");*/
@@ -72,6 +72,6 @@ public abstract class Star extends CelestialObject {
         glPopMatrix();*/
         
         GlStateManager.enableLighting();
-        this.renderChildren(mc, time);
+        this.renderChildren(mc, time, showOrbit);
 	}
 }

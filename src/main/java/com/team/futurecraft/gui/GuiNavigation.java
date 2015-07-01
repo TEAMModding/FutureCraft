@@ -1,32 +1,22 @@
 package com.team.futurecraft.gui;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import java.io.IOException;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
 
+import com.team.futurecraft.FutureCraft;
 import com.team.futurecraft.SpaceRegistry;
 import com.team.futurecraft.StartupCommon;
 import com.team.futurecraft.network.TeleportMessage;
+import com.team.futurecraft.rendering.SpaceRenderer;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.Planet;
-import com.team.futurecraft.space.Sol;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 
 /**
  * This is the gui screen class of the navigation gui.
@@ -38,10 +28,10 @@ public class GuiNavigation extends GuiScreen {
 	private float zPos = -0.3f;
 	private float xRot = 0;
 	private float yRot = 30;
-	private static FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
 	private ArrayList<Planet> planets = new ArrayList<Planet>();
-	private static final float YEAR_SCALE = 0.1f;
+	private static final float TIME_SCALE = 0.0003f;
 	private int selectedPlanet = 0;
+	private SpaceRenderer spaceRender;
 	
 	/**
 	 * No idea why this is even here, i guess we might need it someday.
@@ -49,7 +39,6 @@ public class GuiNavigation extends GuiScreen {
 	 * @param player
 	 */
 	public GuiNavigation(EntityPlayer player) {
-		
 	}
 	
 	/**
@@ -73,6 +62,7 @@ public class GuiNavigation extends GuiScreen {
 			}
 		}
 		this.buttonList.add(new GuiSpaceButton(1000, this.width - 110, this.height - 30, 100, 20, "travel"));
+		spaceRender = new SpaceRenderer(this.mc, true);
 	}
 	
 	/**
@@ -104,6 +94,13 @@ public class GuiNavigation extends GuiScreen {
 	 */
 	public void handleKeyboardInput() throws IOException
     {
+		Keyboard.enableRepeatEvents(true);
+		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+			FutureCraft.timeOffset += 1f;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+			FutureCraft.timeOffset -= 1f;
+		}
 		super.handleKeyboardInput();
     }
 	
@@ -112,125 +109,11 @@ public class GuiNavigation extends GuiScreen {
 	 */
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		setupRendering();
-		new Sol(null).render(this.mc, this.time);
-		revertRendering();
+		this.spaceRender.render(this.xRot, this.yRot, 0f, this.zPos, planets.get(this.selectedPlanet), time);
         
-        time += YEAR_SCALE;
+		//System.out.println(System.nanoTime() * 0.000000001);
+        time = (float) (System.nanoTime() * 0.000000001 * TIME_SCALE)  + FutureCraft.timeOffset;
         super.drawScreen(mouseX, mouseY, partialTicks);
-	}
-	
-	/**
-	 * Sets up 3d projection, shadowing, skybox, all that good stuff.
-	 */
-	private void setupRendering() {
-		//sets up the camera projection and position
-		GlStateManager.matrixMode(GL_PROJECTION);
-        GlStateManager.pushMatrix();
-        GlStateManager.loadIdentity();
-        GLU.gluPerspective(45.0F, 1, 0.001F, 10000000.0F);
-        GL11.glTranslatef(0, 0, zPos);
-        GL11.glRotatef(yRot, 1F, 0F, 0F);
-        GL11.glRotatef(xRot, 0F, 1F, 0F);
-        //sets up the model space
-        GlStateManager.matrixMode(GL_MODELVIEW);
-        GlStateManager.pushMatrix();
-        GlStateManager.loadIdentity();
-        glScalef(0.6f, 1f, 0.6f);
-        
-        Vec3 pos = planets.get(this.selectedPlanet).getPosition(time);
-        GL11.glTranslatef(-(float)pos.xCoord, -(float)pos.yCoord, -(float)pos.zCoord);
-        
-        //enables depth
-        glEnable(GL_DEPTH_TEST);
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        
-        GlStateManager.pushMatrix();
-        
-        renderSkybox();
-        
-        //sets up shadowing
-        GlStateManager.enableLighting();
-        GlStateManager.enableLight(0);
-        
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, setColorBuffer(0f, 0f, 0f, 1f));
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, setColorBuffer(0.6f, 0.6f, 0.6f, 1.0F));
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_AMBIENT, setColorBuffer(0.0F, 0.0F, 0.0F, 1.0F));
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, setColorBuffer(0f, 0f, 0f, 1.0F));
-        
-        GlStateManager.shadeModel(GL_SMOOTH);
-        GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, setColorBuffer(0f, 0f, 0f, 1.0F));
-	}
-	
-	/**
-	 * Gets rid of all our good stuff so minecraft can go happilly along with bad graphics.
-	 */
-	private void revertRendering() {
-		GlStateManager.disableLighting();
-		glPopMatrix();
-        GlStateManager.matrixMode(GL_PROJECTION);
-        GlStateManager.popMatrix();
-        GlStateManager.matrixMode(GL_MODELVIEW);
-        GlStateManager.popMatrix();
-	}
-	
-	/**
-	 * Renders the skybox.....
-	 */
-	private void renderSkybox() {
-		ResourceLocation SKY_POS_X = new ResourceLocation("futurecraft","textures/environment/sky_pos_x.png");
-		ResourceLocation SKY_NEG_X = new ResourceLocation("futurecraft","textures/environment/sky_neg_x.png");
-		ResourceLocation SKY_POS_Y = new ResourceLocation("futurecraft","textures/environment/sky_pos_y.png");
-		ResourceLocation SKY_NEG_Y = new ResourceLocation("futurecraft","textures/environment/sky_neg_y.png");
-		ResourceLocation SKY_POS_Z = new ResourceLocation("futurecraft","textures/environment/sky_pos_z.png");
-		ResourceLocation SKY_NEG_Z = new ResourceLocation("futurecraft","textures/environment/sky_neg_z.png");
-		
-		this.mc.getTextureManager().bindTexture(SKY_NEG_Y);
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer renderer = tessellator.getWorldRenderer();
-
-        for (int i = 0; i < 6; ++i) {
-            GL11.glPushMatrix();
-            GL11.glRotatef(45.0F, 0.0F, 0.0F, 1.0F);
-
-            if (i == 1) {
-            	this.mc.getTextureManager().bindTexture(SKY_POS_Z);
-                GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-            }
-
-            if (i == 2) {
-            	this.mc.getTextureManager().bindTexture(SKY_NEG_Z);
-            	GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-                GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-            }
-
-            if (i == 3) {
-            	this.mc.getTextureManager().bindTexture(SKY_POS_Y);
-                GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-            }
-
-            if (i == 4) {
-            	this.mc.getTextureManager().bindTexture(SKY_POS_X);
-            	GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-                GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
-            }
-
-            if (i == 5) {
-            	this.mc.getTextureManager().bindTexture(SKY_NEG_X);
-            	GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-                GL11.glRotatef(-90.0F, 0.0F, 0.0F, 1.0F);
-            }
-
-            renderer.startDrawingQuads();
-            renderer.setColorOpaque_I(0xFFFFFF);
-            renderer.addVertexWithUV(-10000.0D, -10000.0D, -10000.0D, 0.0D, 0.0D);
-            renderer.addVertexWithUV(-10000.0D, -10000.0D, 10000.0D, 0.0D, 1.0D);
-            renderer.addVertexWithUV(10000.0D, -10000.0D, 10000.0D, 1.0D, 1.0D);
-            renderer.addVertexWithUV(10000.0D, -10000.0D, -10000.0D, 1.0D, 0.0D);
-            tessellator.draw();
-            GL11.glPopMatrix();
-        }
 	}
 	
 	/**
@@ -238,18 +121,6 @@ public class GuiNavigation extends GuiScreen {
 	 */
 	public boolean doesGuiPauseGame() {
 		return true;
-    }
-	
-	/**
-	 * Turns an RGBA color into a buffer for use in shadowing.
-	 */
-	private static FloatBuffer setColorBuffer(float p_74521_0_, float p_74521_1_, float p_74521_2_, float p_74521_3_)
-    {
-        colorBuffer.clear();
-        colorBuffer.put(p_74521_0_).put(p_74521_1_).put(p_74521_2_).put(p_74521_3_);
-        colorBuffer.flip();
-        /** Float buffer used to set OpenGL material colors */
-        return colorBuffer;
     }
 
 	/**

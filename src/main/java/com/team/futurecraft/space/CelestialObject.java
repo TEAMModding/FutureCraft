@@ -53,7 +53,7 @@ public abstract class CelestialObject {
 	/**
 	 * Called when this object is rendered in space.
 	 */
-	public abstract void render(Minecraft mc, float time);
+	public abstract void render(Minecraft mc, float time, boolean showOrbit);
 	
 	/**
 	 * Returns if this object has a dimension you can travel to.
@@ -63,10 +63,10 @@ public abstract class CelestialObject {
 	/**
 	 * Calls render for all this object's children.
 	 */
-	public void renderChildren(Minecraft mc, float time) {
+	public void renderChildren(Minecraft mc, float time, boolean showOrbit) {
 		CelestialObject[] children = this.getChildren();
 		for (int i = 0; i < children.length; i++) {
-			children[i].render(mc, time);
+			children[i].render(mc, time, showOrbit);
 		}
 	}
 	

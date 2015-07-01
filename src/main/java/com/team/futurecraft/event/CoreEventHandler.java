@@ -5,6 +5,7 @@ import com.team.futurecraft.world.WorldProviderPlanet;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.WorldProvider;
+import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -38,4 +39,16 @@ public class CoreEventHandler {
 			entity.stepHeight = 0.6f;
 		}
 	}
+	
+	@SubscribeEvent
+	public void onFogEvent(FogDensity event) {
+		if (event.entity.worldObj.provider instanceof WorldProviderPlanet) {
+			WorldProviderPlanet provider = (WorldProviderPlanet)event.entity.worldObj.provider;
+			if (!provider.hasAtmosphere()) {
+				event.setCanceled(true);
+				event.density = 0.0f;
+			}
+		}
+	}
+	
 }

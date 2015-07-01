@@ -45,6 +45,7 @@ public class Mars extends Planet {
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(300.0f, 1.0f);
+		return new OrbitalParameters(600.0f, 1.881f, 365f);
+		//return new OrbitalParameters(600.0f, 0f, 0f);
 	}
 }

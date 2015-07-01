@@ -46,7 +46,7 @@ public class Earth extends Planet {
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(200.0f, 1.0f);
+		return new OrbitalParameters(500.0f, 1f, 365f);
 	}
 
 	public int getDimension() {

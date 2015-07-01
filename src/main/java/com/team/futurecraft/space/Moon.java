@@ -45,6 +45,6 @@ public class Moon extends Planet {
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(1.0f, 10.0f);
+		return new OrbitalParameters(3.0f, 27f, 27f);
 	}
 }
