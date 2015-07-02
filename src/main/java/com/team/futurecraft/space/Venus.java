@@ -2,16 +2,15 @@ package com.team.futurecraft.space;
 
 import net.minecraft.util.Vec3;
 
-public class Earth extends Planet {
+public class Venus extends Planet {
 
-	public Earth(CelestialObject parent) {
+	public Venus(CelestialObject parent) {
 		super(parent);
-		this.add(new Moon(this));
 	}
 
 	@Override
 	public WorldType getWorldType() {
-		return null;
+		return new WorldTypeSelena();
 	}
 
 	@Override
@@ -26,12 +25,12 @@ public class Earth extends Planet {
 
 	@Override
 	public String getName() {
-		return "Earth";
+		return "Venus";
 	}
 
 	@Override
 	public String getTexture() {
-		return "earth";
+		return "venus";
 	}
 
 	@Override
@@ -46,6 +45,6 @@ public class Earth extends Planet {
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(500.0f, 1f, 365f);
+		return new OrbitalParameters(300.0f, 1f, 365f);
 	}
 }

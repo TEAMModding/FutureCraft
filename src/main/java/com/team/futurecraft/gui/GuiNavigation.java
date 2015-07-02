@@ -56,8 +56,8 @@ public class GuiNavigation extends GuiScreen {
 			
 			CelestialObject[] moons = objects[i].getChildren();
 			for (int j = 0; j < moons.length; j++) {
-				this.buttonList.add(new GuiSpaceButton(buttonCount, 50, 10 + buttonCount * 30, 100, 20, moons[i].getName()));
-				planets.add((Planet)moons[i]);
+				this.buttonList.add(new GuiSpaceButton(buttonCount, 50, 10 + buttonCount * 30, 100, 20, moons[j].getName()));
+				planets.add((Planet)moons[j]);
 				buttonCount++;
 			}
 		}
@@ -131,8 +131,10 @@ public class GuiNavigation extends GuiScreen {
 		super.actionPerformed(button);
 		
 		if (button.id == 1000) {
-			TeleportMessage airstrikeMessageToServer = new TeleportMessage(SpaceRegistry.getDimensionForPlanet(planets.get(this.selectedPlanet)));
-		    StartupCommon.simpleNetworkWrapper.sendToServer(airstrikeMessageToServer);
+			if (planets.get(this.selectedPlanet).isLandable()) {
+				TeleportMessage airstrikeMessageToServer = new TeleportMessage(SpaceRegistry.getDimensionForPlanet(planets.get(this.selectedPlanet)));
+				StartupCommon.simpleNetworkWrapper.sendToServer(airstrikeMessageToServer);
+			}
 		}
 		else {
 			this.selectedPlanet = button.id;

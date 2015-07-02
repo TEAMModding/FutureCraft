@@ -30,7 +30,7 @@ public class Mars extends Planet {
 
 	@Override
 	public String getTexture() {
-		return "mars.png";
+		return "mars";
 	}
 
 	@Override

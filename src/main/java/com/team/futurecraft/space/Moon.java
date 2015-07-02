@@ -30,7 +30,7 @@ public class Moon extends Planet {
 
 	@Override
 	public String getTexture() {
-		return "moon.png";
+		return "moon";
 	}
 
 	@Override

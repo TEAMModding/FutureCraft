@@ -41,14 +41,16 @@ public class SpaceRegistry {
 	public static void registerSystem(CelestialObject object) {
 		CelestialObject[] objects = object.getChildren();
 		for (int i = 0; i < objects.length; i++) {
-			if (objects[i] instanceof Earth){}
-			else {
-				registerPlanet((Planet)objects[i]);
-			}
+			if (objects[i].isLandable()) {
+				if (objects[i] instanceof Earth){}
+				else {
+					registerPlanet((Planet)objects[i]);
+				}
 			
-			CelestialObject[] moons = objects[i].getChildren();
-			for (int j = 0; j < moons.length; j++) {
-				registerPlanet((Planet)moons[i]);
+				CelestialObject[] moons = objects[i].getChildren();
+				for (int j = 0; j < moons.length; j++) {
+					registerPlanet((Planet)moons[j]);
+				}
 			}
 		}
 	}

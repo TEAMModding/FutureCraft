@@ -71,7 +71,7 @@ public abstract class Planet extends CelestialObject {
 	public void render(Minecraft mc, float time, boolean showOrbit) {
 		Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
-        ResourceLocation img = new ResourceLocation("futurecraft", "textures/environment/" + this.getTexture());
+        ResourceLocation img = new ResourceLocation("futurecraft", "textures/planets/" + this.getTexture() + ".jpg");
 		
 		glPushMatrix();
         mc.getTextureManager().bindTexture(img);
