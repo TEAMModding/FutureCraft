@@ -14,7 +14,7 @@ public class WorldTypeSelena extends WorldType{
 
 	@Override
 	public BiomePlanet getBiome() {
-		return BiomeList.moon;
+		return BiomeList.SELENA;
 	}
 
 }

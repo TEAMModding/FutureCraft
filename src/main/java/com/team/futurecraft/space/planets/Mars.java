@@ -1,4 +1,10 @@
-package com.team.futurecraft.space;
+package com.team.futurecraft.space.planets;
+
+import com.team.futurecraft.space.CelestialObject;
+import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.Planet;
+import com.team.futurecraft.space.WorldType;
+import com.team.futurecraft.space.WorldTypeDesert;
 
 import net.minecraft.util.Vec3;
 

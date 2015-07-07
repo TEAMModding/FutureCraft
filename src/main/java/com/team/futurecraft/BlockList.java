@@ -61,4 +61,5 @@ public class BlockList {
 	
 	//misc
 	public static BlockNavigator navigator;
+	public static SimpleBlock dirty_ice;
 }

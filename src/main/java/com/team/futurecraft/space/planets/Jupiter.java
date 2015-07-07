@@ -1,9 +1,14 @@
-package com.team.futurecraft.space;
+package com.team.futurecraft.space.planets;
+
+import com.team.futurecraft.space.CelestialObject;
+import com.team.futurecraft.space.GasGiant;
+import com.team.futurecraft.space.OrbitalParameters;
 
 public class Jupiter extends GasGiant {
 
 	public Jupiter(CelestialObject parent) {
 		super(parent);
+		this.add(new Europa(this));
 	}
 
 	@Override

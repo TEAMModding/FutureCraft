@@ -3,6 +3,8 @@ package com.team.futurecraft.world;
 import java.util.List;
 import java.util.Random;
 
+import com.sun.javafx.geom.Vec3f;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -144,6 +146,30 @@ public class ChunkProviderPlanet implements IChunkProvider {
 
 	        // Get the noise sample
 	        total += noise.func_151605_a(position.xCoord * frequency, position.zCoord * frequency) * amplitude;
+
+	        // Make the wavelength twice as small
+	        frequency *= 2.0;
+
+	        // Add to our maximum possible amplitude
+	        maxAmplitude += amplitude;
+
+	        // Reduce amplitude according to persistence for the next octave
+	        amplitude *= persistence;
+	    }
+
+	    // Scale the result by the maximum amplitude
+	    return total / maxAmplitude;
+	}
+    
+    private float ridgedNoise(Vec3 position, int octaves, float frequency, float persistence) {
+		float total = 0.0f;
+	    float maxAmplitude = 0.0f;
+	    float amplitude = 1.0f;
+	    
+	    for (int i = 0; i < octaves; i++) {
+
+	        // Get the noise sample
+	        total += ((1.0 - Math.abs(noise.func_151605_a(position.xCoord * frequency, position.zCoord * frequency))) * 2.0 - 1.0) * amplitude;
 
 	        // Make the wavelength twice as small
 	        frequency *= 2.0;

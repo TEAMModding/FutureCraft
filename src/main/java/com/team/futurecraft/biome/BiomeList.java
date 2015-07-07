@@ -13,6 +13,7 @@ public class BiomeList {
 	private static final BiomeGenBase.Height height_flat = new BiomeGenBase.Height(0.1F, 0.02F);
 	private static final BiomeGenBase.Height height_rough = new BiomeGenBase.Height(0.1F, 0.4F);
 	
-	public static final BiomePlanet moon = (BiomePlanet)(new BiomeSelena(100)).setColor(16421912).setBiomeName("moon").setDisableRain().setTemperatureRainfall(100.0F, 0.0F).setHeight(height_flat);
-	public static final BiomePlanet mars = (BiomePlanet)(new BiomeDesert(101)).setColor(16421912).setBiomeName("mars").setDisableRain().setTemperatureRainfall(100.0F, 0.0F).setHeight(height_rough);
+	public static final BiomePlanet SELENA = (BiomePlanet)(new BiomeSelena(100)).setColor(16421912).setBiomeName("selena").setDisableRain().setTemperatureRainfall(100.0F, 0.0F).setHeight(height_flat);
+	public static final BiomePlanet DESERT = (BiomePlanet)(new BiomeDesert(101)).setColor(16421912).setBiomeName("desert").setDisableRain().setTemperatureRainfall(100.0F, 0.0F).setHeight(height_rough);
+	public static final BiomePlanet FROZEN = (BiomePlanet)(new BiomeDesert(102)).setColor(16421912).setBiomeName("frozen").setDisableRain().setTemperatureRainfall(100.0F, 0.0F).setHeight(height_rough);
 }

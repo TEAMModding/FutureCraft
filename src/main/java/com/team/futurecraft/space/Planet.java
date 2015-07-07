@@ -93,6 +93,23 @@ public abstract class Planet extends CelestialObject {
         
         if (showOrbit) {
         	glPushMatrix();
+        	GL11.glTranslated(pos.xCoord, pos.yCoord, pos.zCoord);
+        	GlStateManager.disableTexture2D();
+        	GlStateManager.disableLighting();
+        	Vec3 direction = this.getDirection(time);
+        	glLineWidth(1);
+        	renderer.startDrawing(3);
+        	renderer.setColorOpaque_I(0x00FF00);
+        	renderer.addVertex(0, 0, 0);
+        	renderer.addVertex(direction.xCoord * this.getDiameter() * 1.1, direction.yCoord * this.getDiameter() * 1.1, direction.zCoord * this.getDiameter() * 1.1);
+        	tessellator.draw();
+        	glPopMatrix();
+        	GlStateManager.enableTexture2D();
+        	GlStateManager.enableLighting();
+        }
+        
+        if (showOrbit) {
+        	glPushMatrix();
         	GlStateManager.disableTexture2D();
         	GlStateManager.disableLighting();
         
@@ -113,5 +130,9 @@ public abstract class Planet extends CelestialObject {
         
         	glPopMatrix();
         }
+	}
+	
+	public Vec3 getDirection(float time) {
+		return new Vec3(-1, 1, 0).rotateYaw((float) Math.toRadians(time * this.getOrbit().getRotation()));
 	}
 }

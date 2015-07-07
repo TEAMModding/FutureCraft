@@ -1,5 +1,6 @@
 package com.team.futurecraft.world;
 
+import com.team.futurecraft.FutureCraft;
 import com.team.futurecraft.SpaceRegistry;
 import com.team.futurecraft.rendering.PlanetSkyRenderer;
 import com.team.futurecraft.space.Planet;
@@ -24,11 +25,40 @@ public class WorldProviderPlanet extends WorldProvider {
 	
     @Override
 	public Vec3 getFogColor(float p_76562_1_, float p_76562_2_) {
+    	float time = (float) (System.nanoTime() * 0.000000001 * 0.0003f)  + FutureCraft.timeOffset;
+    	Vec3 planetToLight = new Vec3(0, 0, 0).subtract(this.planet.getPosition(time)).normalize();
+    	float value = (float) this.planet.getDirection(time).dotProduct(planetToLight) * 4.0f;
+    	if (value < -1) value = -1;
+    	
+    	float r = (float) this.planet.getAtmosphericColor().xCoord;
+    	float g = (float) this.planet.getAtmosphericColor().yCoord;
+    	float b = (float) this.planet.getAtmosphericColor().zCoord;
+    	
+    	Vec3 color = new Vec3(Math.min(r * value, r), Math.min(g * value, g), Math.min(b * value, b));
+    	
     	if (this.planet.getAtmosphericDensity() > 0)
-    		return this.planet.getAtmosphericColor();
+    		return color;
     	else
-    		return new Vec3(0.5, 0.5, 0.5);
+    		return new Vec3(-1.0, -1.0, -1.0);
 	}
+    
+    @SideOnly(Side.CLIENT)
+    public float getSunBrightness(float par1)
+    {
+    	float time = (float) (System.nanoTime() * 0.000000001 * 0.0003f)  + FutureCraft.timeOffset;
+    	Vec3 planetToLight = new Vec3(0, 0, 0).subtract(this.planet.getPosition(time)).normalize();
+    	float value = (float) this.planet.getDirection(time).dotProduct(planetToLight) * 4.0f;
+    	if (value < 0) value = 0;
+    	if (value > 1) value = 1;
+    	//System.out.println(value);
+    	
+        return value;
+    }
+    
+    public long getWorldTime()
+    {
+    	return 5000;
+    }
     
     public boolean hasAtmosphere() {
     	if (this.planet.getAtmosphericDensity() == 0.0f) return false;

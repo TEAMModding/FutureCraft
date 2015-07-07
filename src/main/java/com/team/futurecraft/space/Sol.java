@@ -1,5 +1,14 @@
 package com.team.futurecraft.space;
 
+import com.team.futurecraft.space.planets.Earth;
+import com.team.futurecraft.space.planets.Jupiter;
+import com.team.futurecraft.space.planets.Mars;
+import com.team.futurecraft.space.planets.Mercury;
+import com.team.futurecraft.space.planets.Neptune;
+import com.team.futurecraft.space.planets.Saturn;
+import com.team.futurecraft.space.planets.Uranus;
+import com.team.futurecraft.space.planets.Venus;
+
 /**
  * It's the sun!
  * 

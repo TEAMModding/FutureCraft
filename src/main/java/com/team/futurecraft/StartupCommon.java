@@ -249,6 +249,9 @@ public class StartupCommon {
 		//misc
 		BlockList.navigator = new BlockNavigator("navigator");
 		GameRegistry.registerBlock(BlockList.navigator, "navigator");
+		
+		BlockList.dirty_ice = new SimpleBlock(Material.rock, "dirty_ice");
+		GameRegistry.registerBlock(BlockList.dirty_ice, "dirty_ice");
 	}
 	
 	/**

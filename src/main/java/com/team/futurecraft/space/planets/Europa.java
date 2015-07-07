@@ -1,16 +1,22 @@
-package com.team.futurecraft.space;
+package com.team.futurecraft.space.planets;
+
+import com.team.futurecraft.space.CelestialObject;
+import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.Planet;
+import com.team.futurecraft.space.WorldType;
+import com.team.futurecraft.space.WorldTypeFrozen;
 
 import net.minecraft.util.Vec3;
 
-public class Moon extends Planet {
+public class Europa extends Planet {
 
-	public Moon(CelestialObject parent) {
+	public Europa(CelestialObject parent) {
 		super(parent);
 	}
 
 	@Override
 	public WorldType getWorldType() {
-		return new WorldTypeSelena();
+		return new WorldTypeFrozen();
 	}
 
 	@Override
@@ -25,12 +31,12 @@ public class Moon extends Planet {
 
 	@Override
 	public String getName() {
-		return "Moon";
+		return "Europa";
 	}
 
 	@Override
 	public String getTexture() {
-		return "moon";
+		return "europa";
 	}
 
 	@Override

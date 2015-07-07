@@ -5,8 +5,8 @@ import java.util.HashMap;
 import org.apache.logging.log4j.Level;
 
 import com.team.futurecraft.space.CelestialObject;
-import com.team.futurecraft.space.Earth;
 import com.team.futurecraft.space.Planet;
+import com.team.futurecraft.space.planets.Earth;
 import com.team.futurecraft.world.WorldProviderPlanet;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -46,11 +46,10 @@ public class SpaceRegistry {
 				else {
 					registerPlanet((Planet)objects[i]);
 				}
-			
-				CelestialObject[] moons = objects[i].getChildren();
-				for (int j = 0; j < moons.length; j++) {
-					registerPlanet((Planet)moons[j]);
-				}
+			}
+			CelestialObject[] moons = objects[i].getChildren();
+			for (int j = 0; j < moons.length; j++) {
+				registerPlanet((Planet)moons[j]);
 			}
 		}
 	}

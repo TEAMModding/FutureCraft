@@ -55,6 +55,7 @@ public class StartupClientOnly {
 		
 		//misc
 		registerItemRendering("navigator");
+		registerItemRendering("dirty_ice");
 		
 		//<=======Items=======>
 		

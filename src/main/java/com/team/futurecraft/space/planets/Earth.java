@@ -1,16 +1,22 @@
-package com.team.futurecraft.space;
+package com.team.futurecraft.space.planets;
+
+import com.team.futurecraft.space.CelestialObject;
+import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.Planet;
+import com.team.futurecraft.space.WorldType;
 
 import net.minecraft.util.Vec3;
 
-public class Venus extends Planet {
+public class Earth extends Planet {
 
-	public Venus(CelestialObject parent) {
+	public Earth(CelestialObject parent) {
 		super(parent);
+		this.add(new Moon(this));
 	}
 
 	@Override
 	public WorldType getWorldType() {
-		return new WorldTypeSelena();
+		return null;
 	}
 
 	@Override
@@ -25,12 +31,12 @@ public class Venus extends Planet {
 
 	@Override
 	public String getName() {
-		return "Venus";
+		return "Earth";
 	}
 
 	@Override
 	public String getTexture() {
-		return "venus";
+		return "earth";
 	}
 
 	@Override
@@ -45,6 +51,6 @@ public class Venus extends Planet {
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(300.0f, 1f, 365f);
+		return new OrbitalParameters(500.0f, 1f, 365f);
 	}
 }

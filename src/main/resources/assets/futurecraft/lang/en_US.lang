@@ -32,6 +32,7 @@ tile.steel_vent.name=Steel Vent
 tile.navigator.name=Navigator
 tile.generator.name=Generator
 tile.generator_lit.name=Lit Generator
+tile.dirty_ice.name=Dirty Ice
 
 
 item.copper_ingot.name=Copper Ingot

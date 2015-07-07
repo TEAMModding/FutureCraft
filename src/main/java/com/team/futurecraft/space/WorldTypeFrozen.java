@@ -6,15 +6,14 @@ import com.team.futurecraft.BlockList;
 import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.biome.BiomeList;
 
-public class WorldTypeDesert extends WorldType{
+public class WorldTypeFrozen extends WorldType {
 	@Override
 	public Block getStoneBlock() {
-		return BlockList.desert_stone;
+		return BlockList.dirty_ice;
 	}
 
 	@Override
 	public BiomePlanet getBiome() {
-		return BiomeList.DESERT;
+		return BiomeList.FROZEN;
 	}
-
 }
