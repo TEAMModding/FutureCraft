@@ -5,6 +5,7 @@ import java.util.Random;
 import com.team.futurecraft.BlockList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
@@ -32,23 +33,23 @@ public class OreSpawn implements IWorldGenerator {
 	}
 
 	private void generateSurface(World world, Random random, int x, int z) {
-		this.addOreSpawn(BlockList.malachite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 1, 60, Blocks.stone);
-		this.addOreSpawn(BlockList.cassiterite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 1, 60, Blocks.stone);
-		this.addOreSpawn(BlockList.bauxite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 1, 50, Blocks.stone);
+		this.addOreSpawn(BlockList.malachite.getDefaultState(), world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 1, 60, Blocks.stone);
+		this.addOreSpawn(BlockList.cassiterite.getDefaultState(), world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 1, 60, Blocks.stone);
+		this.addOreSpawn(BlockList.bauxite.getDefaultState(), world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 1, 50, Blocks.stone);
 		//this.addOreSpawn(BlockList.graphite_ore, world, random, x, z, 16, 16, 9 + random.nextInt(7), 8, 1, 40, Blocks.stone);
 	}
 	
 	private void generateMoon(World world, Random random, int x, int z) {
-		this.addOreSpawn(BlockList.selena_malachite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 15, 15, 60, BlockList.selena_stone);
-		this.addOreSpawn(BlockList.selena_cassiterite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 15, 15, 60, BlockList.selena_stone);
-		this.addOreSpawn(BlockList.selena_bauxite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 15, 15, 60, BlockList.selena_stone);
+		//this.addOreSpawn(BlockList.selena_malachite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 15, 15, 60, BlockList.selena_stone);
+		//this.addOreSpawn(BlockList.selena_cassiterite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 15, 15, 60, BlockList.selena_stone);
+		//this.addOreSpawn(BlockList.selena_bauxite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 15, 15, 60, BlockList.selena_stone);
 	}
 	
 	private void generateMars(World world, Random random, int x, int z) {
-		this.addOreSpawn(BlockList.desert_malachite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 15, 60, BlockList.desert_stone);
-		this.addOreSpawn(BlockList.desert_cassiterite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 15, 60, BlockList.desert_stone);
+		this.addOreSpawn(BlockList.desert_stone.getStateFromMeta(3), world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 15, 60, BlockList.desert_stone);
+		this.addOreSpawn(BlockList.desert_stone.getStateFromMeta(4), world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 15, 60, BlockList.desert_stone);
 		//this.addOreSpawn(GameRegistry.findBlock("futurecraft", "mars_iron_ore"), world, random, x, z, 16, 16, 9 + random.nextInt(7), 20, 15, 80, GameRegistry.findBlock("futurecraft", "mars_stone"));
-		this.addOreSpawn(BlockList.desert_bauxite, world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 15, 50, BlockList.desert_stone);
+		this.addOreSpawn(BlockList.desert_stone.getStateFromMeta(5), world, random, x, z, 16, 16, 9 + random.nextInt(7), 10, 15, 50, BlockList.desert_stone);
 	}
 
 	/**
@@ -66,7 +67,7 @@ public class OreSpawn implements IWorldGenerator {
 	 * @param An int for the minimum Y-Coordinate height at which this block may spawn
 	 * @param An int for the maximum Y-Coordinate height at which this block may spawn
 	 **/
-	public void addOreSpawn(Block block, World world, Random random, int blockXPos, int blockZPos, int maxX, int maxZ, int maxVeinSize, int chancesToSpawn, int minY, int maxY, Block target) {
+	public void addOreSpawn(IBlockState block, World world, Random random, int blockXPos, int blockZPos, int maxX, int maxZ, int maxVeinSize, int chancesToSpawn, int minY, int maxY, Block target) {
 		assert maxY > minY : "The maximum Y must be greater than the Minimum Y";
 		assert maxX > 0 && maxX <= 16 : "addOreSpawn: The Maximum X must be greater than 0 and less than 16";
 		assert minY > 0 : "addOreSpawn: The Minimum Y must be greater than 0";
@@ -78,7 +79,7 @@ public class OreSpawn implements IWorldGenerator {
 			int posX = blockXPos + random.nextInt(maxX);
 			int posY = minY + random.nextInt(diffBtwnMinMaxY);
 			int posZ = blockZPos + random.nextInt(maxZ);
-			new WorldGenMinable(block.getDefaultState(), maxVeinSize, BlockHelper.forBlock(target)).generate(world, random, new BlockPos(posX, posY, posZ));
+			new WorldGenMinable(block, maxVeinSize, BlockHelper.forBlock(target)).generate(world, random, new BlockPos(posX, posY, posZ));
 		}
 	}
 }

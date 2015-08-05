@@ -8,7 +8,6 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 
 import java.nio.FloatBuffer;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,10 +15,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
-
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.Sol;
 
@@ -35,7 +32,7 @@ public class SpaceRenderer {
 	
 	public void render(float xRot, float yRot, float zRot, float zPos, CelestialObject following, float time) {
 		setupRendering(time, xRot, yRot, zRot, zPos, following);
-		new Sol(null).render(this.mc, time, showOrbit);
+		new Sol(null).render(new Vec3(xRot, yRot, zRot), this.mc, time, showOrbit);
 		revertRendering();
 	}
 	

@@ -1,5 +1,5 @@
 {
-    "parent": "futurecraft:block/desert_stonebrick",
+    "parent": "futurecraft:block/selena_bricks",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

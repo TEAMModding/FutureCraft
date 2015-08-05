@@ -41,7 +41,7 @@ public class Mars extends Planet {
 
 	@Override
 	public float getGravity() {
-		return 0.5f;
+		return 1.5f;
 	}
 
 	@Override

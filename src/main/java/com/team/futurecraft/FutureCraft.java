@@ -25,7 +25,7 @@ public class FutureCraft {
 	public static final CreativeTabs tabFutureCraft = new CreativeTabs("futurecraft") {
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
-			return Item.getItemFromBlock(BlockList.steel_plating);
+			return ItemList.creative_tab;
 		}
 		
 		@SideOnly(Side.CLIENT)
@@ -42,10 +42,10 @@ public class FutureCraft {
 	 */
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		StartupCommon.preInit();
 		if (event.getSide() == Side.CLIENT) {
 			StartupClientOnly.preInit();
 		}
-		StartupCommon.preInit();
 	}
   
 	/**
@@ -56,9 +56,9 @@ public class FutureCraft {
 	 */
 	@EventHandler
 	public void init(FMLInitializationEvent event)  {
+		StartupCommon.init();
 		if (event.getSide() == Side.CLIENT) {
 			StartupClientOnly.init();
 		}
-		StartupCommon.init();
 	}
 }

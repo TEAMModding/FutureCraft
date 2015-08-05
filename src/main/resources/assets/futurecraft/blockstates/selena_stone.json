@@ -1,5 +1,10 @@
 {
     "variants": {
-        "normal": { "model": "futurecraft:selena_stone" }
+        "variant=stone": { "model": "futurecraft:selena_stone" },
+        "variant=bricks": { "model": "futurecraft:selena_bricks" },
+        "variant=cobblestone": { "model": "futurecraft:selena_cobblestone" },
+        "variant=malachite": { "model": "futurecraft:selena_malachite" },
+        "variant=cassiterite": { "model": "futurecraft:selena_cassiterite" },
+        "variant=bauxite": { "model": "futurecraft:selena_bauxite" }
     }
 }

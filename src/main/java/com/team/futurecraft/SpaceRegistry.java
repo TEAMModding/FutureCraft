@@ -31,7 +31,7 @@ public class SpaceRegistry {
 			FMLCommonHandler.instance().getFMLLogger().log(Level.ERROR, "An error occurred while registering a planet id: " + id);
 			throw new RuntimeException(e);
 		}
-		DimensionManager.registerProviderType(id, WorldProviderPlanet.class, true);
+		DimensionManager.registerProviderType(id, WorldProviderPlanet.class, false);
 		DimensionManager.registerDimension(id, id);
 		planets.put(id, provider);
 		ids.put(provider, id);

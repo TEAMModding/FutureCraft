@@ -1,14 +1,13 @@
 package com.team.futurecraft.space;
 
 import static org.lwjgl.opengl.GL11.*;
+
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 
 /**
  * The class that all stars should extend.
@@ -43,10 +42,10 @@ public abstract class Star extends CelestialObject {
 	/**
 	 * Render's a boring white ball.
 	 */
-	public void render(Minecraft mc, float time, boolean showOrbit) {
-		Tessellator tessellator = Tessellator.getInstance();
-        /*WorldRenderer renderer = tessellator.getWorldRenderer();
-        ResourceLocation img = new ResourceLocation("futurecraft", "textures/environment/star_glow.png");*/
+	public void render(Vec3 rotation, Minecraft mc, float time, boolean showOrbit) {
+		//Tessellator tessellator = Tessellator.getInstance();
+        //WorldRenderer renderer = tessellator.getWorldRenderer();
+        //ResourceLocation img = new ResourceLocation("futurecraft", "textures/environment/star_glow.png");
 		GlStateManager.disableLighting();
 		GlStateManager.disableTexture2D();
 		glPushMatrix();
@@ -56,22 +55,29 @@ public abstract class Star extends CelestialObject {
         sphere.setTextureFlag(false);
         sphere.setNormals(GLU.GLU_SMOOTH);
         sphere.draw(this.getDiameter(), 100, 100);
+
+        
         glPopMatrix();
         GlStateManager.enableTexture2D();
         /*glPushMatrix();
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         mc.getTextureManager().bindTexture(img);
+        glRotatef(-rotation.x, 0, 1, 0);
+        glRotatef(-rotation.y, 1, 0, 0);
+        float glowSize = this.getDiameter() * 50;
         renderer.startDrawingQuads();
-        renderer.addVertexWithUV(-50, 50, 0, 0, 0);
-        renderer.addVertexWithUV(50, 50, 0, 1, 0);
-        renderer.addVertexWithUV(50, -50, 0, 1, 1);
-        renderer.addVertexWithUV(-50, -50, 0, 0, 1);
+        renderer.setColorRGBA(255, 255, 255, 250);
+        renderer.addVertexWithUV(-glowSize, -glowSize, 0, 0, 1);
+        renderer.addVertexWithUV(glowSize, -glowSize, 0, 1, 1);
+        renderer.addVertexWithUV(glowSize, glowSize, 0, 1, 0);
+        renderer.addVertexWithUV(-glowSize, glowSize, 0, 0, 0);
         tessellator.draw();
-        glPopMatrix();*/
+        glPopMatrix();
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
+        //glDisable(GL_BLEND);
         
         GlStateManager.enableLighting();
-        this.renderChildren(mc, time, showOrbit);
+        this.renderChildren(rotation, mc, time, showOrbit);
 	}
 }

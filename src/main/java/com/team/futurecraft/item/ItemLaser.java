@@ -2,9 +2,11 @@ package com.team.futurecraft.item;
 
 import com.team.futurecraft.FutureCraft;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 /**
@@ -15,16 +17,20 @@ import net.minecraft.world.World;
  * @author Joseph
  *
  */
-public class ItemLaser extends Item {
-	public ItemLaser() {
+public class ItemLaser extends SimpleItem {
+	public ItemLaser(String name) {
+		super(name);
 		this.maxStackSize = 1;
 		this.setMaxDamage(384);
-		this.setFull3D();
         this.setCreativeTab(FutureCraft.tabFutureCraft);
 	}
 	
 	public ItemStack onItemRightClick(ItemStack par1, World par2, EntityPlayer par3) {
 		par1.damageItem(1, par3);
+		System.out.println("right clicking");
+		Entity entity = Minecraft.getMinecraft().objectMouseOver.entityHit;
+		if (entity != null)
+			entity.attackEntityFrom(DamageSource.generic, 1);
 		return par1;
     }
 	

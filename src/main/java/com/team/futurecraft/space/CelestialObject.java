@@ -1,7 +1,6 @@
 package com.team.futurecraft.space;
 
 import java.util.ArrayList;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Vec3;
 
@@ -53,7 +52,7 @@ public abstract class CelestialObject {
 	/**
 	 * Called when this object is rendered in space.
 	 */
-	public abstract void render(Minecraft mc, float time, boolean showOrbit);
+	public abstract void render(Vec3 rotation, Minecraft mc, float time, boolean showOrbit);
 	
 	/**
 	 * Returns if this object has a dimension you can travel to.
@@ -63,10 +62,10 @@ public abstract class CelestialObject {
 	/**
 	 * Calls render for all this object's children.
 	 */
-	public void renderChildren(Minecraft mc, float time, boolean showOrbit) {
+	public void renderChildren(Vec3 rotation, Minecraft mc, float time, boolean showOrbit) {
 		CelestialObject[] children = this.getChildren();
 		for (int i = 0; i < children.length; i++) {
-			children[i].render(mc, time, showOrbit);
+			children[i].render(rotation, mc, time, showOrbit);
 		}
 	}
 	

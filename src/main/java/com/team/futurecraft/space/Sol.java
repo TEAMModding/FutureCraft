@@ -48,7 +48,7 @@ public class Sol extends Star {
 
 	@Override
 	public float getDiameter() {
-		return 10.0f;
+		return 5.0f;
 	}
 
 	@Override

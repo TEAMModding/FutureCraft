@@ -1,5 +1,6 @@
 package com.team.futurecraft.block;
 
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -47,6 +48,7 @@ public class BlockAlloyFurnace extends BlockContainer {
         else {
         	this.setCreativeTab(FutureCraft.tabFutureCraft);
         }
+        GameRegistry.registerBlock(this, name);
     }
 
     public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {

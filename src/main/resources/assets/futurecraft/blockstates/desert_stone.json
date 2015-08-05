@@ -1,5 +1,10 @@
 {
     "variants": {
-        "normal": { "model": "futurecraft:desert_stone" }
+        "variant=stone": { "model": "futurecraft:desert_stone" },
+        "variant=bricks": { "model": "futurecraft:desert_bricks" },
+        "variant=cobblestone": { "model": "futurecraft:desert_cobblestone" },
+        "variant=malachite": { "model": "futurecraft:desert_malachite" },
+        "variant=cassiterite": { "model": "futurecraft:desert_cassiterite" },
+        "variant=bauxite": { "model": "futurecraft:desert_bauxite" }
     }
 }

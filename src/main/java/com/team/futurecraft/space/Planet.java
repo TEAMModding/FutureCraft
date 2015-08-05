@@ -1,14 +1,10 @@
 package com.team.futurecraft.space;
 
-import static org.lwjgl.opengl.GL11.glColor3f;
-import static org.lwjgl.opengl.GL11.glLineWidth;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -68,7 +64,7 @@ public abstract class Planet extends CelestialObject {
 	 * 
 	 * Also renders the orbit path, probably need to put that somewhere else.
 	 */
-	public void render(Minecraft mc, float time, boolean showOrbit) {
+	public void render(Vec3 rotation, Minecraft mc, float time, boolean showOrbit) {
 		Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
         ResourceLocation img = new ResourceLocation("futurecraft", "textures/planets/" + this.getTexture() + ".jpg");
@@ -77,7 +73,7 @@ public abstract class Planet extends CelestialObject {
         mc.getTextureManager().bindTexture(img);
 		glColor3f(1, 1, 1);
 		
-        this.renderChildren(mc, time, showOrbit);
+        this.renderChildren(rotation, mc, time, showOrbit);
         Vec3 pos = this.getPosition(time);
         GL11.glTranslated(pos.xCoord, pos.yCoord, pos.zCoord);
         GL11.glRotatef(time * this.getOrbit().getRotation(), 0F, 1F, 0F);
@@ -122,7 +118,7 @@ public abstract class Planet extends CelestialObject {
         	for (int i = 0; i < 360; i++) {
         		renderer.setColorRGBA(255, 0, 0, (int)(((360 - i) / 200.0f) * 255));
         		double radians = Math.toRadians(i);
-        		renderer.addVertex(Math.cos(radians) * this.getOrbit().getDistance(), 0, Math.sin(radians) * this.getOrbit().getDistance());
+        		renderer.addVertex((Math.cos(radians) * this.getOrbit().getDistance()), 0, Math.sin(radians) * this.getOrbit().getDistance());
         	}
         	tessellator.draw();
         	GlStateManager.enableLighting();
