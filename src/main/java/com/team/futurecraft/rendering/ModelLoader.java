@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.Vec3;
@@ -19,6 +21,7 @@ public class ModelLoader {
 		ArrayList<Vec3> vertices = new ArrayList<Vec3>();
 		ArrayList<Vec3> uvs = new ArrayList<Vec3>();
 		
+		worldrenderer.startDrawing(GL11.GL_TRIANGLES);
 		if (Files.exists(path)) 
 		{
 			try {
@@ -56,5 +59,6 @@ public class ModelLoader {
 				e.printStackTrace();
 			}
 		}
+		tessellator.draw();
 	}
 }

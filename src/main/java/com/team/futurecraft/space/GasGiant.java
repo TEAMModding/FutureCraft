@@ -1,5 +1,7 @@
 package com.team.futurecraft.space;
 
+import com.team.futurecraft.biome.BiomePlanet;
+
 import net.minecraft.util.Vec3;
 
 public abstract class GasGiant extends Planet {
@@ -8,11 +10,15 @@ public abstract class GasGiant extends Planet {
 		super(parent);
 	}
 	
+	public BiomePlanet getBiome() {
+		return null;
+	}
+	
 	public boolean isLandable() {
 		return false;
 	}
 	
-	public WorldType getWorldType() {
+	public PlanetType getWorldType() {
 		return null;
 	}
 	
@@ -24,5 +30,10 @@ public abstract class GasGiant extends Planet {
 	@Override
 	public float getAtmosphericDensity() {
 		return 0;
+	}
+	
+	@Override
+	public String getColormap() {
+		return null;
 	}
 }

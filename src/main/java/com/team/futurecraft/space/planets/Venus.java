@@ -1,10 +1,12 @@
 package com.team.futurecraft.space.planets;
 
+import com.team.futurecraft.biome.BiomeList;
+import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.Planet;
-import com.team.futurecraft.space.WorldType;
-import com.team.futurecraft.space.WorldTypeSelena;
+import com.team.futurecraft.space.PlanetType;
+import com.team.futurecraft.space.PlanetTypeSelena;
 
 import net.minecraft.util.Vec3;
 
@@ -13,10 +15,14 @@ public class Venus extends Planet {
 	public Venus(CelestialObject parent) {
 		super(parent);
 	}
+	
+	public BiomePlanet getBiome() {
+		return BiomeList.DESERT_MARS;
+	}
 
 	@Override
-	public WorldType getWorldType() {
-		return new WorldTypeSelena();
+	public PlanetType getWorldType() {
+		return new PlanetTypeSelena();
 	}
 
 	@Override
@@ -52,5 +58,10 @@ public class Venus extends Planet {
 	@Override
 	public OrbitalParameters getOrbit() {
 		return new OrbitalParameters(300.0f, 1f, 365f);
+	}
+	
+	@Override
+	public String getColormap() {
+		return null;
 	}
 }

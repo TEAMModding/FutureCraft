@@ -8,6 +8,7 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 
 import java.nio.FloatBuffer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,8 +16,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
+
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.Sol;
 
@@ -30,34 +33,49 @@ public class SpaceRenderer {
 		this.showOrbit = showOrbit;
 	}
 	
-	public void render(float xRot, float yRot, float zRot, float zPos, CelestialObject following, float time) {
-		setupRendering(time, xRot, yRot, zRot, zPos, following);
-		new Sol(null).render(new Vec3(xRot, yRot, zRot), this.mc, time, showOrbit);
+	public void render(Vec3 rot, Vec3 pos, CelestialObject following, float time, boolean onPlanet) {
+		setupRendering(time, rot, pos, following, onPlanet);
+		Sol sol = new Sol(null);
+		if (onPlanet) {
+			Vec3 newRot = rot.subtract(new Vec3(time * following.getOrbit().getRotation(), 0, 45));
+			sol.render(newRot, pos, this.mc, time, showOrbit);
+		}
+		else {
+			sol.renderOrbits(time);
+			sol.render(rot, following.getPosition(time).subtract(pos), this.mc, time, showOrbit);
+			
+		}
 		revertRendering();
 	}
 	
 	/**
 	 * Sets up 3d projection, shadowing, skybox, all that good stuff.
 	 */
-	private void setupRendering(float time, float xRot, float yRot, float zRot, float zPos, CelestialObject following) {
+	private void setupRendering(float time, Vec3 rot, Vec3 pos, CelestialObject following, boolean onPlanet) {
 		//sets up the camera projection and position
 		GlStateManager.matrixMode(GL_PROJECTION);
         GlStateManager.pushMatrix();
         GlStateManager.loadIdentity();
         Project.gluPerspective(mc.gameSettings.fovSetting, (float)mc.displayWidth / mc.displayHeight, 0.001F, 1000000);
-        GL11.glTranslatef(0, 0, zPos);
-        GL11.glRotatef(yRot, 1F, 0F, 0F);
-        GL11.glRotatef(xRot, 0F, 1F, 0F);
+        
+        GL11.glRotatef((float)rot.yCoord, 1F, 0F, 0F);
+        GL11.glRotatef((float)rot.xCoord, 0F, 1F, 0F);
+        GL11.glRotatef((float)rot.zCoord, 0F, 0F, 1F);
+        
+        if (onPlanet) {
+        	GL11.glRotatef(-45, 0, 0, 1);
+        	GL11.glRotatef(-time * following.getOrbit().getRotation(), 0, 1, 0);
+        }
+        
+        Vec3 planetPos = following.getPosition(time);
+        GL11.glTranslatef((float)-planetPos.xCoord, (float)-planetPos.yCoord, (float)-planetPos.zCoord);
+        GL11.glTranslatef((float)pos.xCoord, (float)pos.yCoord, (float)pos.zCoord);
         //sets up the model space
         GlStateManager.matrixMode(GL_MODELVIEW);
         GlStateManager.pushMatrix();
         GlStateManager.loadIdentity();
         //glScalef(0.6f, 1f, 0.6f);
-        GL11.glRotatef(zRot, 0F, 0F, 1F);
-        GL11.glRotatef(-time * following.getOrbit().getRotation(), 0, 1, 0);
-        
-        Vec3 pos = following.getPosition(time);
-        GL11.glTranslatef(-(float)pos.xCoord, -(float)pos.yCoord, -(float)pos.zCoord);
+        //GL11.glRotatef(-time * following.getOrbit().getRotation(), 0, 1, 0);
         
         //enables depth
         glEnable(GL_DEPTH_TEST);
@@ -154,7 +172,7 @@ public class SpaceRenderer {
 	/**
 	 * Turns an RGBA color into a buffer for use in shadowing.
 	 */
-	private static FloatBuffer setColorBuffer(float p_74521_0_, float p_74521_1_, float p_74521_2_, float p_74521_3_)
+	public static FloatBuffer setColorBuffer(float p_74521_0_, float p_74521_1_, float p_74521_2_, float p_74521_3_)
     {
         colorBuffer.clear();
         colorBuffer.put(p_74521_0_).put(p_74521_1_).put(p_74521_2_).put(p_74521_3_);

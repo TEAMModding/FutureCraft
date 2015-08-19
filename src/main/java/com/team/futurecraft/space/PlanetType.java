@@ -1,5 +1,6 @@
 package com.team.futurecraft.space;
 
+import com.team.futurecraft.Noise;
 import com.team.futurecraft.biome.BiomePlanet;
 
 import net.minecraft.block.Block;
@@ -10,8 +11,12 @@ import net.minecraft.block.Block;
  * 
  * @author Joseph
  */
-public abstract class WorldType {
+public abstract class PlanetType {
 	public abstract Block getStoneBlock();
 	
-	public abstract BiomePlanet getBiome();
+	public abstract int getHeight(int x, int z, Noise noise);
+	
+	public boolean hasWater() {
+		return false;
+	}
 }

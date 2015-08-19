@@ -1,15 +1,16 @@
 package com.team.futurecraft.biome;
 
-import com.team.futurecraft.BlockList;
 import com.team.futurecraft.space.Planet;
 
-public class BiomeFrozen extends BiomePlanet {
-	public BiomeFrozen(int id, Planet planet) {
+import net.minecraft.init.Blocks;
+
+public class BiomeTerra extends BiomePlanet {
+	public BiomeTerra(int id, Planet planet) {
         super(id, planet);
-        this.setBiomeName("frozen");
+        this.setBiomeName("terra");
         this.spawnableCreatureList.clear();
-        this.topBlock = BlockList.dirty_ice.getDefaultState();
-        this.fillerBlock = BlockList.dirty_ice.getDefaultState();
+        this.topBlock = Blocks.grass.getDefaultState();
+        this.fillerBlock = Blocks.dirt.getDefaultState();
         this.theBiomeDecorator.treesPerChunk = -999;
         this.theBiomeDecorator.generateLakes = false;
         this.spawnableCreatureList.clear();

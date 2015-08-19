@@ -2,6 +2,7 @@ package com.team.futurecraft.biome;
 import java.util.Random;
 
 import com.team.futurecraft.BlockList;
+import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.world.WorldGenCraters;
 
 import net.minecraft.util.BlockPos;
@@ -14,8 +15,9 @@ import net.minecraft.world.World;
  *
  */
 public class BiomeSelena extends BiomePlanet {
-    public BiomeSelena(int p_i1977_1_) {
-        super(p_i1977_1_, BlockList.selena_stone);
+    public BiomeSelena(int id, Planet planet) {
+        super(id, planet);
+        this.setBiomeName("selena");
         this.spawnableCreatureList.clear();
         this.topBlock = BlockList.selena_dirt.getDefaultState();
         this.fillerBlock = BlockList.selena_dirt.getDefaultState();

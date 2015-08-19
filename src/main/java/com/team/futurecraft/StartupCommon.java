@@ -7,6 +7,7 @@ import com.team.futurecraft.block.BlockBatteryNew;
 import com.team.futurecraft.block.BlockGenerator;
 import com.team.futurecraft.block.BlockNavigator;
 import com.team.futurecraft.block.BlockPlanetStone;
+import com.team.futurecraft.block.BlockPlanetTurf;
 import com.team.futurecraft.block.BlockRocketCore;
 import com.team.futurecraft.block.BlockSimpleOre;
 import com.team.futurecraft.block.BlockWire;
@@ -181,11 +182,11 @@ public class StartupCommon {
 		
 		//selena blocks
 		BlockList.selena_stone = new BlockPlanetStone("selena_stone");
-		BlockList.selena_dirt = new SimpleBlock(Material.rock, "selena_dirt");
+		BlockList.selena_dirt = new BlockPlanetTurf("selena_dirt");
 				
 		//desert blocks
 		BlockList.desert_stone = new BlockPlanetStone("desert_stone");
-		BlockList.desert_dirt = new SimpleBlock(Material.rock, "desert_dirt");
+		BlockList.desert_dirt = new BlockPlanetTurf("desert_dirt");
 		
 		//machines
 		BlockList.alloy_furnace = new BlockAlloyFurnace(false, "alloy_furnace");

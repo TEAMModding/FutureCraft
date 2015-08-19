@@ -6,6 +6,7 @@ import com.team.futurecraft.space.planets.Mars;
 import com.team.futurecraft.space.planets.Mercury;
 import com.team.futurecraft.space.planets.Neptune;
 import com.team.futurecraft.space.planets.Saturn;
+import com.team.futurecraft.space.planets.Terra;
 import com.team.futurecraft.space.planets.Uranus;
 import com.team.futurecraft.space.planets.Venus;
 
@@ -15,14 +16,11 @@ import com.team.futurecraft.space.planets.Venus;
  * @author Joseph
  */
 public class Sol extends Star {
-	/**
-	 * This is where the magic happens, to add a new planet to the solar system
-	 * put a new this.add line with your planet in it.
-	 */
 	public Sol(CelestialObject parent) {
 		super(parent);
 		this.add(new Mercury(this));
 		this.add(new Venus(this));
+		this.add(new Terra(this));
 		this.add(new Earth(this));
 		this.add(new Mars(this));
 		this.add(new Jupiter(this));

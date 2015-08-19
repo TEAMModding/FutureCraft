@@ -17,6 +17,7 @@ import com.team.futurecraft.space.Planet;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.Vec3;
 
 /**
  * This is the gui screen class of the navigation gui.
@@ -26,8 +27,11 @@ import net.minecraft.entity.player.EntityPlayer;
 public class GuiNavigation extends GuiScreen {
 	private float time = 0;
 	private float zPos = -0.3f;
+	private float xPos = 0;
+	private float yPos = 0;
 	private float xRot = 0;
 	private float yRot = 30;
+	private float zRot = 0;
 	private ArrayList<Planet> planets = new ArrayList<Planet>();
 	private static final float TIME_SCALE = 0.0003f;
 	private int selectedPlanet = 0;
@@ -62,6 +66,7 @@ public class GuiNavigation extends GuiScreen {
 			}
 		}
 		this.buttonList.add(new GuiSpaceButton(1000, this.width - 110, this.height - 30, 100, 20, "travel"));
+		
 		spaceRender = new SpaceRenderer(this.mc, true);
 	}
 	
@@ -101,6 +106,35 @@ public class GuiNavigation extends GuiScreen {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
 			FutureCraft.timeOffset -= 1f;
 		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			this.zPos += 0.1;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			this.zPos -= 0.1;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+			this.xPos += 0.1;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+			this.xPos -= 0.1;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+			this.yPos += 0.1;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			this.yPos -= 0.1;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+			this.zRot += 10;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
+			this.zRot -= 10;
+		}
+		
 		super.handleKeyboardInput();
     }
 	
@@ -109,7 +143,7 @@ public class GuiNavigation extends GuiScreen {
 	 */
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		this.spaceRender.render(this.xRot, this.yRot, 0f, this.zPos, planets.get(this.selectedPlanet), time);
+		this.spaceRender.render(new Vec3(this.xRot, this.yRot, this.zRot), new Vec3(this.xPos, this.yPos, this.zPos), planets.get(this.selectedPlanet), time, false);
         
 		//System.out.println(System.nanoTime() * 0.000000001);
         time = (float) (System.nanoTime() * 0.000000001 * TIME_SCALE)  + FutureCraft.timeOffset;

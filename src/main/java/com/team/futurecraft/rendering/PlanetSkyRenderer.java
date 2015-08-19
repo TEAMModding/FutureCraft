@@ -36,10 +36,10 @@ public class PlanetSkyRenderer extends IRenderHandler {
 		GL11.glDepthMask(false);
 		GL11.glDisable(GL11.GL_FOG);
 		GlStateManager.enableAlpha();
-		SpaceRenderer render = new SpaceRenderer(mc, false);
-		render.render(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, -45f, 0f, this.planet, time);
-		renderAtmosphere(mc);
 		time = (float) (System.nanoTime() * 0.000000001 * TIME_SCALE) + FutureCraft.timeOffset;
+		SpaceRenderer render = new SpaceRenderer(mc, false);
+		render.render(new Vec3(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, 0), new Vec3(0, 0, 0), this.planet, time, true);
+		renderAtmosphere(mc);
 		//System.out.println(time);
 		GL11.glDepthMask(true);
 	}

@@ -17,9 +17,9 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "v0.5 beta"
-group= "com.team.kalstuff" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "KalStuff-1.8"
+version = "v0.3.d nochat alpha"
+group= "com.team.futurecraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Futurecraft-1.8"
 
 minecraft {
     version = "1.8-11.14.1.1337"

@@ -7,6 +7,7 @@ import com.team.futurecraft.block.BlockBatteryNew;
 import com.team.futurecraft.block.BlockGenerator;
 import com.team.futurecraft.block.BlockNavigator;
 import com.team.futurecraft.block.BlockPlanetStone;
+import com.team.futurecraft.block.BlockPlanetTurf;
 import com.team.futurecraft.block.BlockRocketCore;
 import com.team.futurecraft.block.BlockSimpleOre;
 import com.team.futurecraft.block.BlockWire;
@@ -32,11 +33,11 @@ public class BlockList {
 	public static BlockSimpleOre bauxite;
 	
 	//selena blocks
-	public static SimpleBlock selena_dirt;
+	public static BlockPlanetTurf selena_dirt;
 	public static BlockPlanetStone selena_stone;
 	
 	//desert blocks
-	public static SimpleBlock desert_dirt;
+	public static BlockPlanetTurf desert_dirt;
 	public static BlockPlanetStone desert_stone;
 	
 	//machines

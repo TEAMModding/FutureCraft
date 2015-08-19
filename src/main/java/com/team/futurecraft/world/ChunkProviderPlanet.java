@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.team.futurecraft.Noise;
+import com.team.futurecraft.space.PlanetType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
@@ -37,11 +38,13 @@ public class ChunkProviderPlanet implements IChunkProvider {
     private double[] stoneNoise;
     private BiomeGenBase[] biomesForGeneration;
     private Block stoneBlock;
+    public PlanetType type;
 
-    public ChunkProviderPlanet(World worldIn, long seed, Block stoneblock) {
+    public ChunkProviderPlanet(World worldIn, long seed, PlanetType type) {
     	this.noise = new Noise(worldIn.getSeed());
-        this.stoneBlock = stoneblock;
+        this.stoneBlock = type.getStoneBlock();
         this.stoneNoise = new double[256];
+        this.type = type;
         
         this.worldObj = worldIn;
         this.rand = new Random(seed);
@@ -51,8 +54,9 @@ public class ChunkProviderPlanet implements IChunkProvider {
     public void setBlocksInChunk(int chunkX, int chunkZ, ChunkPrimer world) {
         for (int x = 0; x < 16; x++) {
         	for (int z = 0; z < 16; z++) {
-        		int height = (int)Math.floor(noise.defaultNoise(new Vec3((chunkX * 16) + x, 0, (chunkZ * 16) + z), 3, 0.002f, 0.8f) * 35);
-        		for (int y = 0; y < height + 80; y++) {
+        		//int height = (int)Math.floor(noise.defaultNoise(new Vec3((chunkX * 16) + x, 0, (chunkZ * 16) + z), 3, 0.002f, 0.8f) * 35);
+        		int height = type.getHeight((chunkX * 16) + x, (chunkZ * 16) + z, noise);
+        		for (int y = 0; y < height; y++) {
         			world.setBlockState(x, y, z, this.stoneBlock.getDefaultState());
         		}
         	}

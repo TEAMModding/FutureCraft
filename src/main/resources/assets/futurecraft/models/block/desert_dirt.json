@@ -1,6 +1,6 @@
 {
-    "parent": "block/cube_all",
+    "parent": "futurecraft:block/colored",
     "textures": {
-        "all": "futurecraft:blocks/desert_dirt"
+        "particle": "futurecraft:blocks/desert_dirt"
     }
 }

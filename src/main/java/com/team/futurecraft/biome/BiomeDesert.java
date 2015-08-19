@@ -1,6 +1,7 @@
 package com.team.futurecraft.biome;
 
 import com.team.futurecraft.BlockList;
+import com.team.futurecraft.space.Planet;
 
 /**
  * The Biome class for mars, not really much here.
@@ -8,8 +9,9 @@ import com.team.futurecraft.BlockList;
  *
  */
 public class BiomeDesert extends BiomePlanet {
-	public BiomeDesert(int p_i1977_1_) {
-        super(p_i1977_1_, BlockList.desert_stone);
+	public BiomeDesert(int id, Planet planet) {
+        super(id, planet);
+        this.setBiomeName("desert");
         this.spawnableCreatureList.clear();
         this.topBlock = BlockList.desert_dirt.getDefaultState();
         this.fillerBlock = BlockList.desert_dirt.getDefaultState();

@@ -2,9 +2,25 @@ package com.team.futurecraft.space;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.imageio.ImageIO;
+
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.Disk;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
+
+import scala.actors.threadpool.Arrays;
+
+import com.team.futurecraft.biome.BiomePlanet;
+import com.team.futurecraft.rendering.ModelLoader;
+import com.team.futurecraft.rendering.SpaceRenderer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -18,10 +34,51 @@ import net.minecraft.util.Vec3;
  * @author Joseph
  */
 public abstract class Planet extends CelestialObject {
+	public int[] turfmap;
+	public int[] stonemap;
 	
 	public Planet(CelestialObject parent) {
 		super(parent);
+		this.readColormap();
 	}
+	
+	/**
+	 * Internal stuff that sets up the terrain colormap
+	 */
+	private void readColormap() {
+		InputStream in;
+		BufferedImage image;
+		String mapPath = this.getColormap();
+		if (mapPath != null) {
+			try {
+				in = Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("futurecraft", "textures/planets/" + mapPath +".png")).getInputStream();
+				image = ImageIO.read(in);
+			
+				AffineTransform transform = AffineTransform.getScaleInstance(1f, -1f);
+				transform.translate(0, -image.getHeight());
+				AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+				image = operation.filter(image, null);
+		
+				int height = image.getHeight();
+				int width = image.getWidth();
+
+				int[] pixels = new int[height];
+				image.getRGB(0, 0, 1, height, pixels, 0, 1);
+				turfmap = pixels;
+				
+				int[] pixels2 = new int[height];
+				image.getRGB(1, 0, 1, height, pixels2, 0, 1);
+				stonemap = pixels2;
+			} catch (IOException e) {
+				turfmap = new int[] {0xFFFFFF};
+			}
+		}
+		else {
+			turfmap = new int[] {0xFFFFFF};
+		}
+	}
+	
+	public abstract BiomePlanet getBiome();
 	
 	/**
 	 * Tells everything that this is indeed a planet.
@@ -37,11 +94,20 @@ public abstract class Planet extends CelestialObject {
 		return true;
 	}
 	
+	public boolean hasRings() {
+		return false;
+	}
+	
+	/**
+	 * Returns the name of the colormap image located in textures/planets
+	 */
+	public abstract String getColormap();
+	
 	/**
 	 * Planets should return a WorldType object for this.
 	 * There are currently Selena, and Desert world types. Much much more to come.
 	 */
-	public abstract WorldType getWorldType();
+	public abstract PlanetType getWorldType();
 	
 	/**
 	 * Return's a Vec3 for the atmospheric color, colors range from 0 to 1, not 0 to 255.
@@ -64,71 +130,42 @@ public abstract class Planet extends CelestialObject {
 	 * 
 	 * Also renders the orbit path, probably need to put that somewhere else.
 	 */
-	public void render(Vec3 rotation, Minecraft mc, float time, boolean showOrbit) {
+	public void render(Vec3 rotation, Vec3 pos, Minecraft mc, float time, boolean showOrbit) {
 		Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
         ResourceLocation img = new ResourceLocation("futurecraft", "textures/planets/" + this.getTexture() + ".jpg");
+        ResourceLocation ringImg = new ResourceLocation("futurecraft", "textures/planets/saturn_rings.png");
+        Vec3 PlanetPos = this.getPosition(time);
+        GlStateManager.enableLighting();
 		
 		glPushMatrix();
         mc.getTextureManager().bindTexture(img);
 		glColor3f(1, 1, 1);
 		
-        this.renderChildren(rotation, mc, time, showOrbit);
-        Vec3 pos = this.getPosition(time);
-        GL11.glTranslated(pos.xCoord, pos.yCoord, pos.zCoord);
+        this.renderChildren(rotation, pos, mc, time, showOrbit);
+        
+        GL11.glTranslated(PlanetPos.xCoord, PlanetPos.yCoord, PlanetPos.zCoord);
         GL11.glRotatef(time * this.getOrbit().getRotation(), 0F, 1F, 0F);
         GL11.glRotatef(90, 1F, 0F, 0F);
         
         mc.getTextureManager().bindTexture(img);
         glColor3f(1, 1, 1);
+        
         Sphere sphere = new Sphere();
         sphere.setTextureFlag(true);
-        sphere.setNormals(GLU.GLU_SMOOTH);
-        sphere.draw(this.getDiameter(), 100, 100);
+        sphere.draw(this.getDiameter(), 50, 50);
+        
+        mc.getTextureManager().bindTexture(ringImg);
+        GlStateManager.disableLighting();
+        Disk disc = new Disk();
+        disc.setTextureFlag(true);
+        
+        disc.setOrientation(GLU.GLU_INSIDE);
+        disc.draw(this.getDiameter() * 2, this.getDiameter() * 2 + 0.3f, 50, 50);
+        
+        disc.setOrientation(GLU.GLU_OUTSIDE);
+        disc.draw(this.getDiameter() * 2, this.getDiameter() * 2 + 0.3f, 100, 100);
+        
         glPopMatrix();
-        
-        if (showOrbit) {
-        	glPushMatrix();
-        	GL11.glTranslated(pos.xCoord, pos.yCoord, pos.zCoord);
-        	GlStateManager.disableTexture2D();
-        	GlStateManager.disableLighting();
-        	Vec3 direction = this.getDirection(time);
-        	glLineWidth(1);
-        	renderer.startDrawing(3);
-        	renderer.setColorOpaque_I(0x00FF00);
-        	renderer.addVertex(0, 0, 0);
-        	renderer.addVertex(direction.xCoord * this.getDiameter() * 1.1, direction.yCoord * this.getDiameter() * 1.1, direction.zCoord * this.getDiameter() * 1.1);
-        	tessellator.draw();
-        	glPopMatrix();
-        	GlStateManager.enableTexture2D();
-        	GlStateManager.enableLighting();
-        }
-        
-        if (showOrbit) {
-        	glPushMatrix();
-        	GlStateManager.disableTexture2D();
-        	GlStateManager.disableLighting();
-        
-        	Vec3 parentPos = this.getParent().getPosition(time);
-        	GL11.glTranslated(parentPos.xCoord, parentPos.yCoord, parentPos.zCoord);
-        	GL11.glRotatef(time * this.getOrbit().getYearScale(), 0F, 1F, 0F);
-        	GlStateManager.enableAlpha();
-        	glLineWidth(1);
-        	renderer.startDrawing(3);
-        	for (int i = 0; i < 360; i++) {
-        		renderer.setColorRGBA(255, 0, 0, (int)(((360 - i) / 200.0f) * 255));
-        		double radians = Math.toRadians(i);
-        		renderer.addVertex((Math.cos(radians) * this.getOrbit().getDistance()), 0, Math.sin(radians) * this.getOrbit().getDistance());
-        	}
-        	tessellator.draw();
-        	GlStateManager.enableLighting();
-        	GlStateManager.enableTexture2D();
-        
-        	glPopMatrix();
-        }
-	}
-	
-	public Vec3 getDirection(float time) {
-		return new Vec3(-1, 1, 0).rotateYaw((float) Math.toRadians(time * this.getOrbit().getRotation()));
 	}
 }

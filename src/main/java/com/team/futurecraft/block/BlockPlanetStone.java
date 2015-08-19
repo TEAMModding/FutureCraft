@@ -3,16 +3,24 @@ package com.team.futurecraft.block;
 import java.util.List;
 import java.util.Random;
 
+import com.team.futurecraft.biome.BiomePlanet;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.ColorizerGrass;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -23,6 +31,29 @@ public class BlockPlanetStone extends SimpleBlock {
 		super(Material.rock, name, true);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumType.STONE));
 	}
+	
+	@SideOnly(Side.CLIENT)
+    public int getBlockColor()
+    {
+        return 0xFFFFFF;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int getRenderColor(IBlockState state)
+    {
+        return this.getBlockColor();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int colorMultiplier(IBlockAccess worldIn, BlockPos pos, int renderPass)
+    {
+    	BiomeGenBase biome = worldIn.getBiomeGenForCoords(pos);
+    	if (biome instanceof BiomePlanet) {
+    		BiomePlanet biomePlanet = (BiomePlanet)biome;
+    		return biomePlanet.getStoneColor(pos);
+    	}
+        return 0xFFFFFF;
+    }
 	
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
