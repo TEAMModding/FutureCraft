@@ -2,12 +2,14 @@ package com.team.futurecraft;
 
 import com.team.futurecraft.block.BlockWire;
 import com.team.futurecraft.block.BlockBattery;
+import com.team.futurecraft.block.BlockBatteryNew;
 import com.team.futurecraft.block.BlockGenerator;
 import com.team.futurecraft.block.BlockAlloyFurnace;
 import com.team.futurecraft.block.BlockMovingSidewalk;
 import com.team.futurecraft.block.BlockNavigator;
+import com.team.futurecraft.block.BlockPlanetStone;
+import com.team.futurecraft.block.BlockRocketCore;
 import com.team.futurecraft.block.BlockSimpleOre;
-import com.team.futurecraft.block.BlockTeleporter;
 import com.team.futurecraft.block.SimpleBlock;
 
 /**
@@ -29,27 +31,13 @@ public class BlockList  {
 	public static BlockSimpleOre cassiterite;
 	public static BlockSimpleOre bauxite;
 	
-	//selena ores
-	public static BlockSimpleOre selena_malachite;
-	public static BlockSimpleOre selena_cassiterite;
-	public static BlockSimpleOre selena_bauxite;
-	
-	//desert ores
-	public static BlockSimpleOre desert_malachite;
-	public static BlockSimpleOre desert_cassiterite;
-	public static BlockSimpleOre desert_bauxite;
-	
 	//selena blocks
-	public static SimpleBlock selena_stone;
 	public static SimpleBlock selena_dirt;
-	public static SimpleBlock selena_cobblestone;
-	public static SimpleBlock selena_stonebrick;
+	public static BlockPlanetStone selena_stone;
 	
 	//desert blocks
-	public static SimpleBlock desert_stone;
 	public static SimpleBlock desert_dirt;
-	public static SimpleBlock desert_cobblestone;
-	public static SimpleBlock desert_stonebrick;
+	public static BlockPlanetStone desert_stone;
 	
 	//machines
 	public static BlockAlloyFurnace alloy_furnace;
@@ -60,10 +48,13 @@ public class BlockList  {
 	public static BlockGenerator generator;
 	public static BlockGenerator generator_lit;
 	
+	public static BlockBatteryNew battery_new;
+	
+	//rocket parts
+	public static BlockRocketCore rocket_core;
+	
 	//misc
 	public static BlockNavigator navigator;
-	public static BlockTeleporter earth_teleporter;
-	public static BlockTeleporter moon_teleporter;
-	public static BlockTeleporter mars_teleporter;
+	public static SimpleBlock dirty_ice;
 	public static BlockMovingSidewalk moving_sidewalk;
 }

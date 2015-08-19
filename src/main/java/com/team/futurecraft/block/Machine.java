@@ -18,6 +18,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * <p>This is an astract class that other blocks should extend to provide core
@@ -45,6 +46,7 @@ public abstract class Machine extends BlockContainer implements IElectric {
 		this.setCreativeTab(FutureCraft.tabFutureCraft);
 		this.isFull = full;
 		this.setUnlocalizedName(name);
+		GameRegistry.registerBlock(this, name);
 	}
 	
 	/**

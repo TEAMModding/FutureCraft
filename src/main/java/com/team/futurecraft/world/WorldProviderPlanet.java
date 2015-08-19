@@ -1,26 +1,89 @@
 package com.team.futurecraft.world;
 
+import com.team.futurecraft.FutureCraft;
+import com.team.futurecraft.SpaceRegistry;
+import com.team.futurecraft.rendering.PlanetSkyRenderer;
+import com.team.futurecraft.space.Planet;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.IChunkProvider;
 
 /**
- * This is the Base class for all planets.
- * Any planet's WorldProvider class that extends this one is to be
- * used as the starting point for a new planet. Here you specify gravity, the chunkManager (for biomes),
- * and the ChunkProvider (for generation). 
- * see: WorldProviderMoon and WorldProviderMars.
+ * This represents the dimension for a certain planet.
+ * Simply takes data from the Planet object and generates accordingly.
  * 
  * @author Joseph
  *
  */
-public abstract class WorldProviderPlanet extends WorldProvider {
-    public abstract void registerWorldChunkManager();
+public class WorldProviderPlanet extends WorldProvider {
+	private Planet planet;
+	
+	
+	
+    @Override
+	public Vec3 getFogColor(float p_76562_1_, float p_76562_2_) {
+    	float time = (float) (System.nanoTime() * 0.000000001 * 0.0003f)  + FutureCraft.timeOffset;
+    	Vec3 planetToLight = new Vec3(0, 0, 0).subtract(this.planet.getPosition(time)).normalize();
+    	float value = (float) this.planet.getDirection(time).dotProduct(planetToLight) * 4.0f;
+    	if (value < -1) value = -1;
+    	
+    	float r = (float) this.planet.getAtmosphericColor().xCoord;
+    	float g = (float) this.planet.getAtmosphericColor().yCoord;
+    	float b = (float) this.planet.getAtmosphericColor().zCoord;
+    	
+    	Vec3 color = new Vec3(Math.min(r * value, r), Math.min(g * value, g), Math.min(b * value, b));
+    	
+    	if (this.planet.getAtmosphericDensity() > 0)
+    		return color;
+    	else
+    		return new Vec3(-1.0, -1.0, -1.0);
+	}
     
-    public abstract String getSaveFolder();
+    @SideOnly(Side.CLIENT)
+    public float getSunBrightness(float par1)
+    {
+    	float time = (float) (System.nanoTime() * 0.000000001 * 0.0003f)  + FutureCraft.timeOffset;
+    	Vec3 planetToLight = new Vec3(0, 0, 0).subtract(this.planet.getPosition(time)).normalize();
+    	float value = (float) this.planet.getDirection(time).dotProduct(planetToLight) * 4.0f;
+    	if (value < 0) value = 0;
+    	if (value > 1) value = 1;
+    	//System.out.println(value);
+    	
+        return value;
+    }
     
-    public abstract IChunkProvider createChunkGenerator();
+    public long getWorldTime()
+    {
+    	return 5000;
+    }
+    
+    public boolean hasAtmosphere() {
+    	if (this.planet.getAtmosphericDensity() == 0.0f) return false;
+    	return true;
+    }
+
+	@Override
+	public void setDimension(int dim) {
+    	super.setDimension(dim);
+		this.planet = SpaceRegistry.getPlanetForDimension(dim);
+		System.out.println("loaded dimension for: " + planet.getName());
+	}
+
+	public void registerWorldChunkManager() {
+		this.worldChunkMgr = new PlanetChunkManager(this.planet.getWorldType().getBiome(), 0.0F);
+        this.setSkyRenderer(new PlanetSkyRenderer(this.planet));
+	}
+    
+    public String getSaveFolder() {
+    	return this.planet.getName();
+    }
+    
+    public IChunkProvider createChunkGenerator() {
+    	return new ChunkProviderPlanet(this.worldObj, this.worldObj.getSeed(), this.planet.getWorldType().getStoneBlock());
+    }
     
     /**
      * True if the player can respawn in this dimension (true = overworld, false = nether).
@@ -49,10 +112,8 @@ public abstract class WorldProviderPlanet extends WorldProvider {
      * Returns the dimension's name, e.g. "The End", "Nether", or "Overworld".
      */
     public String getDimensionName() {
-    	return getPlanetName();
+    	return this.planet.getName();
     }
-    
-    public abstract String getPlanetName();
     
     /**
      * gets the gravity for this planet 1.0 is earth gravity.
@@ -60,9 +121,13 @@ public abstract class WorldProviderPlanet extends WorldProvider {
      * 
      * @return the gravity for this planet
      */
-    public abstract double getGravity();
+    public double getGravity() {
+    	return this.planet.getGravity();
+    }
     
-    public abstract String getImage();
+    public String getImage() {
+    	return this.planet.getTexture();
+    }
     
     @Override
 	public String getInternalNameSuffix() {

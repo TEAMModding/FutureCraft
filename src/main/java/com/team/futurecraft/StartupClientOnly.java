@@ -1,17 +1,27 @@
 package com.team.futurecraft;
 
+import com.team.futurecraft.entity.ChunkEntity;
+import com.team.futurecraft.rendering.entity.RenderChunkEntity;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class StartupClientOnly {
-	public static void preInit() {}
+	public static void preInit() {
+	}
 	
 	/**
 	 * Initializes the client side.
 	 * Register Item rendering and any other rendering here.
 	 */
 	public static void init() {	
+		RenderingRegistry.registerEntityRenderingHandler(ChunkEntity.class, new RenderChunkEntity(Minecraft.getMinecraft().getRenderManager()));
+		
 		//metal blocks
 		registerItemRendering("steel_plating");
 		registerItemRendering("steel_vent");
@@ -21,27 +31,25 @@ public class StartupClientOnly {
 		registerItemRendering("cassiterite");
 		registerItemRendering("bauxite");
 		
-		//desert ores
-		registerItemRendering("desert_malachite");
-		registerItemRendering("desert_cassiterite");
-		registerItemRendering("desert_bauxite");
-		
-		//selena ores
-		registerItemRendering("selena_malachite");
-		registerItemRendering("selena_cassiterite");
-		registerItemRendering("selena_bauxite");
-		
 		//selena blocks
-		registerItemRendering("selena_stone");
+		registerMetaItemRendering("selena_stone", 
+				"selena_stone",
+				"selena_bricks",
+				"selena_cobblestone",
+				"selena_malachite",
+				"selena_cassiterite",
+				"selena_bauxite");
 		registerItemRendering("selena_dirt");
-		registerItemRendering("selena_cobblestone");
-		registerItemRendering("selena_stonebrick");
 		
 		//desert blocks
-		registerItemRendering("desert_stone");
+		registerMetaItemRendering("desert_stone", 
+				"desert_stone",
+				"desert_bricks",
+				"desert_cobblestone",
+				"desert_malachite",
+				"desert_cassiterite",
+				"desert_bauxite");
 		registerItemRendering("desert_dirt");
-		registerItemRendering("desert_cobblestone");
-		registerItemRendering("desert_stonebrick");
 		
 		//machines
 		registerItemRendering("alloy_furnace");
@@ -51,8 +59,12 @@ public class StartupClientOnly {
 		registerItemRendering("battery");
 		registerItemRendering("creative_battery");
 		
+		//rocket parts
+		registerItemRendering("rocket_core");
+		
 		//misc
 		registerItemRendering("navigator");
+		registerItemRendering("dirty_ice");
 		
 		//<=======Items=======>
 		
@@ -76,10 +88,18 @@ public class StartupClientOnly {
 		registerItemRendering("steel_pickaxe");
 		registerItemRendering("steel_hoe");
 		
+		//space suit
+		registerItemRendering("space_suit_helmet");
+		registerItemRendering("space_suit_chestplate");
+		registerItemRendering("space_suit_leggings");
+		registerItemRendering("space_suit_boots");
+		
 		//misc
 		registerItemRendering("stone_channel");
 		registerItemRendering("stone_cast");
 		registerItemRendering("multimeter");
+		registerItemRendering("laser");
+		registerItemRendering("creative_tab");
 	}
 	
 	/**Registers a new ItemModel.
@@ -90,7 +110,28 @@ public class StartupClientOnly {
 	 * 
 	 * @param name The itemModel/block name
 	 */
+	private static void registerItemRendering(Item item, int meta, String modelName) {
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta, new ModelResourceLocation(FutureCraft.MODID + ":" + modelName, "inventory"));
+	}
+	
+	private static void registerMetaItemRendering(String name, String... modelNames) {
+		Item item = GameRegistry.findItem(FutureCraft.MODID, name);
+		System.out.println("registering item: " + item);
+		ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+		String[] newModelNames = new String[modelNames.length];
+		for (int i = 0; i < modelNames.length; i++) {
+			newModelNames[i] = FutureCraft.MODID + ":" + modelNames[i];
+		}
+		
+		ModelBakery.addVariantName(item, newModelNames);
+		
+		for (int i = 0; i < modelNames.length; i++) {
+			System.out.println("registering: " + modelNames[i]);
+			mesher.register(item, i, new ModelResourceLocation(FutureCraft.MODID + ":" + modelNames[i], "inventory"));
+		}
+	}
+	
 	private static void registerItemRendering(String name) {
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(GameRegistry.findItem(FutureCraft.MODID, name), 0, new ModelResourceLocation(FutureCraft.MODID + ":" + name, "inventory"));
+		registerItemRendering(GameRegistry.findItem(FutureCraft.MODID, name), 0, name);
 	}
 }

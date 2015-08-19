@@ -12,6 +12,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
 public class BlockWire extends BlockContainer implements IElectric {
@@ -21,6 +22,7 @@ public class BlockWire extends BlockContainer implements IElectric {
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(FutureCraft.tabFutureCraft);
 		this.setStepSound(soundTypeCloth);
+		GameRegistry.registerBlock(this, name);
 	}
 
 	@Override

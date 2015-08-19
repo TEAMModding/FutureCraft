@@ -76,10 +76,10 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 		NBTTagList nbttaglist = new NBTTagList();
 	    for (int i = 0; i < this.slots.length; ++i) {
 	        if (this.slots[i] != null) {
-	            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-	            nbttagcompound1.setByte("Slot", (byte)i);
-	            this.slots[i].writeToNBT(nbttagcompound1);
-	            nbttaglist.appendTag(nbttagcompound1);
+	            NBTTagCompound nbttagcompound = new NBTTagCompound();
+	            nbttagcompound.setByte("Slot", (byte)i);
+	            this.slots[i].writeToNBT(nbttagcompound);
+	            nbttaglist.appendTag(nbttagcompound);
 	        }
 	    }
 	    tag.setTag("Items", nbttaglist);

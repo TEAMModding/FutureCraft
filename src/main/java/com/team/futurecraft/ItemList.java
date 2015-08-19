@@ -33,11 +33,15 @@ public class ItemList {
 	public static ItemHoe steel_hoe;
 
 	// space suit
-	public static ItemSpaceSuit space_suit;
+	public static ItemSpaceSuit space_suit_helmet;
+	public static ItemSpaceSuit space_suit_chestplate;
+	public static ItemSpaceSuit space_suit_leggings;
+	public static ItemSpaceSuit space_suit_boots;
 
 	// misc
 	public static SimpleItem stone_channel;
 	public static SimpleItem stone_cast;
 	public static ItemMultimeter multimeter;
 	public static ItemLaser itemLaser;
+	public static SimpleItem creative_tab;
 }
