@@ -21,6 +21,7 @@ import com.team.futurecraft.recipe.AlloyRegistry;
 import com.team.futurecraft.tileentity.TileEntityAlloyFurnace;
 import com.team.futurecraft.tileentity.TileEntityGenerator;
 import com.team.futurecraft.tileentity.TileEntityMachine;
+import com.team.futurecraft.tileentity.TileEntityMovingSidewalk;
 import com.team.futurecraft.tileentity.TileEntityWire;
 import com.team.futurecraft.world.OreSpawn;
 import com.team.futurecraft.world.WorldProviderMars;
@@ -68,6 +69,7 @@ public class StartupCommon {
 		GameRegistry.registerTileEntity(TileEntityMachine.class, "futurecraft:machine");
 		GameRegistry.registerTileEntity(TileEntityWire.class, "futurecraft:wire");
 		GameRegistry.registerTileEntity(TileEntityGenerator.class, "futurecraft:generator");
+		GameRegistry.registerTileEntity(TileEntityMovingSidewalk.class, "futurecraft:moving_sidewalk");
 		
 		GameRegistry.registerWorldGenerator(new OreSpawn(), 1);
 	}

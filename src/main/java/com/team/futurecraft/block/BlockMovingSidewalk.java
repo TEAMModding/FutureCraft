@@ -1,12 +1,14 @@
 package com.team.futurecraft.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
@@ -15,10 +17,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.team.futurecraft.FutureCraft;
+import com.team.futurecraft.tileentity.TileEntityMovingSidewalk;
 
-public class BlockMovingSidewalk extends Block {
+public class BlockMovingSidewalk extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public BlockMovingSidewalk() throws StackOverflowError {
+	public BlockMovingSidewalk() {
 	super(Material.rock);
 	this.setCreativeTab(FutureCraft.tabFutureCraft);
     this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
@@ -41,6 +44,12 @@ public class BlockMovingSidewalk extends Block {
 	 return true;
 	 }
 
+		// Called when the block is placed or loaded client side to get the tile entity for the block
+		// Should return a new instance of the tile entity for the block
+		@Override
+		public TileEntity createNewTileEntity(World worldIn, int meta) {
+			return new TileEntityMovingSidewalk();
+		}
 	 
 	 public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
 	    {

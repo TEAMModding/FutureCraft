@@ -18,7 +18,7 @@ import com.team.futurecraft.world.WorldProviderPlanet;
  * @author Joseph
  *
  */
-public class CoreEventHandler {
+public class CoreEventHandler {/*
 	@SubscribeEvent
 	public void onUpdateEvent(LivingUpdateEvent event) {
 		EntityLivingBase entity = event.entityLiving;
@@ -59,5 +59,5 @@ public class CoreEventHandler {
 	@SubscribeEvent
 	public void onUpdate(Entity entity) {
 		
-	}
+	}*/
 }
