@@ -2,6 +2,8 @@ package com.team.futurecraft;
 
 import com.team.futurecraft.BlockList;
 import com.team.futurecraft.block.BlockAlloyFurnace;
+import com.team.futurecraft.block.BlockDirtyIce;
+import com.team.futurecraft.block.BlockMovingSidewalk;
 import com.team.futurecraft.block.BlockBattery;
 import com.team.futurecraft.block.BlockBatteryNew;
 import com.team.futurecraft.block.BlockGenerator;
@@ -29,6 +31,7 @@ import com.team.futurecraft.tileentity.ElectricalBase;
 import com.team.futurecraft.tileentity.TileEntityAlloyFurnace;
 import com.team.futurecraft.tileentity.TileEntityGenerator;
 import com.team.futurecraft.tileentity.TileEntityMachine;
+import com.team.futurecraft.tileentity.TileEntityMovingSidewalk;
 import com.team.futurecraft.tileentity.TileEntityWire;
 import com.team.futurecraft.world.OreSpawn;
 
@@ -60,6 +63,7 @@ import net.minecraftforge.fml.relauncher.Side;
  * @author Joseph
  */
 public class StartupCommon {
+	
 	public static SimpleNetworkWrapper simpleNetworkWrapper;
 	public static final Sol SOL = new Sol(null);
 	public static final int TELEPORT_MESSAGE_ID = 35;
@@ -79,8 +83,9 @@ public class StartupCommon {
 		GameRegistry.registerTileEntity(TileEntityMachine.class, "futurecraft:machine");
 		GameRegistry.registerTileEntity(TileEntityWire.class, "futurecraft:wire");
 		GameRegistry.registerTileEntity(TileEntityGenerator.class, "futurecraft:generator");
+		GameRegistry.registerTileEntity(TileEntityMovingSidewalk.class, "futurecraft:moving_sidewalk");
 		GameRegistry.registerTileEntity(ElectricalBase.class, "futurecraft:electrical_base");
-		
+	
 		GameRegistry.registerWorldGenerator(new OreSpawn(), 1);
 		
 		simpleNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("futurecraft:teleport_channel");
@@ -204,7 +209,10 @@ public class StartupCommon {
 		
 		//misc
 		BlockList.navigator = new BlockNavigator("navigator");
-		BlockList.dirty_ice = new SimpleBlock(Material.rock, "dirty_ice");
+		BlockList.dirty_ice = new BlockDirtyIce(Material.rock, "dirty_ice");
+		
+		BlockList.moving_sidewalk = new BlockMovingSidewalk();
+		GameRegistry.registerBlock(BlockList.moving_sidewalk, "moving_sidewalk");
 	}
 	
 	/**
