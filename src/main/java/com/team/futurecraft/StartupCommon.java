@@ -2,6 +2,7 @@ package com.team.futurecraft;
 
 import com.team.futurecraft.BlockList;
 import com.team.futurecraft.block.BlockAlloyFurnace;
+import com.team.futurecraft.block.BlockDirtyIce;
 import com.team.futurecraft.block.BlockMovingSidewalk;
 import com.team.futurecraft.block.BlockBattery;
 import com.team.futurecraft.block.BlockBatteryNew;
@@ -207,7 +208,7 @@ public class StartupCommon {
 		
 		//misc
 		BlockList.navigator = new BlockNavigator("navigator");
-		BlockList.dirty_ice = new SimpleBlock(Material.rock, "dirty_ice");
+		BlockList.dirty_ice = new BlockDirtyIce(Material.rock, "dirty_ice");
 		
 		BlockList.moving_sidewalk = new BlockMovingSidewalk();
 		GameRegistry.registerBlock(BlockList.moving_sidewalk, "moving_sidewalk");

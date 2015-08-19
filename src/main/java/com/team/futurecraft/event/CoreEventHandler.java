@@ -15,7 +15,6 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import com.team.futurecraft.BlockList;
 import com.team.futurecraft.world.WorldProviderPlanet;
 
 /**

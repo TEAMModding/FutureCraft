@@ -1,5 +1,6 @@
 package com.team.futurecraft;
 
+import com.team.futurecraft.block.BlockDirtyIce;
 import com.team.futurecraft.block.BlockWire;
 import com.team.futurecraft.block.BlockBattery;
 import com.team.futurecraft.block.BlockBatteryNew;
@@ -55,6 +56,6 @@ public class BlockList  {
 	
 	//misc
 	public static BlockNavigator navigator;
-	public static SimpleBlock dirty_ice;
+	public static BlockDirtyIce dirty_ice;
 	public static BlockMovingSidewalk moving_sidewalk;
 }
