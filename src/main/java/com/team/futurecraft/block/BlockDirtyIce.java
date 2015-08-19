@@ -6,7 +6,7 @@ public class BlockDirtyIce extends SimpleBlock {
 
 	public BlockDirtyIce(Material materialIn, String name) {
 		super(materialIn, name);
-		slipperiness = 1.1f;
+		slipperiness = 1.05f;
 	}
 
 }
