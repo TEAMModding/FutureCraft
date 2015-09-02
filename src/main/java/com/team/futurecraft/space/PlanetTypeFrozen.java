@@ -5,8 +5,6 @@ import net.minecraft.util.Vec3;
 
 import com.team.futurecraft.BlockList;
 import com.team.futurecraft.Noise;
-import com.team.futurecraft.biome.BiomePlanet;
-import com.team.futurecraft.biome.BiomeList;
 
 public class PlanetTypeFrozen extends PlanetType {
 	@Override

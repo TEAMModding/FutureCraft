@@ -8,6 +8,13 @@ public class Saturn extends GasGiant {
 
 	public Saturn(CelestialObject parent) {
 		super(parent);
+		this.add(new Mimas(this));
+		this.add(new Enceladus(this));
+		this.add(new Tethys(this));
+		this.add(new Dione(this));
+		this.add(new Rhea(this));
+		this.add(new Titan(this));
+		this.add(new Iapetus(this));
 	}
 
 	@Override
@@ -27,12 +34,13 @@ public class Saturn extends GasGiant {
 
 	@Override
 	public float getDiameter() {
-		return 0.5f;
+		return 120536f;
 	}
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(1500.0f, 1f, 365f);
+		//TODO: rotation time not accurate
+		return new OrbitalParameters(1421.013f, 10752.17f, 0.4166f);
 	}
 
 }

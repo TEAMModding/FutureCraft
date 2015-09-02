@@ -17,12 +17,12 @@ public class Mercury extends Planet {
 	}
 	
 	public BiomePlanet getBiome() {
-		return BiomeList.SELENA_MOON;
+		return BiomeList.SELENA_MERCURY;
 	}
 
 	@Override
 	public PlanetType getWorldType() {
-		return new PlanetTypeSelena();
+		return new PlanetTypeSelena(0.5f);
 	}
 
 	@Override
@@ -52,16 +52,16 @@ public class Mercury extends Planet {
 
 	@Override
 	public float getDiameter() {
-		return 0.1f;
+		return 4480;
 	}
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(200.0f, 1f, 365f);
+		return new OrbitalParameters(57.663f, 87.95f, 58.646f);
 	}
 	
 	@Override
 	public String getColormap() {
-		return null;
+		return "mercury_colormap";
 	}
 }

@@ -59,7 +59,7 @@ public abstract class Star extends CelestialObject {
         Sphere sphere = new Sphere();
         sphere.setTextureFlag(false);
         sphere.setNormals(GLU.GLU_SMOOTH);
-        sphere.draw(this.getDiameter(), 100, 100);
+        sphere.draw((this.getDiameter() / 1000000) * 2, 100, 100);
         glPopMatrix();
         
         //draw the star glow
@@ -69,7 +69,7 @@ public abstract class Star extends CelestialObject {
         mc.getTextureManager().bindTexture(img);
         glRotatef((float)-rotation.xCoord, 0, 1, 0);
         glRotatef((float)-rotation.yCoord, 1, 0, 0);
-        float glowSize = this.getDiameter() * 20;
+        float glowSize = ((this.getDiameter() / 1000000) * 2) * 20;
         
         renderer.startDrawingQuads();
         renderer.setColorRGBA(255, 255, 255, 255);
@@ -83,6 +83,7 @@ public abstract class Star extends CelestialObject {
         glPopMatrix();
         
         GlStateManager.enableLighting();
+        GlStateManager.enableTexture2D();
         this.renderChildren(rotation, pos, mc, time, showOrbit);
 	}
 }

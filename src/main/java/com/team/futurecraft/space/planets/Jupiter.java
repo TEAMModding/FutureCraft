@@ -8,7 +8,10 @@ public class Jupiter extends GasGiant {
 
 	public Jupiter(CelestialObject parent) {
 		super(parent);
+		this.add(new Io(this));
 		this.add(new Europa(this));
+		this.add(new Ganymede(this));
+		this.add(new Callisto(this));
 	}
 
 	@Override
@@ -28,12 +31,13 @@ public class Jupiter extends GasGiant {
 
 	@Override
 	public float getDiameter() {
-		return 0.5f;
+		return 142984f;
 	}
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(1000.0f, 1f, 365f);
+		//TODO: rotation time not accurate
+		return new OrbitalParameters(775.247f, 4329.63f, 0.4166f);
 	}
 
 }

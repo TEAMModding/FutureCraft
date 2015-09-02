@@ -51,12 +51,12 @@ public class Earth extends Planet {
 
 	@Override
 	public float getDiameter() {
-		return 0.1f;
+		return 12756.28f;
 	}
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(500.0f, 1f, 365f);
+		return new OrbitalParameters(149f, 365f, 1);
 	}
 
 	@Override

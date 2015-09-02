@@ -5,8 +5,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
 import com.team.futurecraft.Noise;
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 
 public class PlanetTypeTerra extends PlanetType {
 	@Override

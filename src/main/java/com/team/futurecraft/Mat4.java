@@ -1,7 +1,9 @@
 package com.team.futurecraft;
 
-import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
+
 import net.minecraft.util.Vec3;
+
 import org.lwjgl.BufferUtils;
 /*
  * The MIT License (MIT)
@@ -258,12 +260,12 @@ public class Mat4 {
      *
      * @return Vector as FloatBuffer
      */
-    public DoubleBuffer getBuffer() {
-        DoubleBuffer buffer = BufferUtils.createDoubleBuffer(16);
-        buffer.put(m00).put(m10).put(m20).put(m30);
-        buffer.put(m01).put(m11).put(m21).put(m31);
-        buffer.put(m02).put(m12).put(m22).put(m32);
-        buffer.put(m03).put(m13).put(m23).put(m33);
+    public FloatBuffer getBuffer() {
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
+        buffer.put((float) m00).put((float) m10).put((float) m20).put((float) m30);
+        buffer.put((float) m01).put((float) m11).put((float) m21).put((float) m31);
+        buffer.put((float) m02).put((float) m12).put((float) m22).put((float) m32);
+        buffer.put((float) m03).put((float) m13).put((float) m23).put((float) m33);
         buffer.flip();
         return buffer;
     }

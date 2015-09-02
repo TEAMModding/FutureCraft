@@ -80,12 +80,18 @@ public abstract class CelestialObject {
         
         	Vec3 parentPos = this.getParent().getPosition(time);
         	GL11.glTranslated(parentPos.xCoord, parentPos.yCoord, parentPos.zCoord);
-        	GL11.glRotatef(time * this.getOrbit().getYearScale(), 0F, 1F, 0F);
+        	GL11.glRotatef(time / this.getOrbit().getYearScale(), 0F, 1F, 0F);
         	GlStateManager.enableAlpha();
         	glLineWidth(1);
         	renderer.startDrawing(3);
+        	Vec3 color = new Vec3(0, 150, 0);
+        	
+        	if (this.parent.getType() == EnumCelestialType.PLANET) {
+        		color = new Vec3(150, 75, 0);
+        	}
+        	
         	for (int k = 0; k < 360; k++) {
-        		renderer.setColorRGBA(255, 0, 0, (int)(((330 - k) / 200.0f) * 255));
+        		renderer.setColorRGBA((int)color.xCoord, (int)color.yCoord, (int)color.zCoord, (int)(((330 - k) / 200.0f) * 255));
         		double radians = Math.toRadians(k);
         		renderer.addVertex((Math.cos(radians) * this.getOrbit().getDistance()), 0, Math.sin(radians) * this.getOrbit().getDistance());
         	}
@@ -95,7 +101,7 @@ public abstract class CelestialObject {
         }
         
         //render landing spot on planet
-        if (this.isLandable()) {
+        /*if (this.isLandable()) {
         	Vec3 PlanetPos = this.getPosition(time);
         	
         	glPushMatrix();
@@ -105,10 +111,10 @@ public abstract class CelestialObject {
         	renderer.startDrawing(3);
         	renderer.setColorOpaque_I(0x00FF00);
         	renderer.addVertex(0, 0, 0);
-        	renderer.addVertex(direction.xCoord * this.getDiameter() * 1.1, direction.yCoord * this.getDiameter() * 1.1, direction.zCoord * this.getDiameter() * 1.1);
+        	renderer.addVertex(direction.xCoord * (this.getDiameter() / 1000000) * 1.0001, direction.yCoord * (this.getDiameter() / 1000000) * 1.0001, direction.zCoord * this.getDiameter() * 1.1);
         	tessellator.draw();
         	glPopMatrix();
-        }
+        }*/
         GlStateManager.enableTexture2D();
     	GlStateManager.enableLighting();
         
@@ -131,7 +137,7 @@ public abstract class CelestialObject {
 	public Vec3 getPosition(float time) {
 		Vec3 offsetPos = new Vec3(0, 0, 0);
 		if (this.getOrbit() != null && this.parent != null) {
-			double radians = Math.toRadians(-time * this.getOrbit().getYearScale());
+			double radians = Math.toRadians(-time / this.getOrbit().getYearScale());
 			Vec3 orbitPos = new Vec3(Math.cos(radians) * this.getOrbit().getDistance(), 0, Math.sin(radians) * this.getOrbit().getDistance());
 			offsetPos = this.parent.getPosition(time);
 			return orbitPos.add(offsetPos);

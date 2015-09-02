@@ -8,6 +8,11 @@ public class Uranus extends GasGiant {
 
 	public Uranus(CelestialObject parent) {
 		super(parent);
+		this.add(new Miranda(this));
+		this.add(new Ariel(this));
+		this.add(new Umbriel(this));
+		this.add(new Titania(this));
+		this.add(new Oberon(this));
 	}
 
 	@Override
@@ -27,12 +32,13 @@ public class Uranus extends GasGiant {
 
 	@Override
 	public float getDiameter() {
-		return 0.5f;
+		return 51118f;
 	}
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(2000.0f, 1f, 365f);
+		//TODO: rotation time not accurate
+		return new OrbitalParameters(2859.459f, 30665.11f, 0.7083f);
 	}
 
 }

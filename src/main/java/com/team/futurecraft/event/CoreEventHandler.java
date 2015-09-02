@@ -3,23 +3,17 @@ package com.team.futurecraft.event;
 import java.util.Iterator;
 import java.util.List;
 
-import com.team.futurecraft.Noise;
 import com.team.futurecraft.entity.ChunkEntity;
 import com.team.futurecraft.item.ItemSpaceSuit;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.terraingen.ChunkProviderEvent.ReplaceBiomeBlocks;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.team.futurecraft.world.WorldProviderPlanet;

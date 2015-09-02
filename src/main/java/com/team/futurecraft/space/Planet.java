@@ -11,20 +11,12 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.Disk;
-import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
-import scala.actors.threadpool.Arrays;
-
 import com.team.futurecraft.biome.BiomePlanet;
-import com.team.futurecraft.rendering.ModelLoader;
-import com.team.futurecraft.rendering.SpaceRenderer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 
@@ -60,7 +52,6 @@ public abstract class Planet extends CelestialObject {
 				image = operation.filter(image, null);
 		
 				int height = image.getHeight();
-				int width = image.getWidth();
 
 				int[] pixels = new int[height];
 				image.getRGB(0, 0, 1, height, pixels, 0, 1);
@@ -125,22 +116,28 @@ public abstract class Planet extends CelestialObject {
 	public abstract String getTexture();
 	
 	/**
+	 * Renders the planet by itself without calculating orbits or anything.
+	 * Used for rendering planets on gui buttons.
+	 */
+	public void renderStatic(Minecraft mc) {
+		ResourceLocation img = new ResourceLocation("futurecraft", "textures/planets/" + this.getTexture() + ".jpg");
+		mc.getTextureManager().bindTexture(img);
+		
+		glColor3f(1, 1, 1);
+        Sphere sphere = new Sphere();
+        sphere.setTextureFlag(true);
+        sphere.draw(10, 25, 25);
+	}
+	
+	/**
 	 * This covers the render function from Celestial object. But if you have a SUPER
 	 * special planet, you could override it and have custom rendering.
-	 * 
-	 * Also renders the orbit path, probably need to put that somewhere else.
 	 */
 	public void render(Vec3 rotation, Vec3 pos, Minecraft mc, float time, boolean showOrbit) {
-		Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer renderer = tessellator.getWorldRenderer();
-        ResourceLocation img = new ResourceLocation("futurecraft", "textures/planets/" + this.getTexture() + ".jpg");
-        ResourceLocation ringImg = new ResourceLocation("futurecraft", "textures/planets/saturn_rings.png");
         Vec3 PlanetPos = this.getPosition(time);
         GlStateManager.enableLighting();
 		
 		glPushMatrix();
-        mc.getTextureManager().bindTexture(img);
-		glColor3f(1, 1, 1);
 		
         this.renderChildren(rotation, pos, mc, time, showOrbit);
         
@@ -148,24 +145,21 @@ public abstract class Planet extends CelestialObject {
         GL11.glRotatef(time * this.getOrbit().getRotation(), 0F, 1F, 0F);
         GL11.glRotatef(90, 1F, 0F, 0F);
         
-        mc.getTextureManager().bindTexture(img);
-        glColor3f(1, 1, 1);
-        
+        int lod = 8;
+        if (pos.distanceTo(PlanetPos) < 10) {
+			ResourceLocation img = new ResourceLocation("futurecraft", "textures/planets/" + this.getTexture() + ".jpg");
+			mc.getTextureManager().bindTexture(img);
+			lod = 50;
+		}
+        else {
+        	GlStateManager.disableTexture2D();
+        }
+		glColor3f(1, 1, 1);
         Sphere sphere = new Sphere();
         sphere.setTextureFlag(true);
-        sphere.draw(this.getDiameter(), 50, 50);
-        
-        mc.getTextureManager().bindTexture(ringImg);
-        GlStateManager.disableLighting();
-        Disk disc = new Disk();
-        disc.setTextureFlag(true);
-        
-        disc.setOrientation(GLU.GLU_INSIDE);
-        disc.draw(this.getDiameter() * 2, this.getDiameter() * 2 + 0.3f, 50, 50);
-        
-        disc.setOrientation(GLU.GLU_OUTSIDE);
-        disc.draw(this.getDiameter() * 2, this.getDiameter() * 2 + 0.3f, 100, 100);
+        sphere.draw((this.getDiameter() / 1000000) / 2, lod, lod);
         
         glPopMatrix();
+        GlStateManager.enableTexture2D();
 	}
 }

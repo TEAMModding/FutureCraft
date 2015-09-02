@@ -8,6 +8,7 @@ public class Neptune extends GasGiant {
 
 	public Neptune(CelestialObject parent) {
 		super(parent);
+		this.add(new Triton(this));
 	}
 
 	@Override
@@ -27,12 +28,13 @@ public class Neptune extends GasGiant {
 
 	@Override
 	public float getDiameter() {
-		return 0.5f;
+		return 99063.998f;
 	}
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(2500.0f, 1f, 365f);
+		//TODO: rotation time not accurate
+		return new OrbitalParameters(4480.281f, 60149.445f, 0.6666f);
 	}
 
 }

@@ -6,7 +6,7 @@ import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
-import com.team.futurecraft.space.PlanetTypeSelena;
+import com.team.futurecraft.space.PlanetTypeDesert;
 
 import net.minecraft.util.Vec3;
 
@@ -17,22 +17,22 @@ public class Venus extends Planet {
 	}
 	
 	public BiomePlanet getBiome() {
-		return BiomeList.DESERT_MARS;
+		return BiomeList.DESERT_VENUS;
 	}
 
 	@Override
 	public PlanetType getWorldType() {
-		return new PlanetTypeSelena();
+		return new PlanetTypeDesert();
 	}
 
 	@Override
 	public Vec3 getAtmosphericColor() {
-		return new Vec3(0, 0, 0);
+		return new Vec3(0.62, 0.54, 0.4);
 	}
 
 	@Override
 	public float getAtmosphericDensity() {
-		return 0f;
+		return 1f;
 	}
 
 	@Override
@@ -52,16 +52,16 @@ public class Venus extends Planet {
 
 	@Override
 	public float getDiameter() {
-		return 0.1f;
+		return 12104f;
 	}
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(300.0f, 1f, 365f);
+		return new OrbitalParameters(107.727f, 224.697f, 243.020f);
 	}
 	
 	@Override
 	public String getColormap() {
-		return null;
+		return "venus_colormap";
 	}
 }

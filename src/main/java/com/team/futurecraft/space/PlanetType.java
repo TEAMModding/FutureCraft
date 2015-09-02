@@ -1,7 +1,6 @@
 package com.team.futurecraft.space;
 
 import com.team.futurecraft.Noise;
-import com.team.futurecraft.biome.BiomePlanet;
 
 import net.minecraft.block.Block;
 

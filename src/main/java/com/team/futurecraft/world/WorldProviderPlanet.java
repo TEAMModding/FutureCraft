@@ -1,14 +1,5 @@
 package com.team.futurecraft.world;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.imageio.ImageIO;
-
 import com.team.futurecraft.FutureCraft;
 import com.team.futurecraft.SpaceRegistry;
 import com.team.futurecraft.rendering.PlanetSkyRenderer;
@@ -16,9 +7,7 @@ import com.team.futurecraft.space.Planet;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.IChunkProvider;

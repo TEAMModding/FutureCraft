@@ -52,12 +52,12 @@ public class Europa extends Planet {
 
 	@Override
 	public float getDiameter() {
-		return 0.04f;
+		return 6243.2f;
 	}
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(3.0f, 27f, 27f);
+		return new OrbitalParameters(0.670891031f, 3.552f, 3.552f);
 	}
 	
 	@Override

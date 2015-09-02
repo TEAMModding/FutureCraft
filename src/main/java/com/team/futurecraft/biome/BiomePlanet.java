@@ -1,30 +1,17 @@
 package com.team.futurecraft.biome;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
 
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.ChunkPrimer;
 
-import com.team.futurecraft.world.ChunkProviderPlanet;
 import com.team.futurecraft.world.WorldProviderPlanet;
 
 /**

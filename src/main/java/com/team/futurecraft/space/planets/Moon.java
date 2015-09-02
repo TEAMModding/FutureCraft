@@ -22,7 +22,7 @@ public class Moon extends Planet {
 
 	@Override
 	public PlanetType getWorldType() {
-		return new PlanetTypeSelena();
+		return new PlanetTypeSelena(0.0f);
 	}
 
 	@Override
@@ -52,12 +52,12 @@ public class Moon extends Planet {
 
 	@Override
 	public float getDiameter() {
-		return 0.04f;
+		return 3474.8f;
 	}
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(3.0f, 27f, 27f);
+		return new OrbitalParameters(0.379666035f, 27.322f, 27.322f);
 	}
 	
 	@Override

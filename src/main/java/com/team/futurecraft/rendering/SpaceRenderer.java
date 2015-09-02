@@ -27,6 +27,7 @@ public class SpaceRenderer {
 	private Minecraft mc;
 	private boolean showOrbit;
 	private static FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
+	//private static int shader = ShaderUtil.loadShader("shaders/simple.vsh", "shaders/simple.fsh");
 	
 	public SpaceRenderer(Minecraft mc, boolean showOrbit) {
 		this.mc = mc;
@@ -35,14 +36,20 @@ public class SpaceRenderer {
 	
 	public void render(Vec3 rot, Vec3 pos, CelestialObject following, float time, boolean onPlanet) {
 		setupRendering(time, rot, pos, following, onPlanet);
+		
+		
 		Sol sol = new Sol(null);
 		if (onPlanet) {
+			//glUseProgram(shader);
 			Vec3 newRot = rot.subtract(new Vec3(time * following.getOrbit().getRotation(), 0, 45));
-			sol.render(newRot, pos, this.mc, time, showOrbit);
+			sol.render(newRot, following.getPosition(time), this.mc, time, showOrbit);
+			//glUseProgram(0);
 		}
 		else {
 			sol.renderOrbits(time);
+			//glUseProgram(shader);
 			sol.render(rot, following.getPosition(time).subtract(pos), this.mc, time, showOrbit);
+			//glUseProgram(0);
 			
 		}
 		revertRendering();
@@ -56,7 +63,7 @@ public class SpaceRenderer {
 		GlStateManager.matrixMode(GL_PROJECTION);
         GlStateManager.pushMatrix();
         GlStateManager.loadIdentity();
-        Project.gluPerspective(mc.gameSettings.fovSetting, (float)mc.displayWidth / mc.displayHeight, 0.001F, 1000000);
+        Project.gluPerspective(70f, (float)mc.displayWidth / mc.displayHeight, 0.001F, 1000000);
         
         GL11.glRotatef((float)rot.yCoord, 1F, 0F, 0F);
         GL11.glRotatef((float)rot.xCoord, 0F, 1F, 0F);
@@ -84,7 +91,7 @@ public class SpaceRenderer {
         
         GlStateManager.pushMatrix();
         
-        renderSkybox();
+        renderSkybox(pos.add(planetPos));
         
         //sets up shadowing
         GlStateManager.enableLighting();
@@ -114,7 +121,7 @@ public class SpaceRenderer {
 	/**
 	 * Renders the skybox.....
 	 */
-	private void renderSkybox() {
+	private void renderSkybox(Vec3 pos) {
 		ResourceLocation SKY_POS_X = new ResourceLocation("futurecraft","textures/environment/sky_pos_x.png");
 		ResourceLocation SKY_NEG_X = new ResourceLocation("futurecraft","textures/environment/sky_neg_x.png");
 		ResourceLocation SKY_POS_Y = new ResourceLocation("futurecraft","textures/environment/sky_pos_y.png");
@@ -125,6 +132,9 @@ public class SpaceRenderer {
 		this.mc.getTextureManager().bindTexture(SKY_NEG_Y);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
+        
+        GL11.glPushMatrix();
+        GL11.glTranslated(pos.xCoord, pos.yCoord, pos.zCoord);
 
         for (int i = 0; i < 6; ++i) {
             GL11.glPushMatrix();
@@ -167,6 +177,7 @@ public class SpaceRenderer {
             tessellator.draw();
             GL11.glPopMatrix();
         }
+        GL11.glPopMatrix();
 	}
 	
 	/**

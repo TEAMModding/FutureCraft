@@ -52,12 +52,12 @@ public class Mars extends Planet {
 
 	@Override
 	public float getDiameter() {
-		return 0.1f;
+		return 6792f;
 	}
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(600.0f, 1.881f, 365f);
+		return new OrbitalParameters(227.076f, 686.565f, 1.026f);
 	}
 	
 	@Override

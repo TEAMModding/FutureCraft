@@ -6,7 +6,6 @@ import com.team.futurecraft.space.planets.Mars;
 import com.team.futurecraft.space.planets.Mercury;
 import com.team.futurecraft.space.planets.Neptune;
 import com.team.futurecraft.space.planets.Saturn;
-import com.team.futurecraft.space.planets.Terra;
 import com.team.futurecraft.space.planets.Uranus;
 import com.team.futurecraft.space.planets.Venus;
 
@@ -20,7 +19,7 @@ public class Sol extends Star {
 		super(parent);
 		this.add(new Mercury(this));
 		this.add(new Venus(this));
-		this.add(new Terra(this));
+		//this.add(new Terra(this));
 		this.add(new Earth(this));
 		this.add(new Mars(this));
 		this.add(new Jupiter(this));
@@ -46,7 +45,7 @@ public class Sol extends Star {
 
 	@Override
 	public float getDiameter() {
-		return 5.0f;
+		return 1525580f;
 	}
 
 	@Override

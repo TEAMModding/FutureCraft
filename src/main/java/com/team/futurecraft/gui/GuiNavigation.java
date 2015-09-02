@@ -2,6 +2,7 @@ package com.team.futurecraft.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -32,6 +33,7 @@ public class GuiNavigation extends GuiScreen {
 	private float xRot = 0;
 	private float yRot = 30;
 	private float zRot = 0;
+	private float movementSpeed = 0.01f;
 	private ArrayList<Planet> planets = new ArrayList<Planet>();
 	private static final float TIME_SCALE = 0.0003f;
 	private int selectedPlanet = 0;
@@ -54,18 +56,20 @@ public class GuiNavigation extends GuiScreen {
 		CelestialObject[] objects = StartupCommon.SOL.getChildren();
 		int buttonCount = 0;
 		for (int i = 0; i < objects.length; i++) {
-			this.buttonList.add(new GuiSpaceButton(buttonCount, 10, 10 + buttonCount * 30, 100, 20, objects[i].getName()));
+			this.buttonList.add(new GuiPlanetButton(buttonCount, 0, buttonCount * 50, objects[i]));
 			planets.add((Planet)objects[i]);
 			buttonCount++;
 			
 			CelestialObject[] moons = objects[i].getChildren();
 			for (int j = 0; j < moons.length; j++) {
-				this.buttonList.add(new GuiSpaceButton(buttonCount, 50, 10 + buttonCount * 30, 100, 20, moons[j].getName()));
+				this.buttonList.add(new GuiPlanetButton(buttonCount, 40, buttonCount * 50, moons[j]));
 				planets.add((Planet)moons[j]);
 				buttonCount++;
 			}
 		}
 		this.buttonList.add(new GuiSpaceButton(1000, this.width - 110, this.height - 30, 100, 20, "travel"));
+		
+		
 		
 		spaceRender = new SpaceRenderer(this.mc, true);
 	}
@@ -87,7 +91,24 @@ public class GuiNavigation extends GuiScreen {
 		else {
 			Mouse.setGrabbed(false);
 		}
-		this.zPos -= Mouse.getEventDWheel() * 0.001 * zPos;
+		//this.movementSpeed += ((float)Mouse.getEventDWheel() / 120f) * 0.001f;
+		
+		int mouseMove = Mouse.getEventDWheel();
+		if (mouseMove != 0) {
+			@SuppressWarnings("rawtypes")
+			Iterator iterator = this.buttonList.iterator();
+			
+			while (iterator.hasNext()) {
+				Object obj = iterator.next();
+				if (obj instanceof GuiPlanetButton) {
+					GuiPlanetButton button = (GuiPlanetButton)obj;
+					button.yPosition += mouseMove / 10;
+				}
+			}
+		}
+		
+		if (this.movementSpeed < 0f)
+			this.movementSpeed = 0;
 		
 		super.handleMouseInput();
     }
@@ -99,40 +120,48 @@ public class GuiNavigation extends GuiScreen {
 	 */
 	public void handleKeyboardInput() throws IOException
     {
+		double horizontal = Math.toRadians(xRot);
+		double vertical = Math.toRadians(yRot);
+		
+		Vec3 direction = new Vec3(
+			Math.cos(vertical) * Math.sin(horizontal),
+			Math.sin(vertical),
+			Math.cos(vertical) * Math.cos(horizontal)
+		);
+		
+		Vec3 right = new Vec3(
+			Math.sin(horizontal - 3.14f/2.0f),
+			0,
+			Math.cos(horizontal - 3.14f/2.0f)
+		);
+		
 		Keyboard.enableRepeatEvents(true);
 		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-			FutureCraft.timeOffset += 1f;
+			FutureCraft.timeOffset += 100f;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			FutureCraft.timeOffset -= 1f;
+			FutureCraft.timeOffset -= 100f;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			this.zPos += 0.1;
+			this.xPos -= (float) direction.xCoord * movementSpeed;
+			this.yPos += (float) direction.yCoord * movementSpeed;
+			this.zPos += (float) direction.zCoord * movementSpeed;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			this.zPos -= 0.1;
+			this.xPos += (float) direction.xCoord * movementSpeed;
+			this.yPos -= (float) direction.yCoord * movementSpeed;
+			this.zPos -= (float) direction.zCoord * movementSpeed;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			this.xPos += 0.1;
+			this.xPos -= (float) right.xCoord * movementSpeed;
+			this.zPos += (float) right.zCoord * movementSpeed;
 		}
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			this.xPos -= 0.1;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			this.yPos += 0.1;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			this.yPos -= 0.1;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
-			this.zRot += 10;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
-			this.zRot -= 10;
+			this.xPos += (float) right.xCoord * movementSpeed;
+			this.zPos -= (float) right.zCoord * movementSpeed;
 		}
 		
 		super.handleKeyboardInput();
@@ -142,11 +171,11 @@ public class GuiNavigation extends GuiScreen {
 	 * draws the buttons and planet. Called every tick.
 	 */
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {		
 		this.spaceRender.render(new Vec3(this.xRot, this.yRot, this.zRot), new Vec3(this.xPos, this.yPos, this.zPos), planets.get(this.selectedPlanet), time, false);
-        
-		//System.out.println(System.nanoTime() * 0.000000001);
         time = (float) (System.nanoTime() * 0.000000001 * TIME_SCALE)  + FutureCraft.timeOffset;
+		
+        
         super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	
