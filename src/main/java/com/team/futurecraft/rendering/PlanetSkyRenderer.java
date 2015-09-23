@@ -36,7 +36,7 @@ public class PlanetSkyRenderer extends IRenderHandler {
 		GL11.glDepthMask(false);
 		GL11.glDisable(GL11.GL_FOG);
 		GlStateManager.enableAlpha();
-		time = (float) (System.nanoTime() * 0.000000001 * TIME_SCALE) + FutureCraft.timeOffset;
+		time = FutureCraft.timeOffset;
 		SpaceRenderer render = new SpaceRenderer(mc, false);
 		render.render(new Vec3(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, 0), new Vec3(0, 0, 0), this.planet, time, true);
 		renderAtmosphere(mc);

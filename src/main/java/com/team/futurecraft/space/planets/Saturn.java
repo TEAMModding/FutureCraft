@@ -1,5 +1,7 @@
 package com.team.futurecraft.space.planets;
 
+import net.minecraft.util.Vec3;
+
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.GasGiant;
 import com.team.futurecraft.space.OrbitalParameters;
@@ -40,7 +42,16 @@ public class Saturn extends GasGiant {
 	@Override
 	public OrbitalParameters getOrbit() {
 		//TODO: rotation time not accurate
-		return new OrbitalParameters(1421.013f, 10752.17f, 0.4166f);
+		return new OrbitalParameters(10752.17f, 1421.013f, 0.054f, 2.484f, 113.715f, -21.283f, -42.488f, 0.4166f);
+	}
+	
+	@Override
+	public Vec3 getAtmosphericColor() {
+		return new Vec3(0.2, 0.4, 0.7);
 	}
 
+	@Override
+	public float getAtmosphericDensity() {
+		return 0.2f;
+	}
 }

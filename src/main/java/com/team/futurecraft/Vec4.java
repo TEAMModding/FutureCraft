@@ -3,6 +3,8 @@ package com.team.futurecraft;
 import java.nio.DoubleBuffer;
 import org.lwjgl.BufferUtils;
 
+import net.minecraft.util.Vec3;
+
 /**
  * This class represents a (x,y,z,w)-Vector. GLSL equivalent to vec4.
  *
@@ -37,6 +39,13 @@ public class Vec4 {
         this.xCoord = x;
         this.yCoord = y;
         this.zCoord = z;
+        this.wCoord = w;
+    }
+    
+    public Vec4(Vec3 vec, double w) {
+    	this.xCoord = vec.xCoord;
+        this.yCoord = vec.yCoord;
+        this.zCoord = vec.zCoord;
         this.wCoord = w;
     }
 

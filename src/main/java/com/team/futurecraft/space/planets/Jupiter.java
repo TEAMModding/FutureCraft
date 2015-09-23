@@ -1,5 +1,7 @@
 package com.team.futurecraft.space.planets;
 
+import net.minecraft.util.Vec3;
+
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.GasGiant;
 import com.team.futurecraft.space.OrbitalParameters;
@@ -37,7 +39,16 @@ public class Jupiter extends GasGiant {
 	@Override
 	public OrbitalParameters getOrbit() {
 		//TODO: rotation time not accurate
-		return new OrbitalParameters(775.247f, 4329.63f, 0.4166f);
+		return new OrbitalParameters(4329.63f, 775.247f, 0.048f, 1.305f, 100.556f, -85.802f, 19.650f, 0.4166f);
 	}
 
+	@Override
+	public Vec3 getAtmosphericColor() {
+		return new Vec3(0.5, 0.5, 0.5);
+	}
+
+	@Override
+	public float getAtmosphericDensity() {
+		return 0.1f;
+	}
 }

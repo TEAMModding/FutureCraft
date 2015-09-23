@@ -11,6 +11,7 @@ import com.team.futurecraft.FutureCraft;
 import com.team.futurecraft.SpaceRegistry;
 import com.team.futurecraft.StartupCommon;
 import com.team.futurecraft.network.TeleportMessage;
+import com.team.futurecraft.rendering.ShaderList;
 import com.team.futurecraft.rendering.SpaceRenderer;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.Planet;
@@ -27,15 +28,15 @@ import net.minecraft.util.Vec3;
  */
 public class GuiNavigation extends GuiScreen {
 	private float time = 0;
-	private float zPos = -0.3f;
+	private float zPos = -0.1f;
 	private float xPos = 0;
-	private float yPos = 0;
+	private float yPos = -0.05f;
 	private float xRot = 0;
 	private float yRot = 30;
 	private float zRot = 0;
-	private float movementSpeed = 0.01f;
+	private static float movementSpeed = 1f;
 	private ArrayList<Planet> planets = new ArrayList<Planet>();
-	private static final float TIME_SCALE = 0.0003f;
+	private static final float TIME_SCALE = 0.001f;
 	private int selectedPlanet = 0;
 	private SpaceRenderer spaceRender;
 	
@@ -45,6 +46,7 @@ public class GuiNavigation extends GuiScreen {
 	 * @param player
 	 */
 	public GuiNavigation(EntityPlayer player) {
+		
 	}
 	
 	/**
@@ -68,8 +70,6 @@ public class GuiNavigation extends GuiScreen {
 			}
 		}
 		this.buttonList.add(new GuiSpaceButton(1000, this.width - 110, this.height - 30, 100, 20, "travel"));
-		
-		
 		
 		spaceRender = new SpaceRenderer(this.mc, true);
 	}
@@ -107,8 +107,8 @@ public class GuiNavigation extends GuiScreen {
 			}
 		}
 		
-		if (this.movementSpeed < 0f)
-			this.movementSpeed = 0;
+		if (movementSpeed < 0f)
+			movementSpeed = 0;
 		
 		super.handleMouseInput();
     }
@@ -164,6 +164,20 @@ public class GuiNavigation extends GuiScreen {
 			this.zPos -= (float) right.zCoord * movementSpeed;
 		}
 		
+		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+			this.zRot += 1;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
+			this.zRot -= 1;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_F10)) {
+			ShaderList.loadShaders();
+		}
+		
+		
+		
 		super.handleKeyboardInput();
     }
 	
@@ -173,8 +187,7 @@ public class GuiNavigation extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {		
 		this.spaceRender.render(new Vec3(this.xRot, this.yRot, this.zRot), new Vec3(this.xPos, this.yPos, this.zPos), planets.get(this.selectedPlanet), time, false);
-        time = (float) (System.nanoTime() * 0.000000001 * TIME_SCALE)  + FutureCraft.timeOffset;
-		
+        time = FutureCraft.timeOffset;
         
         super.drawScreen(mouseX, mouseY, partialTicks);
 	}

@@ -23,16 +23,6 @@ public abstract class GasGiant extends Planet {
 	}
 	
 	@Override
-	public Vec3 getAtmosphericColor() {
-		return null;
-	}
-
-	@Override
-	public float getAtmosphericDensity() {
-		return 0;
-	}
-	
-	@Override
 	public String getColormap() {
 		return null;
 	}

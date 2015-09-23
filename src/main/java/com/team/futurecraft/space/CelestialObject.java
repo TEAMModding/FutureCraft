@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
+import com.team.futurecraft.Mat4;
+import com.team.futurecraft.Vec4;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -72,7 +75,7 @@ public abstract class CelestialObject {
 	public void renderOrbits(float time) {
 		Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
-		
+        
         GlStateManager.disableTexture2D();
     	GlStateManager.disableLighting();
         if (this.getParent() != null) {
@@ -80,7 +83,12 @@ public abstract class CelestialObject {
         
         	Vec3 parentPos = this.getParent().getPosition(time);
         	GL11.glTranslated(parentPos.xCoord, parentPos.yCoord, parentPos.zCoord);
-        	GL11.glRotatef(time / this.getOrbit().getYearScale(), 0F, 1F, 0F);
+        	GL11.glRotatef(this.getOrbit().ascendingNode, 0, 1, 0);
+        	GL11.glRotatef(this.getOrbit().inclination, 0, 0, 1);
+        	GL11.glRotatef(this.getOrbit().argOfPericenter, 0, 1, 0);
+        	GL11.glTranslated(0, 0,  - (this.getOrbit().semiMajorAxis * this.getOrbit().eccentricity));
+        	GL11.glScalef((1 - this.getOrbit().eccentricity), 1, 1);
+        	GL11.glRotatef(time / this.getOrbit().period - 90 + this.getOrbit().meanAnomaly, 0F, 1F, 0F);
         	GlStateManager.enableAlpha();
         	glLineWidth(1);
         	renderer.startDrawing(3);
@@ -93,28 +101,23 @@ public abstract class CelestialObject {
         	for (int k = 0; k < 360; k++) {
         		renderer.setColorRGBA((int)color.xCoord, (int)color.yCoord, (int)color.zCoord, (int)(((330 - k) / 200.0f) * 255));
         		double radians = Math.toRadians(k);
-        		renderer.addVertex((Math.cos(radians) * this.getOrbit().getDistance()), 0, Math.sin(radians) * this.getOrbit().getDistance());
+        		renderer.addVertex((Math.cos(radians) * this.getOrbit().semiMajorAxis), 0, Math.sin(radians) * this.getOrbit().semiMajorAxis);
         	}
         	tessellator.draw();
         
         	glPopMatrix();
         }
         
-        //render landing spot on planet
-        /*if (this.isLandable()) {
-        	Vec3 PlanetPos = this.getPosition(time);
-        	
-        	glPushMatrix();
-        	GL11.glTranslated(PlanetPos.xCoord, PlanetPos.yCoord, PlanetPos.zCoord);
-        	Vec3 direction = this.getDirection(time);
-        	glLineWidth(1);
-        	renderer.startDrawing(3);
-        	renderer.setColorOpaque_I(0x00FF00);
-        	renderer.addVertex(0, 0, 0);
-        	renderer.addVertex(direction.xCoord * (this.getDiameter() / 1000000) * 1.0001, direction.yCoord * (this.getDiameter() / 1000000) * 1.0001, direction.zCoord * this.getDiameter() * 1.1);
-        	tessellator.draw();
-        	glPopMatrix();
-        }*/
+        Vec3 pos = this.getPosition(time);
+        glPushMatrix();
+        GL11.glTranslated(pos.xCoord, pos.yCoord, pos.zCoord);
+        renderer.startDrawing(3);
+    	renderer.setColorRGBA(150, 0, 0, 255);
+    	renderer.addVertex(0, 0, 0);
+    	renderer.addVertex(0, 0, this.getDiameter() / 1000000);
+    	tessellator.draw();
+    	glPopMatrix();
+        
         GlStateManager.enableTexture2D();
     	GlStateManager.enableLighting();
         
@@ -122,6 +125,37 @@ public abstract class CelestialObject {
 		for (int i = 0; i < children.length; i++) {
 			children[i].renderOrbits(time);
 		}
+	}
+	
+	public Vec3 getPosition(float time) {
+		Vec3 offsetPos = new Vec3(0, 0, 0);
+		if (this.getOrbit() != null && this.parent != null) {
+			Vec3 parentPos = this.getParent().getPosition(time);
+			
+			Mat4 mat = new Mat4();
+			mat = mat.multiply(Mat4.translate(parentPos.xCoord, parentPos.yCoord, parentPos.zCoord));
+			mat = mat.multiply(Mat4.rotate(this.getOrbit().ascendingNode, 0, 1, 0));
+			mat = mat.multiply(Mat4.rotate(this.getOrbit().inclination, 0, 0, 1));
+			mat = mat.multiply(Mat4.rotate(this.getOrbit().argOfPericenter, 0, 1, 0));
+			mat = mat.multiply(Mat4.translate(0, 0,  -(this.getOrbit().semiMajorAxis * this.getOrbit().eccentricity)));
+			mat = mat.multiply(Mat4.scale((1 - this.getOrbit().eccentricity), 1, 1));
+			
+			
+			double radians = Math.toRadians(-time / this.getOrbit().period) + (Math.PI / 2) - (Math.toRadians(this.getOrbit().meanAnomaly));
+			Vec3 orbitPos = new Vec3(Math.cos(radians) * this.getOrbit().semiMajorAxis, 0, Math.sin(radians) * this.getOrbit().semiMajorAxis);
+			
+			Vec4 finalPos = mat.multiply(new Vec4(orbitPos, 1));
+			
+			return new Vec3(finalPos.xCoord, finalPos.yCoord, finalPos.zCoord);
+		}
+		return offsetPos;
+	}
+	
+	public Vec3 getDirection(float time) {
+		if (this.getOrbit() != null)
+			return new Vec3(-1, 1, 0).rotateYaw((float) Math.toRadians(time * this.getOrbit().rotationPeriod));
+		else 
+			return new Vec3(-1, 1, 0);
 	}
 	
 	/**
@@ -132,24 +166,6 @@ public abstract class CelestialObject {
 		for (int i = 0; i < children.length; i++) {
 			children[i].render(rotation, pos, mc, time, showOrbit);
 		}
-	}
-	
-	public Vec3 getPosition(float time) {
-		Vec3 offsetPos = new Vec3(0, 0, 0);
-		if (this.getOrbit() != null && this.parent != null) {
-			double radians = Math.toRadians(-time / this.getOrbit().getYearScale());
-			Vec3 orbitPos = new Vec3(Math.cos(radians) * this.getOrbit().getDistance(), 0, Math.sin(radians) * this.getOrbit().getDistance());
-			offsetPos = this.parent.getPosition(time);
-			return orbitPos.add(offsetPos);
-		}
-		return offsetPos;
-	}
-	
-	public Vec3 getDirection(float time) {
-		if (this.getOrbit() != null)
-			return new Vec3(-1, 1, 0).rotateYaw((float) Math.toRadians(time * this.getOrbit().getRotation()));
-		else 
-			return new Vec3(-1, 1, 0);
 	}
 	
 	/**

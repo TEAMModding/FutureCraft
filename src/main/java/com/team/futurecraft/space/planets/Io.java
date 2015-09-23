@@ -44,6 +44,15 @@ public class Io extends Planet {
 	public String getTexture() {
 		return "io";
 	}
+	
+	@Override
+	public String getNightTexture() {
+		return "io_lights";
+	}
+	
+	public float getNightMultiplier() {
+		return 5.0f;
+	}
 
 	@Override
 	public float getGravity() {

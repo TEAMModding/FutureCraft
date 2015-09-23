@@ -26,12 +26,12 @@ public class Earth extends Planet {
 
 	@Override
 	public Vec3 getAtmosphericColor() {
-		return new Vec3(0, 0, 0);
+		return new Vec3(0.2, 0.4, 0.7);
 	}
 
 	@Override
 	public float getAtmosphericDensity() {
-		return 0f;
+		return 0.5f;
 	}
 
 	@Override
@@ -42,6 +42,16 @@ public class Earth extends Planet {
 	@Override
 	public String getTexture() {
 		return "earth";
+	}
+	
+	@Override
+	public String getNightTexture() {
+		return "earth_lights";
+	}
+	
+	@Override
+	public String getOceanTexture() {
+		return "earth_ocean";
 	}
 
 	@Override
@@ -56,7 +66,7 @@ public class Earth extends Planet {
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(149f, 365f, 1);
+		return new OrbitalParameters(365f, 149f, 0.017f, 0f, 348.739f, -245.802f, -2.471f, 1);
 	}
 
 	@Override

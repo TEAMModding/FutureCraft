@@ -1,19 +1,31 @@
 package com.team.futurecraft.space;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.IntBuffer;
 
 import javax.imageio.ImageIO;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL21;
 import org.lwjgl.util.glu.Sphere;
 
+import com.team.futurecraft.Mat4;
 import com.team.futurecraft.biome.BiomePlanet;
+import com.team.futurecraft.rendering.ShaderList;
+import com.team.futurecraft.rendering.ShaderUtil;
+import com.team.futurecraft.rendering.SpaceRenderer;
+import com.team.futurecraft.space.planets.Earth;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -110,10 +122,22 @@ public abstract class Planet extends CelestialObject {
 	 */
 	public abstract float getAtmosphericDensity();
 	
+	public float getNightMultiplier() {
+		return 1.0f;
+	}
+	
 	/**
 	 * Gets the texture of this planet in space, located in textures/environment.
 	 */
 	public abstract String getTexture();
+	
+	public String getNightTexture() {
+		return null;
+	}
+	
+	public String getOceanTexture() {
+		return null;
+	}
 	
 	/**
 	 * Renders the planet by itself without calculating orbits or anything.
@@ -135,31 +159,61 @@ public abstract class Planet extends CelestialObject {
 	 */
 	public void render(Vec3 rotation, Vec3 pos, Minecraft mc, float time, boolean showOrbit) {
         Vec3 PlanetPos = this.getPosition(time);
-        GlStateManager.enableLighting();
-		
-		glPushMatrix();
-		
         this.renderChildren(rotation, pos, mc, time, showOrbit);
+		glPushMatrix();
         
-        GL11.glTranslated(PlanetPos.xCoord, PlanetPos.yCoord, PlanetPos.zCoord);
-        GL11.glRotatef(time * this.getOrbit().getRotation(), 0F, 1F, 0F);
-        GL11.glRotatef(90, 1F, 0F, 0F);
+        //bind all the needed textures
+        if (this.getNightTexture() != null) {
+        	GL13.glActiveTexture(GL13.GL_TEXTURE2);
+        	ResourceLocation img2 = new ResourceLocation("futurecraft", "textures/planets/" + this.getNightTexture() + ".jpg");
+        	mc.getTextureManager().bindTexture(img2);
+        }
+        else {
+        	GL13.glActiveTexture(GL13.GL_TEXTURE2);
+        	GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        }
+        if (this.getOceanTexture() != null) {
+        	GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        	ResourceLocation img1 = new ResourceLocation("futurecraft", "textures/planets/" + this.getOceanTexture() + ".jpg");
+        	mc.getTextureManager().bindTexture(img1);
+        }
+        else {
+        	GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        	GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        }
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        ResourceLocation img0 = new ResourceLocation("futurecraft", "textures/planets/" + this.getTexture() + ".jpg");
+        mc.getTextureManager().bindTexture(img0);
+        
+        //use the planet shader
+        GL20.glUseProgram(ShaderList.planetShader);
+        
+        Mat4 model = Mat4.translate(PlanetPos.xCoord, PlanetPos.yCoord, PlanetPos.zCoord).multiply(Mat4.rotate(time * this.getOrbit().rotationPeriod, 0F, 1F, 0F)).multiply(Mat4.rotate(90, 1F, 0F, 0F));
+        
+        //specify uniforms
+        ShaderUtil.uniformMat4(model, "model", ShaderList.planetShader);
+        ShaderUtil.uniformMat4(SpaceRenderer.getViewMatrix(pos, rotation), "view", ShaderList.planetShader);
+        ShaderUtil.uniformMat4(SpaceRenderer.getProjectionMatrix(mc), "projection", ShaderList.planetShader);
+        ShaderUtil.uniformVec3(this.getAtmosphericColor(), "atmosphereColor", ShaderList.planetShader);
+        ShaderUtil.uniformFloat(this.getAtmosphericDensity(), "atmosphereDensity", ShaderList.planetShader);
+        ShaderUtil.uniformFloat(this.getNightMultiplier(), "nightMultiplier", ShaderList.planetShader);
+        
+        IntBuffer intBuf = BufferUtils.createIntBuffer(3); intBuf.put(0); intBuf.put(1); intBuf.put(2); intBuf.flip();
+        int uniform = GL20.glGetUniformLocation(ShaderList.planetShader, "texture");
+		GL20.glUniform1(uniform, intBuf);
         
         int lod = 8;
-        if (pos.distanceTo(PlanetPos) < 10) {
-			ResourceLocation img = new ResourceLocation("futurecraft", "textures/planets/" + this.getTexture() + ".jpg");
-			mc.getTextureManager().bindTexture(img);
-			lod = 50;
-		}
-        else {
-        	GlStateManager.disableTexture2D();
-        }
-		glColor3f(1, 1, 1);
+        
+        double distance = pos.distanceTo(new Vec3(-PlanetPos.xCoord, -PlanetPos.yCoord, -PlanetPos.zCoord));
+        
+        if (distance < 2)
+        	lod = 50;
+        
         Sphere sphere = new Sphere();
         sphere.setTextureFlag(true);
         sphere.draw((this.getDiameter() / 1000000) / 2, lod, lod);
+        GL20.glUseProgram(0);
         
         glPopMatrix();
-        GlStateManager.enableTexture2D();
 	}
 }

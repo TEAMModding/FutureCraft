@@ -57,7 +57,7 @@ public class Venus extends Planet {
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(107.727f, 224.697f, 243.020f);
+		return new OrbitalParameters(224.697f, 107.727f, 0.007f, 3.395f, 76.681f, 54.852f, 50.446f, 243.020f);
 	}
 	
 	@Override

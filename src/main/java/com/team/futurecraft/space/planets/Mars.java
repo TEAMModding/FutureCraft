@@ -32,7 +32,7 @@ public class Mars extends Planet {
 
 	@Override
 	public float getAtmosphericDensity() {
-		return 0.7f;
+		return 0.3f;
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class Mars extends Planet {
 
 	@Override
 	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(227.076f, 686.565f, 1.026f);
+		return new OrbitalParameters(686.565f, 227.076f, 0.093f, 1.851f, 49.479f, 286.562f, 19.412f, 1.026f);
 	}
 	
 	@Override

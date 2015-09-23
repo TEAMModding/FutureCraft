@@ -1,5 +1,7 @@
 package com.team.futurecraft.space.planets;
 
+import net.minecraft.util.Vec3;
+
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.GasGiant;
 import com.team.futurecraft.space.OrbitalParameters;
@@ -38,7 +40,16 @@ public class Uranus extends GasGiant {
 	@Override
 	public OrbitalParameters getOrbit() {
 		//TODO: rotation time not accurate
-		return new OrbitalParameters(2859.459f, 30665.11f, 0.7083f);
+		return new OrbitalParameters(30665.11f, 2859.459f, 0.047f, 0.77f, 74.23f, 96.734f, 142.268f, 0.7083f);
+	}
+	
+	@Override
+	public Vec3 getAtmosphericColor() {
+		return new Vec3(0.2, 0.4, 0.7);
 	}
 
+	@Override
+	public float getAtmosphericDensity() {
+		return 0.1f;
+	}
 }
