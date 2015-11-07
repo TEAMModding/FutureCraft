@@ -4,6 +4,7 @@ import com.team.futurecraft.biome.BiomeList;
 import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.PhysicalParameters;
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
 import com.team.futurecraft.space.PlanetTypeSelena;
@@ -14,6 +15,9 @@ public class Mercury extends Planet {
 
 	public Mercury(CelestialObject parent) {
 		super(parent);
+		
+		this.orbit = new OrbitalParameters(63082497600L, 87.95f, 57.663f, 0.206f, 7.005f, 48.332f, 29.124f, 174.795f);
+		this.physical = new PhysicalParameters(0.37773f, 4480f, 0, 58.646f, 291.2f, 7.01f, 48.42f);
 	}
 	
 	public BiomePlanet getBiome() {
@@ -43,21 +47,6 @@ public class Mercury extends Planet {
 	@Override
 	public String getTexture() {
 		return "mercury";
-	}
-
-	@Override
-	public float getGravity() {
-		return 1.0f;
-	}
-
-	@Override
-	public float getDiameter() {
-		return 4480;
-	}
-
-	@Override
-	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(87.95f, 57.663f, 0.206f, 7.005f, 48.332f, 29.124f, 174.795f, 58.646f);
 	}
 	
 	@Override

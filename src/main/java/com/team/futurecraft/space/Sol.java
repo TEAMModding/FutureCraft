@@ -1,6 +1,6 @@
 package com.team.futurecraft.space;
 
-import com.team.futurecraft.space.planets.Earth;
+import com.team.futurecraft.space.planets.EarthMoon;
 import com.team.futurecraft.space.planets.Jupiter;
 import com.team.futurecraft.space.planets.Mars;
 import com.team.futurecraft.space.planets.Mercury;
@@ -17,10 +17,13 @@ import com.team.futurecraft.space.planets.Venus;
 public class Sol extends Star {
 	public Sol(CelestialObject parent) {
 		super(parent);
+		
+		this.orbit = null;
+		this.physical = new PhysicalParameters(500, 152550f, 0, 0, 0, 0, 0);
+		
 		this.add(new Mercury(this));
 		this.add(new Venus(this));
-		//this.add(new Terra(this));
-		this.add(new Earth(this));
+		this.add(new EarthMoon(this));
 		this.add(new Mars(this));
 		this.add(new Jupiter(this));
 		this.add(new Saturn(this));
@@ -36,20 +39,5 @@ public class Sol extends Star {
 	@Override
 	public String getName() {
 		return "sol";
-	}
-
-	@Override
-	public float getGravity() {
-		return 500;
-	}
-
-	@Override
-	public float getDiameter() {
-		return 1525580f;
-	}
-
-	@Override
-	public OrbitalParameters getOrbit() {
-		return null;
 	}
 }

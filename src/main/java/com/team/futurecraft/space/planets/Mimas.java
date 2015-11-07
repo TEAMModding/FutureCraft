@@ -4,6 +4,7 @@ import com.team.futurecraft.biome.BiomeList;
 import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.PhysicalParameters;
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
 import com.team.futurecraft.space.PlanetTypeFrozen;
@@ -14,6 +15,9 @@ public class Mimas extends Planet {
 
 	public Mimas(CelestialObject parent) {
 		super(parent);
+		
+		this.orbit = new OrbitalParameters(63050918400L, 0.94242f, 0.18552752f, 0.021f, 1.566f, 177.459f, 332.864f, 100.173f);
+		this.physical = new PhysicalParameters(0.005156f, 404.5f, 0f, 0.94242f, 0f, 1.566f, 177.459f);
 	}
 	
 	public BiomePlanet getBiome() {
@@ -43,22 +47,6 @@ public class Mimas extends Planet {
 	@Override
 	public String getTexture() {
 		return "mimas";
-	}
-
-	@Override
-	public float getGravity() {
-		return 0.3f;
-	}
-
-	@Override
-	public float getDiameter() {
-		return 404.5f;
-	}
-
-	@Override
-	public OrbitalParameters getOrbit() {
-		//TODO: rotation cycle not accurate
-		return new OrbitalParameters(0.18552752f, 0.916f, 0.916f);
 	}
 	
 	@Override

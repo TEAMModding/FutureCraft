@@ -4,7 +4,6 @@ import com.team.futurecraft.space.planets.Europa;
 import com.team.futurecraft.space.planets.Mars;
 import com.team.futurecraft.space.planets.Mercury;
 import com.team.futurecraft.space.planets.Moon;
-import com.team.futurecraft.space.planets.Terra;
 import com.team.futurecraft.space.planets.Venus;
 
 /**
@@ -20,5 +19,4 @@ public class BiomeList {
 	public static final BiomeSelena SELENA_MOON = new BiomeSelena(102, new Moon(null));
 	public static final BiomeDesert DESERT_MARS = new BiomeDesert(103, new Mars(null));
 	public static final BiomeFrozen FROZEN_EUROPA = new BiomeFrozen(104, new Europa(null));
-	public static final BiomeTerra TERRA = new BiomeTerra(105, new Terra(null));
 }

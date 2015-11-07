@@ -49,7 +49,10 @@ public class SpaceRegistry {
 			}
 			CelestialObject[] moons = objects[i].getChildren();
 			for (int j = 0; j < moons.length; j++) {
-				registerPlanet((Planet)moons[j]);
+				if (moons[j] instanceof Earth){}
+				else {
+					registerPlanet((Planet)moons[j]);
+				}
 			}
 		}
 	}

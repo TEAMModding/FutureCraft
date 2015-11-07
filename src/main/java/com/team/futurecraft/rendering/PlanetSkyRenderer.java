@@ -15,17 +15,14 @@ import net.minecraftforge.client.IRenderHandler;
 
 /**
  * The SkyRendering class used for rendering the sky of planets.
- * Currently only used for the moon. This needs alot of work for making
- * atmospheres and moons and daylight cycles dependent on the planet's physical
- * and orbital parameters.
  * 
  * @author Joseph
  *
  */
 public class PlanetSkyRenderer extends IRenderHandler {
 	private Planet planet;
-	private static final float TIME_SCALE = 0.0003f;
-	private float time;
+	private long time = 62755776000L
+			;
 	
 	public PlanetSkyRenderer(Planet planet) {
 		this.planet = planet;
@@ -36,11 +33,11 @@ public class PlanetSkyRenderer extends IRenderHandler {
 		GL11.glDepthMask(false);
 		GL11.glDisable(GL11.GL_FOG);
 		GlStateManager.enableAlpha();
-		time = FutureCraft.timeOffset;
-		SpaceRenderer render = new SpaceRenderer(mc, false);
-		render.render(new Vec3(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, 0), new Vec3(0, 0, 0), this.planet, time, true);
+		
+		SpaceRenderer render = new SpaceRenderer();
+		Camera cam = new Camera(this.planet.getPosition(time), new Vec3(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, 0));
+		render.render(cam, time, false);
 		renderAtmosphere(mc);
-		//System.out.println(time);
 		GL11.glDepthMask(true);
 	}
 	
@@ -85,22 +82,4 @@ public class PlanetSkyRenderer extends IRenderHandler {
         
         GlStateManager.enableTexture2D();
 	}
-	
-	/**
-	 * Renders the planet with the specified image.
-	 */
-	/*private void renderPlanet(ResourceLocation img, float size, Minecraft mc) {
-		glPushMatrix();
-        mc.getTextureManager().bindTexture(img);
-		glColor3f(1, 1, 1);
-        
-        
-        mc.getTextureManager().bindTexture(img);
-        glColor3f(1, 1, 1);
-        Sphere sphere = new Sphere();
-        sphere.setTextureFlag(true);
-        sphere.setNormals(GLU.GLU_SMOOTH);
-        sphere.draw(size, 100, 100);
-        glPopMatrix();
-	}*/
 }

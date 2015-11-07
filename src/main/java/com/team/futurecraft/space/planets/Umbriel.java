@@ -4,6 +4,7 @@ import com.team.futurecraft.biome.BiomeList;
 import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.PhysicalParameters;
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
 import com.team.futurecraft.space.PlanetTypeFrozen;
@@ -14,6 +15,9 @@ public class Umbriel extends Planet {
 
 	public Umbriel(CelestialObject parent) {
 		super(parent);
+		
+		this.orbit = new OrbitalParameters(63082497600L, 4.144f, 0.265996444f, 0.005f, 0.36f, 0, 0, 280f);
+		this.physical = new PhysicalParameters(0.023323f, 1169.4f, 0, 4.133f, 0, 0.36f, 0);
 	}
 	
 	public BiomePlanet getBiome() {
@@ -43,21 +47,6 @@ public class Umbriel extends Planet {
 	@Override
 	public String getTexture() {
 		return "umbriel";
-	}
-
-	@Override
-	public float getGravity() {
-		return 0.3f;
-	}
-
-	@Override
-	public float getDiameter() {
-		return 1169.4f;
-	}
-
-	@Override
-	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(0.265996444f, 4.144f, 4.144f);
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package com.team.futurecraft.space.planets;
 import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.PhysicalParameters;
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
 
@@ -12,7 +13,9 @@ public class Earth extends Planet {
 
 	public Earth(CelestialObject parent) {
 		super(parent);
-		this.add(new Moon(this));
+		
+		this.orbit = new OrbitalParameters(63082497600L, 27.322f, 0.00470989f, 0.055f, 5.15f, 125.08f, 138.15f, 135.27f);
+		this.physical = new PhysicalParameters(1, 12756.28f, 0, 1, -79.5f, 23.439f, 180f);
 	}
 
 	public BiomePlanet getBiome() {
@@ -26,12 +29,12 @@ public class Earth extends Planet {
 
 	@Override
 	public Vec3 getAtmosphericColor() {
-		return new Vec3(0.2, 0.4, 0.7);
+		return new Vec3(0.3, 0.6, 1);
 	}
 
 	@Override
 	public float getAtmosphericDensity() {
-		return 0.5f;
+		return 0.7f;
 	}
 
 	@Override
@@ -45,6 +48,11 @@ public class Earth extends Planet {
 	}
 	
 	@Override
+	public String getCloudTexture() {
+		return "earth_clouds";
+	}
+	
+	@Override
 	public String getNightTexture() {
 		return "earth_lights";
 	}
@@ -52,21 +60,6 @@ public class Earth extends Planet {
 	@Override
 	public String getOceanTexture() {
 		return "earth_ocean";
-	}
-
-	@Override
-	public float getGravity() {
-		return 1.0f;
-	}
-
-	@Override
-	public float getDiameter() {
-		return 12756.28f;
-	}
-
-	@Override
-	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(365f, 149f, 0.017f, 0f, 348.739f, -245.802f, -2.471f, 1);
 	}
 
 	@Override

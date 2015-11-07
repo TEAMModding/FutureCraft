@@ -130,7 +130,7 @@ public class WorldProviderPlanet extends WorldProvider {
      * @return the gravity for this planet
      */
     public double getGravity() {
-    	return this.planet.getGravity();
+    	return this.planet.physical.gravity;
     }
     
     public String getImage() {

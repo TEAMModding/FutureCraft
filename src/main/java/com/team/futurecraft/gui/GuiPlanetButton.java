@@ -6,7 +6,6 @@ import org.lwjgl.opengl.GL11;
 
 import com.team.futurecraft.rendering.SpaceRenderer;
 import com.team.futurecraft.space.CelestialObject;
-import com.team.futurecraft.space.Planet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -51,7 +50,7 @@ public class GuiPlanetButton extends GuiButton
         	GL11.glTranslatef(this.xPosition + 25, this.yPosition + 25, 30);
         	GL11.glRotatef(-90, 1, 0, 0);
         	GL11.glScalef(2, 2, 2);
-        	((Planet)this.planet).renderStatic(mc);
+        	this.planet.renderStatic(mc);
         	GL11.glPopMatrix();
         	
         	GlStateManager.disableLighting();

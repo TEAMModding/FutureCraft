@@ -4,6 +4,7 @@ import com.team.futurecraft.biome.BiomeList;
 import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.PhysicalParameters;
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
 import com.team.futurecraft.space.PlanetTypeFrozen;
@@ -14,6 +15,9 @@ public class Europa extends Planet {
 
 	public Europa(CelestialObject parent) {
 		super(parent);
+		
+		this.orbit = new OrbitalParameters(62344209600L, 3.552f, 0.670891031f, 0.01f, 0.470f, 101.087f, 54.425f, 20.865f);
+		this.physical = new PhysicalParameters(0.13418f, 6243.2f, 0, 3.5518f, 0, 0.47f, 101.087f);
 	}
 	
 	public BiomePlanet getBiome() {
@@ -43,21 +47,6 @@ public class Europa extends Planet {
 	@Override
 	public String getTexture() {
 		return "europa";
-	}
-
-	@Override
-	public float getGravity() {
-		return 0.3f;
-	}
-
-	@Override
-	public float getDiameter() {
-		return 6243.2f;
-	}
-
-	@Override
-	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(0.670891031f, 3.552f, 3.552f);
 	}
 	
 	@Override

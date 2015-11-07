@@ -1,8 +1,6 @@
 package com.team.futurecraft.space;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -17,18 +15,18 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
+import org.lwjgl.util.glu.Disk;
+import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
 import com.team.futurecraft.Mat4;
 import com.team.futurecraft.biome.BiomePlanet;
-import com.team.futurecraft.rendering.ShaderList;
-import com.team.futurecraft.rendering.ShaderUtil;
+import com.team.futurecraft.rendering.Camera;
+import com.team.futurecraft.rendering.Shader;
 import com.team.futurecraft.rendering.SpaceRenderer;
-import com.team.futurecraft.space.planets.Earth;
+import com.team.futurecraft.rendering.Textures;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 
@@ -41,9 +39,43 @@ public abstract class Planet extends CelestialObject {
 	public int[] turfmap;
 	public int[] stonemap;
 	
+	private boolean hasCloudmap = false;
+	private boolean hasLightmap = false;
+	private boolean hasOceanmap = false;
+	private IntBuffer intBuf;
+	
+	private String surfacePath;
+	private String nightPath;
+	private String oceanPath;
+	private String cloudPath;
+	
+	private Shader planetShader;
+	private Shader atmosphereShader;
+	private Shader cloudShader;
+	private Shader ringShader;
+	
 	public Planet(CelestialObject parent) {
 		super(parent);
 		this.readColormap();
+		
+		intBuf = BufferUtils.createIntBuffer(3); intBuf.put(0); intBuf.put(1); intBuf.put(2); intBuf.flip();
+		
+		surfacePath = "textures/planets/" + this.getName() + "/surface.png";
+		nightPath = "textures/planets/" + this.getName() + "/night.png";
+		oceanPath = "textures/planets/" + this.getName() + "/ocean.png";
+		cloudPath = "textures/planets/" + this.getName() + "/clouds.png";
+		
+		if (Textures.exists(nightPath))
+			hasLightmap = true;
+		if (Textures.exists(oceanPath))
+			hasOceanmap = true;
+		if (Textures.exists(cloudPath))
+			hasCloudmap = true;
+		
+		planetShader = Shader.loadShader("planet");
+		atmosphereShader = Shader.loadShader("atmosphere");
+		cloudShader = Shader.loadShader("clouds");
+		ringShader = Shader.loadShader("rings");
 	}
 	
 	/**
@@ -55,7 +87,7 @@ public abstract class Planet extends CelestialObject {
 		String mapPath = this.getColormap();
 		if (mapPath != null) {
 			try {
-				in = Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("futurecraft", "textures/planets/" + mapPath +".png")).getInputStream();
+				in = Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("futurecraft", "textures/planets/" + this.getName() + "/colormap.png")).getInputStream();
 				image = ImageIO.read(in);
 			
 				AffineTransform transform = AffineTransform.getScaleInstance(1f, -1f);
@@ -90,9 +122,6 @@ public abstract class Planet extends CelestialObject {
 		return EnumCelestialType.PLANET;
 	}
 	
-	/**
-	 * Yes you can land on it...
-	 */
 	public boolean isLandable() {
 		return true;
 	}
@@ -135,6 +164,10 @@ public abstract class Planet extends CelestialObject {
 		return null;
 	}
 	
+	public String getCloudTexture() {
+		return null;
+	}
+	
 	public String getOceanTexture() {
 		return null;
 	}
@@ -144,7 +177,7 @@ public abstract class Planet extends CelestialObject {
 	 * Used for rendering planets on gui buttons.
 	 */
 	public void renderStatic(Minecraft mc) {
-		ResourceLocation img = new ResourceLocation("futurecraft", "textures/planets/" + this.getTexture() + ".jpg");
+		ResourceLocation img = new ResourceLocation("futurecraft", surfacePath);
 		mc.getTextureManager().bindTexture(img);
 		
 		glColor3f(1, 1, 1);
@@ -153,67 +186,112 @@ public abstract class Planet extends CelestialObject {
         sphere.draw(10, 25, 25);
 	}
 	
+	private void bindTextures() {
+		
+		
+		if (hasLightmap) {
+        	GL13.glActiveTexture(GL13.GL_TEXTURE2);
+        	Textures.loadTexture(nightPath);
+        }
+        else {
+        	GL13.glActiveTexture(GL13.GL_TEXTURE2);
+        	GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        }
+        if (hasOceanmap) {
+        	GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        	Textures.loadTexture(oceanPath);
+        }
+        else {
+        	GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        	GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        }
+        
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        Textures.loadTexture(surfacePath);
+	}
+	
 	/**
 	 * This covers the render function from Celestial object. But if you have a SUPER
 	 * special planet, you could override it and have custom rendering.
 	 */
-	public void render(Vec3 rotation, Vec3 pos, Minecraft mc, float time, boolean showOrbit) {
+	public void render(Camera cam, float time) {
         Vec3 PlanetPos = this.getPosition(time);
-        this.renderChildren(rotation, pos, mc, time, showOrbit);
-		glPushMatrix();
+        this.renderChildren(cam, time);
         
-        //bind all the needed textures
-        if (this.getNightTexture() != null) {
-        	GL13.glActiveTexture(GL13.GL_TEXTURE2);
-        	ResourceLocation img2 = new ResourceLocation("futurecraft", "textures/planets/" + this.getNightTexture() + ".jpg");
-        	mc.getTextureManager().bindTexture(img2);
+        double distance = cam.pos.distanceTo(PlanetPos);
+        
+        if (distance < 5) {
+        	//bind all the needed textures
+        	bindTextures();
+        
+        	Mat4 model = new Mat4();
+        	model = model.multiply(Mat4.translate(PlanetPos.xCoord, PlanetPos.yCoord, PlanetPos.zCoord));
+        	model = model.multiply(Mat4.rotate(this.physical.eqAscNode, 0F, 1F, 0F));
+        	model = model.multiply(Mat4.rotate(this.physical.obliquity, 0F, 0F, 1F));
+        	model = model.multiply(Mat4.rotate(90, 1F, 0F, 0F));
+        	model = model.multiply(Mat4.rotate(-90, 0F, 0F, 1F));
+        	model = model.multiply(Mat4.rotate(-(((time - this.orbit.epoch) / 86400) / this.physical.rotationPeriod * 360) - this.physical.rotationOffset, 0F, 0F, 1F));
+        
+        	
+        	planetShader.bind();
+        	planetShader.uniformMat4(model, "model");
+        	planetShader.uniformMat4(SpaceRenderer.getViewMatrix(cam.pos, cam.rot), "view");
+        	planetShader.uniformMat4(SpaceRenderer.getProjectionMatrix(), "projection");
+        	planetShader.uniformVec3(this.getAtmosphericColor(), "atmosphereColor");
+        	planetShader.uniformFloat(this.getAtmosphericDensity(), "atmosphereDensity");
+        	planetShader.uniformFloat(this.getNightMultiplier(), "nightMultiplier");
+        	
+        	int uniform = GL20.glGetUniformLocation(planetShader.id, "texture");
+        	GL20.glUniform1(uniform, intBuf);
+        
+        	Sphere sphere = new Sphere();
+        	sphere.setTextureFlag(true);
+        	sphere.draw((this.physical.diameter / 1000000) / 2, 50, 50);
+        
+        	atmosphereShader.bind();
+        	atmosphereShader.uniformMat4(model, "model");
+        	atmosphereShader.uniformMat4(SpaceRenderer.getViewMatrix(cam.pos, cam.rot), "view");
+        	atmosphereShader.uniformMat4(SpaceRenderer.getProjectionMatrix(), "projection");
+        	atmosphereShader.uniformVec3(this.getAtmosphericColor(), "atmosphereColor");
+        	atmosphereShader.uniformFloat(this.getAtmosphericDensity(), "atmosphereDensity");
+        	atmosphereShader.uniformFloat(this.getNightMultiplier(), "nightMultiplier");
+        
+        	GL11.glBlendFunc(GL_ONE, GL_ONE);
+        	Sphere sphere2 = new Sphere();
+        	sphere2.setTextureFlag(true);
+        	sphere2.setOrientation(GLU.GLU_INSIDE);
+        	sphere2.draw(((this.physical.diameter / 1000000) / 2) * 1.02f, 50, 50);
+        	GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        
+        	if (hasCloudmap) {
+        		cloudShader.bind();
+        		cloudShader.uniformMat4(model, "model");
+        		cloudShader.uniformMat4(SpaceRenderer.getViewMatrix(cam.pos, cam.rot), "view");
+        		cloudShader.uniformMat4(SpaceRenderer.getProjectionMatrix(), "projection");
+        		cloudShader.uniformVec3(this.getAtmosphericColor(), "atmosphereColor");
+        		cloudShader.uniformFloat(this.getAtmosphericDensity(), "atmosphereDensity");
+        		cloudShader.uniformFloat(this.getNightMultiplier(), "nightMultiplier");
+        
+        		Textures.loadTexture(cloudPath);
+        		
+        		Sphere sphere3 = new Sphere();
+        		sphere3.setTextureFlag(true);
+        		sphere3.draw(((this.physical.diameter / 1000000) / 2) * 1.01f, 50, 50);
+        	}
+        	
+        	/*ringShader.bind();
+        	ringShader.uniformMat4(model, "model");
+    		ringShader.uniformMat4(SpaceRenderer.getViewMatrix(cam.pos, cam.rot), "view");
+    		ringShader.uniformMat4(SpaceRenderer.getProjectionMatrix(), "projection");
+    		
+    		Textures.loadTexture("textures/planets/saturn/rings.png");
+    		
+    		Disk disk = new Disk();
+    		disk.setTextureFlag(true);
+    		disk.setOrientation(GLU.GLU_INSIDE);
+    		disk.draw((this.physical.diameter / 1000000), (this.physical.diameter / 1000000) * 2, 50, 50);*/
+        
+        	GL20.glUseProgram(0);
         }
-        else {
-        	GL13.glActiveTexture(GL13.GL_TEXTURE2);
-        	GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-        }
-        if (this.getOceanTexture() != null) {
-        	GL13.glActiveTexture(GL13.GL_TEXTURE1);
-        	ResourceLocation img1 = new ResourceLocation("futurecraft", "textures/planets/" + this.getOceanTexture() + ".jpg");
-        	mc.getTextureManager().bindTexture(img1);
-        }
-        else {
-        	GL13.glActiveTexture(GL13.GL_TEXTURE1);
-        	GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-        }
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        ResourceLocation img0 = new ResourceLocation("futurecraft", "textures/planets/" + this.getTexture() + ".jpg");
-        mc.getTextureManager().bindTexture(img0);
-        
-        //use the planet shader
-        GL20.glUseProgram(ShaderList.planetShader);
-        
-        Mat4 model = Mat4.translate(PlanetPos.xCoord, PlanetPos.yCoord, PlanetPos.zCoord).multiply(Mat4.rotate(time * this.getOrbit().rotationPeriod, 0F, 1F, 0F)).multiply(Mat4.rotate(90, 1F, 0F, 0F));
-        
-        //specify uniforms
-        ShaderUtil.uniformMat4(model, "model", ShaderList.planetShader);
-        ShaderUtil.uniformMat4(SpaceRenderer.getViewMatrix(pos, rotation), "view", ShaderList.planetShader);
-        ShaderUtil.uniformMat4(SpaceRenderer.getProjectionMatrix(mc), "projection", ShaderList.planetShader);
-        ShaderUtil.uniformVec3(this.getAtmosphericColor(), "atmosphereColor", ShaderList.planetShader);
-        ShaderUtil.uniformFloat(this.getAtmosphericDensity(), "atmosphereDensity", ShaderList.planetShader);
-        ShaderUtil.uniformFloat(this.getNightMultiplier(), "nightMultiplier", ShaderList.planetShader);
-        
-        IntBuffer intBuf = BufferUtils.createIntBuffer(3); intBuf.put(0); intBuf.put(1); intBuf.put(2); intBuf.flip();
-        int uniform = GL20.glGetUniformLocation(ShaderList.planetShader, "texture");
-		GL20.glUniform1(uniform, intBuf);
-        
-        int lod = 8;
-        
-        double distance = pos.distanceTo(new Vec3(-PlanetPos.xCoord, -PlanetPos.yCoord, -PlanetPos.zCoord));
-        
-        if (distance < 2)
-        	lod = 50;
-        
-        Sphere sphere = new Sphere();
-        sphere.setTextureFlag(true);
-        sphere.draw((this.getDiameter() / 1000000) / 2, lod, lod);
-        GL20.glUseProgram(0);
-        
-        glPopMatrix();
 	}
 }

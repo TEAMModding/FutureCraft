@@ -4,6 +4,7 @@ import com.team.futurecraft.biome.BiomeList;
 import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.PhysicalParameters;
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
 import com.team.futurecraft.space.PlanetTypeFrozen;
@@ -14,6 +15,9 @@ public class Rhea extends Planet {
 
 	public Rhea(CelestialObject parent) {
 		super(parent);
+		
+		this.orbit = new OrbitalParameters(63050918400L, 4.5175f, 0.527032954f, 0.001f, 0.327f, 1.095f, 205.869f, 109.204f);
+		this.physical = new PhysicalParameters(0.026833f, 1528f, 0, 4.175f, 0, 0.327f, 1.095f);
 	}
 	
 	public BiomePlanet getBiome() {
@@ -45,21 +49,6 @@ public class Rhea extends Planet {
 		return "rhea";
 	}
 
-	@Override
-	public float getGravity() {
-		return 0.3f;
-	}
-
-	@Override
-	public float getDiameter() {
-		return 1528f;
-	}
-
-	@Override
-	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(0.527032954f, 4.517f, 4.517f);
-	}
-	
 	@Override
 	public String getColormap() {
 		return null;

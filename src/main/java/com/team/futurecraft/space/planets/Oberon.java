@@ -4,6 +4,7 @@ import com.team.futurecraft.biome.BiomeList;
 import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.PhysicalParameters;
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
 import com.team.futurecraft.space.PlanetTypeFrozen;
@@ -14,6 +15,9 @@ public class Oberon extends Planet {
 
 	public Oberon(CelestialObject parent) {
 		super(parent);
+		
+		this.orbit = new OrbitalParameters(63082497600L, 13.463f, 0.583592198f, 0.001f, 0.1f, 0, 0, 150f);
+		this.physical = new PhysicalParameters(0.035367f, 1522.8f, 0, 13.463f, 0, 0.1f, 0);
 	}
 	
 	public BiomePlanet getBiome() {
@@ -43,21 +47,6 @@ public class Oberon extends Planet {
 	@Override
 	public String getTexture() {
 		return "oberon";
-	}
-
-	@Override
-	public float getGravity() {
-		return 0.3f;
-	}
-
-	@Override
-	public float getDiameter() {
-		return 1522.8f;
-	}
-
-	@Override
-	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(0.583592198f, 13.463f, 13.463f);
 	}
 	
 	@Override

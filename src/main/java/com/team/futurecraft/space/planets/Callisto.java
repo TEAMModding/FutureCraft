@@ -4,6 +4,7 @@ import com.team.futurecraft.biome.BiomeList;
 import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.PhysicalParameters;
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
 import com.team.futurecraft.space.PlanetTypeFrozen;
@@ -14,6 +15,9 @@ public class Callisto extends Planet {
 
 	public Callisto(CelestialObject parent) {
 		super(parent);
+		
+		this.orbit = new OrbitalParameters(62344209600L, 16.689f, 1.882974825f, 0.007f, 0.281f, 323.265f, 12.668f, -250.842f);
+		this.physical = new PhysicalParameters(0.12612f, 4820.6f, 0, 16.689f, 0, 0.281f, 323.265f);
 	}
 	
 	public BiomePlanet getBiome() {
@@ -43,21 +47,6 @@ public class Callisto extends Planet {
 	@Override
 	public String getTexture() {
 		return "callisto";
-	}
-
-	@Override
-	public float getGravity() {
-		return 0.3f;
-	}
-
-	@Override
-	public float getDiameter() {
-		return 4820.6f;
-	}
-
-	@Override
-	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(1.882974825f, 16.689f, 16.689f);
 	}
 	
 	@Override

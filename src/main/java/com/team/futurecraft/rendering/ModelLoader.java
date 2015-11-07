@@ -13,6 +13,11 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.Vec3;
 
+/**
+ * This is actually an obj model loader, might need it someday.
+ * 
+ * @author Joseph
+ */
 public class ModelLoader {
 	public static void renderObj(String file) {
 		Tessellator tessellator = Tessellator.getInstance();

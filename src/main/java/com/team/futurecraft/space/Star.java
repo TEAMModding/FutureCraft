@@ -5,12 +5,13 @@ import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
+import com.team.futurecraft.rendering.Camera;
+import com.team.futurecraft.rendering.Textures;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 
 /**
  * The class that all stars should extend.
@@ -42,13 +43,16 @@ public abstract class Star extends CelestialObject {
 	 */
 	public abstract int getTemperature();
 	
+	public void renderStatic(Minecraft mc) {
+		
+	}
+	
 	/**
 	 * Render's an awesome star.
 	 */
-	public void render(Vec3 rotation, Vec3 pos, Minecraft mc, float time, boolean showOrbit) {
+	public void render(Camera cam, float time) {
 		Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
-        ResourceLocation img = new ResourceLocation("futurecraft", "textures/environment/star_glow.png");
         
         //draw the star itself
 		glPushMatrix();
@@ -59,17 +63,17 @@ public abstract class Star extends CelestialObject {
         Sphere sphere = new Sphere();
         sphere.setTextureFlag(false);
         sphere.setNormals(GLU.GLU_SMOOTH);
-        sphere.draw((this.getDiameter() / 1000000) * 2, 100, 100);
+        sphere.draw((this.physical.diameter / 1000000) * 2, 100, 100);
         glPopMatrix();
         
         //draw the star glow
         glPushMatrix();
         GlStateManager.enableTexture2D();
         glBlendFunc(GL_ONE, GL_ONE);
-        mc.getTextureManager().bindTexture(img);
-        glRotatef((float)-rotation.xCoord, 0, 1, 0);
-        glRotatef((float)-rotation.yCoord, 1, 0, 0);
-        float glowSize = ((this.getDiameter() / 1000000) * 2) * 20;
+        Textures.loadTexture("textures/environment/star_glow.png");
+        glRotatef((float)-cam.rot.xCoord, 0, 1, 0);
+        glRotatef((float)-cam.rot.yCoord, 1, 0, 0);
+        float glowSize = ((this.physical.diameter / 1000000) * 2) * 20;
         
         renderer.startDrawingQuads();
         renderer.setColorRGBA(255, 255, 255, 255);
@@ -84,6 +88,6 @@ public abstract class Star extends CelestialObject {
         
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
-        this.renderChildren(rotation, pos, mc, time, showOrbit);
+        this.renderChildren(cam, time);
 	}
 }

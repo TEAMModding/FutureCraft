@@ -1,7 +1,6 @@
 package com.team.futurecraft;
 
 import com.team.futurecraft.entity.ChunkEntity;
-import com.team.futurecraft.rendering.ShaderList;
 import com.team.futurecraft.rendering.entity.RenderChunkEntity;
 
 import net.minecraft.client.Minecraft;
@@ -14,7 +13,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class StartupClientOnly {
 	public static void preInit() {
-		ShaderList.loadShaders();
+		
 	}
 	
 	/**

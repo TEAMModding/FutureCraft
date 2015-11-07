@@ -61,7 +61,12 @@ public class CoreEventHandler {
 			
 			if (entity.stepHeight != 1f) entity.stepHeight = 1f;
 			
-			if (!entity.onGround) entity.addVelocity(0, 0.1D - (planet.getGravity() * 0.1D), 0);
+			if (!entity.onGround) {
+				entity.addVelocity(0, 0.0733D - (planet.getGravity() * 0.0733D), 0);
+				entity.motionX *= 1.02;
+				entity.motionY *= 1.02;
+				entity.motionZ *= 1.02;
+			}
 		}
 		else if (entity.stepHeight != 0.6f) {
 			entity.stepHeight = 0.6f;

@@ -2,8 +2,11 @@ package com.team.futurecraft.space;
 
 import com.team.futurecraft.biome.BiomePlanet;
 
-import net.minecraft.util.Vec3;
-
+/**
+ * All gas giants subclass this.
+ * 
+ * @author Joseph
+ */
 public abstract class GasGiant extends Planet {
 
 	public GasGiant(CelestialObject parent) {

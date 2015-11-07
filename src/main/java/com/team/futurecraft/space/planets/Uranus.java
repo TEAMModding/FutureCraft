@@ -5,11 +5,16 @@ import net.minecraft.util.Vec3;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.GasGiant;
 import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.PhysicalParameters;
 
 public class Uranus extends GasGiant {
 
 	public Uranus(CelestialObject parent) {
 		super(parent);
+		
+		this.orbit = new OrbitalParameters(63082497600L, 30665.11f, 2859.459f, 0.047f, 0.77f, 74.23f, 96.734f, 142.268f);
+		this.physical = new PhysicalParameters(0.9052f, 51118f, 0, 0.71833f, 331.18f, 97.810f, 167.760f);
+		
 		this.add(new Miranda(this));
 		this.add(new Ariel(this));
 		this.add(new Umbriel(this));
@@ -25,22 +30,6 @@ public class Uranus extends GasGiant {
 	@Override
 	public String getName() {
 		return "Uranus";
-	}
-
-	@Override
-	public float getGravity() {
-		return 1;
-	}
-
-	@Override
-	public float getDiameter() {
-		return 51118f;
-	}
-
-	@Override
-	public OrbitalParameters getOrbit() {
-		//TODO: rotation time not accurate
-		return new OrbitalParameters(30665.11f, 2859.459f, 0.047f, 0.77f, 74.23f, 96.734f, 142.268f, 0.7083f);
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import com.team.futurecraft.biome.BiomeList;
 import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
+import com.team.futurecraft.space.PhysicalParameters;
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
 import com.team.futurecraft.space.PlanetTypeDesert;
@@ -14,6 +15,9 @@ public class Mars extends Planet {
 
 	public Mars(CelestialObject parent) {
 		super(parent);
+		
+		this.orbit = new OrbitalParameters(63082497600L, 686.565f, 227.076f, 0.093f, 1.851f, 49.479f, 286.562f, 19.412f);
+		this.physical = new PhysicalParameters(0.37902f, 6792f, 0, 1.026f, 136.005f, 26.72f, 82.91f);
 	}
 	
 	public BiomePlanet getBiome() {
@@ -43,21 +47,6 @@ public class Mars extends Planet {
 	@Override
 	public String getTexture() {
 		return "mars";
-	}
-
-	@Override
-	public float getGravity() {
-		return 0.5f;
-	}
-
-	@Override
-	public float getDiameter() {
-		return 6792f;
-	}
-
-	@Override
-	public OrbitalParameters getOrbit() {
-		return new OrbitalParameters(686.565f, 227.076f, 0.093f, 1.851f, 49.479f, 286.562f, 19.412f, 1.026f);
 	}
 	
 	@Override
