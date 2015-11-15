@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.team.futurecraft.entity.ChunkEntity;
 import com.team.futurecraft.item.ItemSpaceSuit;
+import com.team.futurecraft.world.WorldProviderPlanet;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,8 +17,6 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import com.team.futurecraft.world.WorldProviderPlanet;
 
 /**
  * The core event handler for Futurecraft. Currently only handles

@@ -9,6 +9,12 @@ import static org.lwjgl.opengl.GL11.glPopMatrix;
 
 import java.nio.FloatBuffer;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.Project;
+
+import com.team.futurecraft.FutureCraft;
+import com.team.futurecraft.Mat4;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,13 +22,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.Project;
-
-import com.team.futurecraft.Mat4;
-import com.team.futurecraft.space.CelestialObject;
-import com.team.futurecraft.space.Sol;
 
 public class SpaceRenderer {
 	private static Minecraft mc = Minecraft.getMinecraft();
@@ -39,19 +38,18 @@ public class SpaceRenderer {
 	}
 	
 	public static Mat4 getProjectionMatrix() {
-		return Mat4.perspective(mc.gameSettings.fovSetting, (float)mc.displayWidth / mc.displayHeight, 0.0001F, 10);
+		return Mat4.perspective(mc.gameSettings.fovSetting, (float)mc.displayWidth / mc.displayHeight, 0.000001F, 10);
 	}
 	
 	public void render(Camera cam, long time, boolean renderOrbits) {
 		setupRendering(cam, time);
 		
-		Sol sol = new Sol(null);
 		if (renderOrbits) {
-			sol.renderOrbits(time);
-			sol.render(cam, time);
+			FutureCraft.SOL.renderOrbits(time);
+			FutureCraft.SOL.render(cam, time);
 		}
 		else {
-			sol.render(cam, time);
+			FutureCraft.SOL.render(cam, time);
 		}
 		revertRendering();
 	}

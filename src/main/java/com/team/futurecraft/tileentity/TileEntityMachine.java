@@ -3,6 +3,7 @@ package com.team.futurecraft.tileentity;
 import com.team.futurecraft.block.EnumMachineSetting;
 import com.team.futurecraft.block.IElectric;
 import com.team.futurecraft.block.Machine;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;

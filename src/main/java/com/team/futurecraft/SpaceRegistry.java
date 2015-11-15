@@ -9,8 +9,8 @@ import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.planets.Earth;
 import com.team.futurecraft.world.WorldProviderPlanet;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  * This is the registry for all planets in this mod.

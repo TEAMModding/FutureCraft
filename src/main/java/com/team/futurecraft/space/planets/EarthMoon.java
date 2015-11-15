@@ -12,10 +12,6 @@ public class EarthMoon extends Barycenter {
 		this.add(new Moon(this));
 		
 		this.orbit = new OrbitalParameters(63082497600L, 365f, 149f, 0.017f, 0f, 348.739f, -245.802f, -2.471f);
-	}
-
-	@Override
-	public String getName() {
-		return "Earth-Moon";
+		this.name = "Earth-Moon";
 	}
 }

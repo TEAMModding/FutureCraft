@@ -27,7 +27,7 @@ public class GuiPlanetButton extends GuiButton
 	private CelestialObject planet;
 	
 	public GuiPlanetButton(int buttonId, int x, int y, CelestialObject planet) {
-		super(buttonId, x, y, 150, 50, planet.getName());
+		super(buttonId, x, y, 150, 50, planet.name);
 		this.planet = planet;
 	}
 	

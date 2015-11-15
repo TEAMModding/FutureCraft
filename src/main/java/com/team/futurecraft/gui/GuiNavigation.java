@@ -8,6 +8,7 @@ import java.util.Iterator;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import com.team.futurecraft.FutureCraft;
 import com.team.futurecraft.SpaceRegistry;
 import com.team.futurecraft.StartupCommon;
 import com.team.futurecraft.network.TeleportMessage;
@@ -55,7 +56,7 @@ public class GuiNavigation extends GuiScreen {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui() {
-		CelestialObject[] objects = StartupCommon.SOL.getChildren();
+		CelestialObject[] objects = FutureCraft.SOL.getChildren();
 		int buttonCount = 0;
 		for (int i = 0; i < objects.length; i++) {
 			this.buttonList.add(new GuiPlanetButton(buttonCount, 0, buttonCount * 50, objects[i]));
@@ -202,8 +203,6 @@ public class GuiNavigation extends GuiScreen {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		
-		System.out.println(this.xRot);
 		Camera cam = new Camera(new Vec3(this.xPos, this.yPos, this.zPos).add(planets.get(this.selectedPlanet).getPosition(time)), new Vec3(this.xRot, this.yRot, this.zRot));
 		this.spaceRender.render(cam, time, true);
         

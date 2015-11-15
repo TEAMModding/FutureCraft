@@ -18,15 +18,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.Buffer;
-import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.BiConsumer;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
 
 import com.team.futurecraft.Mat4;
@@ -39,6 +35,8 @@ public class Shader {
 	public int id;
 	
 	private static HashMap<String, Integer> shaders = new HashMap<String, Integer>();
+	private static HashMap<Integer, Integer> BoundVsh = new HashMap<Integer, Integer>();
+	private static HashMap<Integer, Integer> BoundFsh = new HashMap<Integer, Integer>();
 	
 	public Shader(int id) {
 		this.id = id;
@@ -92,6 +90,9 @@ public class Shader {
 			String key = entry.getKey();
 			int value = entry.getValue();
 			
+			GL20.glDetachShader(value, BoundVsh.get(value));
+			GL20.glDetachShader(value, BoundFsh.get(value));
+			
 			loadProgram(key + ".vsh", key + ".fsh", value);
 		}
 	}
@@ -114,11 +115,15 @@ public class Shader {
 		if (status != GL_TRUE) {
 			throw new RuntimeException(glGetShaderInfoLog(vertexShader, 1000));
 		}
+		
 		int status2 = glGetShaderi(fragmentShader, GL_COMPILE_STATUS);
 		if (status2 != GL_TRUE) {
 			throw new RuntimeException(glGetShaderInfoLog(fragmentShader, 1000));
 		}
-				
+		
+		BoundVsh.put(id, vertexShader);
+		BoundFsh.put(id, fragmentShader);
+		
 		//create shader program
 		glAttachShader(id, vertexShader);
 		glAttachShader(id, fragmentShader);
@@ -143,12 +148,5 @@ public class Shader {
 			e1.printStackTrace();
 		}
 		return shader;
-	}
-	
-	class MapConsumer implements BiConsumer<String, Integer> {
-		@Override
-		public void accept(String t, Integer u) {
-			
-		}
 	}
 }

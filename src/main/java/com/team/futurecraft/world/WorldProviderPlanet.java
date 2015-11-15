@@ -5,12 +5,12 @@ import com.team.futurecraft.SpaceRegistry;
 import com.team.futurecraft.rendering.PlanetSkyRenderer;
 import com.team.futurecraft.space.Planet;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This represents the dimension for a certain planet.
@@ -38,13 +38,13 @@ public class WorldProviderPlanet extends WorldProvider {
     	float value = (float) this.planet.getDirection(time).dotProduct(planetToLight) * 4.0f;
     	if (value < -1) value = -1;
     	
-    	float r = (float) this.planet.getAtmosphericColor().xCoord;
-    	float g = (float) this.planet.getAtmosphericColor().yCoord;
-    	float b = (float) this.planet.getAtmosphericColor().zCoord;
+    	float r = (float) this.planet.atmosphere.xCoord;
+    	float g = (float) this.planet.atmosphere.yCoord;
+    	float b = (float) this.planet.atmosphere.zCoord;
     	
     	Vec3 color = new Vec3(Math.min(r * value, r), Math.min(g * value, g), Math.min(b * value, b));
     	
-    	if (this.planet.getAtmosphericDensity() > 0)
+    	if (this.planet.atmosphere.wCoord > 0)
     		return color;
     	else
     		return new Vec3(-1.0, -1.0, -1.0);
@@ -69,7 +69,7 @@ public class WorldProviderPlanet extends WorldProvider {
     }
     
     public boolean hasAtmosphere() {
-    	if (this.planet.getAtmosphericDensity() == 0.0f) return false;
+    	if (this.planet.atmosphere.wCoord == 0.0f) return false;
     	return true;
     }
 
@@ -77,7 +77,7 @@ public class WorldProviderPlanet extends WorldProvider {
 	public void setDimension(int dim) {
     	super.setDimension(dim);
 		this.planet = SpaceRegistry.getPlanetForDimension(dim);
-		System.out.println("loaded dimension for: " + planet.getName());
+		System.out.println("loaded dimension for: " + planet.name);
 	}
 
 	public void registerWorldChunkManager() {
@@ -86,11 +86,11 @@ public class WorldProviderPlanet extends WorldProvider {
 	}
     
     public String getSaveFolder() {
-    	return this.planet.getName();
+    	return this.planet.name;
     }
     
     public IChunkProvider createChunkGenerator() {
-    	return new ChunkProviderPlanet(this.worldObj, this.worldObj.getSeed(), this.planet.getWorldType());
+    	return new ChunkProviderPlanet(this.worldObj, this.worldObj.getSeed(), this.planet.type);
     }
     
     /**
@@ -120,7 +120,7 @@ public class WorldProviderPlanet extends WorldProvider {
      * Returns the dimension's name, e.g. "The End", "Nether", or "Overworld".
      */
     public String getDimensionName() {
-    	return this.planet.getName();
+    	return this.planet.name;
     }
     
     /**
@@ -131,10 +131,6 @@ public class WorldProviderPlanet extends WorldProvider {
      */
     public double getGravity() {
     	return this.planet.physical.gravity;
-    }
-    
-    public String getImage() {
-    	return this.planet.getTexture();
     }
     
     @Override

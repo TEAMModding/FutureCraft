@@ -1,17 +1,17 @@
 package com.team.futurecraft;
 
-import com.team.futurecraft.block.BlockDirtyIce;
-import com.team.futurecraft.block.BlockWire;
+import com.team.futurecraft.block.BlockAlloyFurnace;
 import com.team.futurecraft.block.BlockBattery;
 import com.team.futurecraft.block.BlockBatteryNew;
+import com.team.futurecraft.block.BlockDirtyIce;
 import com.team.futurecraft.block.BlockGenerator;
-import com.team.futurecraft.block.BlockAlloyFurnace;
 import com.team.futurecraft.block.BlockMovingSidewalk;
 import com.team.futurecraft.block.BlockNavigator;
 import com.team.futurecraft.block.BlockPlanetStone;
 import com.team.futurecraft.block.BlockPlanetTurf;
 import com.team.futurecraft.block.BlockRocketCore;
 import com.team.futurecraft.block.BlockSimpleOre;
+import com.team.futurecraft.block.BlockWire;
 import com.team.futurecraft.block.SimpleBlock;
 
 /**

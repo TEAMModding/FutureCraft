@@ -1,5 +1,7 @@
 package com.team.futurecraft;
 
+import com.team.futurecraft.space.Sol;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
@@ -20,6 +22,7 @@ public class FutureCraft {
 	public static final String MODID = "futurecraft";
 	public static final String VERSION = "0.2";
 	public static long timeOffset = 0;
+	public static final Sol SOL = new Sol(null);
 	
 	//creative tab
 	public static final CreativeTabs tabFutureCraft = new CreativeTabs("futurecraft") {

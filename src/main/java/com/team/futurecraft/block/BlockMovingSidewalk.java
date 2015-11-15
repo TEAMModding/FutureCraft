@@ -1,5 +1,8 @@
 package com.team.futurecraft.block;
 
+import com.team.futurecraft.FutureCraft;
+import com.team.futurecraft.tileentity.TileEntityMovingSidewalk;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -15,9 +18,6 @@ import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.team.futurecraft.FutureCraft;
-import com.team.futurecraft.tileentity.TileEntityMovingSidewalk;
 
 public class BlockMovingSidewalk extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);

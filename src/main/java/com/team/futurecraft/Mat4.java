@@ -2,9 +2,9 @@ package com.team.futurecraft;
 
 import java.nio.FloatBuffer;
 
-import net.minecraft.util.Vec3;
-
 import org.lwjgl.BufferUtils;
+
+import net.minecraft.util.Vec3;
 /*
  * The MIT License (MIT)
  *

@@ -1,6 +1,7 @@
 package com.team.futurecraft.space;
 
 import com.team.futurecraft.rendering.Camera;
+
 import net.minecraft.client.Minecraft;
 
 /**

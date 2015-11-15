@@ -2,7 +2,7 @@ package com.team.futurecraft.rendering;
 
 import org.lwjgl.opengl.GL11;
 
-import com.team.futurecraft.FutureCraft;
+import com.team.futurecraft.Vec4;
 import com.team.futurecraft.space.Planet;
 
 import net.minecraft.client.Minecraft;
@@ -44,7 +44,7 @@ public class PlanetSkyRenderer extends IRenderHandler {
 	private void renderAtmosphere(Minecraft mc) {
 		Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
-		Vec3 colors = this.planet.getAtmosphericColor();
+		Vec4 colors = this.planet.atmosphere;
         
         for (int i = 0; i < 2; i++) {
         	GL11.glPushMatrix();
@@ -60,10 +60,10 @@ public class PlanetSkyRenderer extends IRenderHandler {
         	GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         	GlStateManager.shadeModel(7425);
         	renderer.startDrawingQuads();
-        	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, this.planet.getAtmosphericDensity());
+        	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, (float)colors.wCoord);
         	renderer.addVertex(-500.0D, -100.0D, -100.0D);
         	renderer.addVertex(500.0D, -100.0D, -100.0D);
-        	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, this.planet.getAtmosphericDensity() - 0.5f);
+        	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, (float)colors.wCoord - 0.5f);
         	renderer.addVertex(500.0D, 100.0D, -100.0D);
         	renderer.addVertex(-500.0D, 100.0D, -100.0D);
         	tessellator.draw();
@@ -72,7 +72,7 @@ public class PlanetSkyRenderer extends IRenderHandler {
         GL11.glPushMatrix();
         GL11.glRotatef(-mc.thePlayer.rotationYaw, 0, 1, 0);
         renderer.startDrawingQuads();
-    	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, this.planet.getAtmosphericDensity() - 0.5f);
+    	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, (float)colors.wCoord - 0.5f);
     	renderer.addVertex(-500.0D, 100.0D, -100.0D);
     	renderer.addVertex(500.0D, 100.0D, -100.0D);
     	renderer.addVertex(500.0D, 100.0D, 100.0D);

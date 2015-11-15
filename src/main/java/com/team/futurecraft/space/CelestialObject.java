@@ -29,6 +29,7 @@ public abstract class CelestialObject {
 	
 	public OrbitalParameters orbit;
 	public PhysicalParameters physical;
+	public String name = "Planet";
 	
 	public CelestialObject(CelestialObject parent) {
 		this.parent = parent;
@@ -49,11 +50,6 @@ public abstract class CelestialObject {
 	public abstract EnumCelestialType getType();
 	
 	/**
-	 * Gets this object's name, used for save folders and gui's.
-	 */
-	public abstract String getName();
-	
-	/**
 	 * Renders the planet by itself without calculating orbits or anything.
 	 * Used for rendering planets on gui buttons.
 	 */
@@ -63,6 +59,8 @@ public abstract class CelestialObject {
 	 * Called when this object is rendered in space.
 	 */
 	public abstract void render(Camera cam, float time);
+	
+	
 	
 	/**
 	 * Returns if this object has a dimension you can travel to.
@@ -169,6 +167,17 @@ public abstract class CelestialObject {
 			return new Vec3(-1, 1, 0).rotateYaw((float) Math.toRadians(time * this.physical.rotationPeriod));
 		else 
 			return new Vec3(-1, 1, 0);
+	}
+	
+	public void init() {
+		this.initChildren();
+	}
+	
+	public void initChildren() {
+		CelestialObject[] children = this.getChildren();
+		for (int i = 0; i < children.length; i++) {
+			children[i].init();
+		}
 	}
 	
 	/**

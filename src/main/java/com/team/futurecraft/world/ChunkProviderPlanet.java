@@ -17,9 +17,9 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
-import net.minecraftforge.common.*;
-import net.minecraftforge.fml.common.eventhandler.Event.*;
-import net.minecraftforge.event.terraingen.*;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.terraingen.ChunkProviderEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 
 /**
  * This is the class that physically generates the world chunks from ground up.

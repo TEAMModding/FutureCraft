@@ -1,5 +1,9 @@
 package com.team.futurecraft.tileentity;
 
+import java.util.List;
+
+import com.team.futurecraft.BlockList;
+
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -8,10 +12,6 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
-import java.util.List;
-
-import com.team.futurecraft.BlockList;
 
 
 public class TileEntityMovingSidewalk extends TileEntity implements IUpdatePlayerListBox {

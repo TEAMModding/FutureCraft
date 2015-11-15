@@ -1,6 +1,7 @@
 package com.team.futurecraft;
 
 import java.nio.DoubleBuffer;
+
 import org.lwjgl.BufferUtils;
 
 import net.minecraft.util.Vec3;

@@ -5,7 +5,9 @@ varying vec3 vNormal;
 varying vec3 vEyeDirection;
 
 uniform mat4 model;
+uniform mat4 realModel;
 uniform mat4 view;
+uniform mat4 realView;
 uniform mat4 projection;
 
 void main(){

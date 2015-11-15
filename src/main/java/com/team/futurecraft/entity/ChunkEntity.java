@@ -3,10 +3,10 @@ package com.team.futurecraft.entity;
 import java.util.ArrayList;
 
 import com.team.futurecraft.BlockList;
-import com.team.futurecraft.RayTrace.EnumAxis;
 import com.team.futurecraft.Mat4;
 import com.team.futurecraft.OBB;
 import com.team.futurecraft.RayTrace;
+import com.team.futurecraft.RayTrace.EnumAxis;
 import com.team.futurecraft.Vec4;
 
 import net.minecraft.block.Block;

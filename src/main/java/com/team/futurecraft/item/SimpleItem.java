@@ -1,6 +1,7 @@
 package com.team.futurecraft.item;
 
 import com.team.futurecraft.FutureCraft;
+
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 

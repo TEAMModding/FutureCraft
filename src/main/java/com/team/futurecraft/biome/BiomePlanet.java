@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.PlanetType;
+import com.team.futurecraft.world.WorldProviderPlanet;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -11,8 +12,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.ChunkPrimer;
-
-import com.team.futurecraft.world.WorldProviderPlanet;
 
 /**
  * This is the base Biome gen class that all planets inherit.
@@ -48,7 +47,7 @@ public class BiomePlanet extends BiomeGenBase {
 	
 	public void generateBiomeTerrainNew(World worldIn, Random p_180628_2_, ChunkPrimer primer, int p_180628_4_, int p_180628_5_, double p_180628_6_) {
 		WorldProviderPlanet provider = (WorldProviderPlanet)worldIn.provider;
-		PlanetType type = provider.planet.getWorldType();
+		PlanetType type = provider.planet.type;
 		
         IBlockState topState = this.topBlock;
         IBlockState fillState = this.fillerBlock;

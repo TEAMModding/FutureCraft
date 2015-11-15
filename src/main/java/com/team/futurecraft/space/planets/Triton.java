@@ -6,10 +6,7 @@ import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
 import com.team.futurecraft.space.Planet;
-import com.team.futurecraft.space.PlanetType;
 import com.team.futurecraft.space.PlanetTypeFrozen;
-
-import net.minecraft.util.Vec3;
 
 public class Triton extends Planet {
 
@@ -18,39 +15,11 @@ public class Triton extends Planet {
 		
 		this.orbit = new OrbitalParameters(62755776000L, 5.8769f, 0.354760543f, 0, 156.826f, 147.899f, 293.092f, 315.726f);
 		this.physical = new PhysicalParameters(0.078066f, 2706.8f, 0, 5.8769f, 0, 156.826f, 147.899f);
+		this.type = new PlanetTypeFrozen();
+		this.name = "Triton";
 	}
 	
 	public BiomePlanet getBiome() {
 		return BiomeList.FROZEN_EUROPA;
-	}
-
-	@Override
-	public PlanetType getWorldType() {
-		return new PlanetTypeFrozen();
-	}
-
-	@Override
-	public Vec3 getAtmosphericColor() {
-		return new Vec3(1, 1, 1);
-	}
-
-	@Override
-	public float getAtmosphericDensity() {
-		return 0.0f;
-	}
-
-	@Override
-	public String getName() {
-		return "Triton";
-	}
-
-	@Override
-	public String getTexture() {
-		return "Triton";
-	}
-	
-	@Override
-	public String getColormap() {
-		return null;
 	}
 }

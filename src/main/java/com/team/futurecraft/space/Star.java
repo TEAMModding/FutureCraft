@@ -1,6 +1,14 @@
 package com.team.futurecraft.space;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_ONE;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
@@ -36,12 +44,6 @@ public abstract class Star extends CelestialObject {
 	public boolean isLandable() {
 		return true;
 	}
-	
-	/**
-	 * This will determine the star's color in the future,
-	 * for now stars are just white, and this is useless.
-	 */
-	public abstract int getTemperature();
 	
 	public void renderStatic(Minecraft mc) {
 		

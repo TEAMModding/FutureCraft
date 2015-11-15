@@ -1,12 +1,11 @@
 package com.team.futurecraft;
 
-import com.team.futurecraft.BlockList;
 import com.team.futurecraft.block.BlockAlloyFurnace;
-import com.team.futurecraft.block.BlockDirtyIce;
-import com.team.futurecraft.block.BlockMovingSidewalk;
 import com.team.futurecraft.block.BlockBattery;
 import com.team.futurecraft.block.BlockBatteryNew;
+import com.team.futurecraft.block.BlockDirtyIce;
 import com.team.futurecraft.block.BlockGenerator;
+import com.team.futurecraft.block.BlockMovingSidewalk;
 import com.team.futurecraft.block.BlockNavigator;
 import com.team.futurecraft.block.BlockPlanetStone;
 import com.team.futurecraft.block.BlockPlanetTurf;
@@ -26,7 +25,6 @@ import com.team.futurecraft.item.SimplePickaxe;
 import com.team.futurecraft.network.TeleportMessage;
 import com.team.futurecraft.network.TeleportMessageHandler;
 import com.team.futurecraft.recipe.AlloyRegistry;
-import com.team.futurecraft.space.Sol;
 import com.team.futurecraft.tileentity.ElectricalBase;
 import com.team.futurecraft.tileentity.TileEntityAlloyFurnace;
 import com.team.futurecraft.tileentity.TileEntityGenerator;
@@ -38,6 +36,7 @@ import com.team.futurecraft.world.OreSpawn;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemHoe;
@@ -45,7 +44,6 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
@@ -65,7 +63,6 @@ import net.minecraftforge.fml.relauncher.Side;
 public class StartupCommon {
 	
 	public static SimpleNetworkWrapper simpleNetworkWrapper;
-	public static final Sol SOL = new Sol(null);
 	public static final int TELEPORT_MESSAGE_ID = 35;
 	
 	/**
@@ -101,7 +98,8 @@ public class StartupCommon {
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler("futurecraft", new GuiHandler());
 		
-		SpaceRegistry.registerSystem(SOL);
+		SpaceRegistry.registerSystem(FutureCraft.SOL);
+		FutureCraft.SOL.init();
 		
 		EntityRegistry.registerModEntity(ChunkEntity.class, "chunk_entity", 540, "futurecraft", 800, 1, true);
 	}

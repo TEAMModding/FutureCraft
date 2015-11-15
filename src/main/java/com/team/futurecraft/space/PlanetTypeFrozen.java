@@ -1,10 +1,10 @@
 package com.team.futurecraft.space;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.Vec3;
-
 import com.team.futurecraft.BlockList;
 import com.team.futurecraft.Noise;
+
+import net.minecraft.block.Block;
+import net.minecraft.util.Vec3;
 
 public class PlanetTypeFrozen extends PlanetType {
 	@Override
