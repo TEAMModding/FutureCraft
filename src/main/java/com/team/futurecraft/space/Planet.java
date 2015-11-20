@@ -36,8 +36,6 @@ import org.lwjgl.util.glu.Sphere;
 
 import com.team.futurecraft.Mat4;
 import com.team.futurecraft.Vec4;
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.rendering.Camera;
 import com.team.futurecraft.rendering.Shader;
 import com.team.futurecraft.rendering.SpaceRenderer;
@@ -111,10 +109,6 @@ public abstract class Planet extends CelestialObject {
 			hasRingmap = true;
 		
 		super.init();
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.FROZEN_EUROPA;
 	}
 	
 	/**

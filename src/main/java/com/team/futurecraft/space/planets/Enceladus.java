@@ -1,7 +1,5 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -17,9 +15,5 @@ public class Enceladus extends Planet {
 		this.physical = new PhysicalParameters(0.012041f, 498.8f, 0f, 1.3702f, 0, 0.01f, 137.077f);
 		this.type = new PlanetTypeFrozen();
 		this.name = "Enceladus";
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.FROZEN_EUROPA;
 	}
 }

@@ -1,7 +1,5 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -17,9 +15,5 @@ public class Iapetus extends Planet {
 		this.physical = new PhysicalParameters(0.026435f, 1436f, 0, 79.33f, 0, 15.5f, 75.583f);
 		this.type = new PlanetTypeFrozen();
 		this.name = "Iapetus";
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.FROZEN_EUROPA;
 	}
 }

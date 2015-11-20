@@ -1,8 +1,6 @@
 package com.team.futurecraft.space.planets;
 
 import com.team.futurecraft.Vec4;
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -19,9 +17,5 @@ public class Mars extends Planet {
 		this.name = "Mars";
 		this.type = new PlanetTypeDesert();
 		this.atmosphere = new Vec4(0.703, 0.467, 0.271, 0.3);
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.DESERT_MARS;
 	}
 }

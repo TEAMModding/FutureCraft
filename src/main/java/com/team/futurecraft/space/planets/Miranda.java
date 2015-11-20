@@ -1,7 +1,5 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -17,9 +15,5 @@ public class Miranda extends Planet {
 		this.physical = new PhysicalParameters(0.0080481f, 471f, 0, 1.413f, 0, 4.22f, 0);
 		this.type = new PlanetTypeFrozen();
 		this.name = "Miranda";
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.FROZEN_EUROPA;
 	}
 }

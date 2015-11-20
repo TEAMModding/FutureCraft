@@ -81,7 +81,8 @@ public class WorldProviderPlanet extends WorldProvider {
 	}
 
 	public void registerWorldChunkManager() {
-		this.worldChunkMgr = new PlanetChunkManager(this.planet.getBiome(), 0.0F);
+		System.out.println("Registering chunk manager for: " + this.getDimensionName() + " as: " + SpaceRegistry.getBiomeForPlanet(this.planet));
+		this.worldChunkMgr = new PlanetChunkManager(SpaceRegistry.getBiomeForPlanet(this.planet), 0.0F);
         this.setSkyRenderer(new PlanetSkyRenderer(this.planet));
 	}
     

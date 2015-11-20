@@ -1,7 +1,5 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -17,9 +15,5 @@ public class Dione extends Planet {
 		this.physical = new PhysicalParameters(0.023954f, 1118f, 0f, 2.7369f, 0f, 0.002f, 57.741f);
 		this.type = new PlanetTypeFrozen();
 		this.name = "Dione";
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.FROZEN_EUROPA;
 	}
 }

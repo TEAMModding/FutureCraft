@@ -1,7 +1,5 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -17,9 +15,5 @@ public class Moon extends Planet {
 		this.physical = new PhysicalParameters(0.16579f, 3474.8f, 0, 27.322f, 0, 5.15f, 125.08f);
 		this.type = new PlanetTypeSelena(0);
 		this.name = "Moon";
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.SELENA_MOON;
 	}
 }

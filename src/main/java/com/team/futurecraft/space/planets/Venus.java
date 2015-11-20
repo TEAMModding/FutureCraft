@@ -1,7 +1,5 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -17,9 +15,5 @@ public class Venus extends Planet {
 		this.physical = new PhysicalParameters(0.90521f, 12104f, 0, 243.02f, 137.45f, 178.78f, 300.22f);
 		this.type = new PlanetTypeDesert();
 		this.name = "Venus";
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.DESERT_VENUS;
 	}
 }

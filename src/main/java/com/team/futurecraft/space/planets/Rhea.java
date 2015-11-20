@@ -1,7 +1,5 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -17,9 +15,5 @@ public class Rhea extends Planet {
 		this.physical = new PhysicalParameters(0.026833f, 1528f, 0, 4.175f, 0, 0.327f, 1.095f);
 		this.type = new PlanetTypeFrozen();
 		this.name = "Rhea";
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.FROZEN_EUROPA;
 	}
 }

@@ -1,7 +1,5 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -17,9 +15,5 @@ public class Mercury extends Planet {
 		this.physical = new PhysicalParameters(0.37773f, 4480f, 0, 58.646f, 291.2f, 7.01f, 48.42f);
 		this.type = new PlanetTypeSelena(0.5f);
 		this.name = "Mercury";
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.SELENA_MERCURY;
 	}
 }

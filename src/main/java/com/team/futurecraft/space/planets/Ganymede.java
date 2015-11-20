@@ -1,7 +1,5 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -17,9 +15,5 @@ public class Ganymede extends Planet {
 		this.physical = new PhysicalParameters(0.14572f, 5262.4f, 0, 7.1546f, 0, 0.195f, 119.841f);
 		this.type = new PlanetTypeFrozen();
 		this.name = "Ganymede";
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.FROZEN_EUROPA;
 	}
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.apache.logging.log4j.Level;
 
+import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.Planet;
 import com.team.futurecraft.space.planets.Earth;
@@ -22,10 +23,21 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 public class SpaceRegistry {
 	private static HashMap<Integer, Planet> planets = new HashMap<Integer, Planet>();
 	private static HashMap<Planet, Integer> ids = new HashMap<Planet, Integer>();
+	private static HashMap<Planet, BiomePlanet> biomes = new HashMap<Planet, BiomePlanet>();
 	private static int dimensionIndex = 100;
 	
 	private static void registerPlanet(Planet provider) {
 		int id = dimensionIndex;
+		
+		try {
+			BiomePlanet biome = provider.type.getBiome().getDeclaredConstructor(int.class, Planet.class).newInstance(id, provider);
+			biomes.put(provider, biome);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		try {
 		} catch (Exception e) {
 			FMLCommonHandler.instance().getFMLLogger().log(Level.ERROR, "An error occurred while registering a planet id: " + id);
@@ -62,6 +74,10 @@ public class SpaceRegistry {
 	 */
 	public static Planet[] getRegisteredPlanets() {
 		return planets.values().toArray(new Planet[] {});
+	}
+	
+	public static BiomePlanet getBiomeForPlanet(Planet planet) {
+		return biomes.get(planet);
 	}
 	
 	public static Planet getPlanetForDimension(int id) {

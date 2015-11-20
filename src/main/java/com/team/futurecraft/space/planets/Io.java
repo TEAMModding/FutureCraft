@@ -1,7 +1,5 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.biome.BiomeList;
-import com.team.futurecraft.biome.BiomePlanet;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -17,10 +15,6 @@ public class Io extends Planet {
 		this.physical = new PhysicalParameters(0.18328f, 3643.2f, 0, 1.7691f, 0, 0.04f, 312.981f);
 		this.type = new PlanetTypeFrozen();
 		this.name = "Io";
-	}
-	
-	public BiomePlanet getBiome() {
-		return BiomeList.FROZEN_EUROPA;
 	}
 }
 
