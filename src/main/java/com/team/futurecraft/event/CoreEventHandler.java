@@ -78,7 +78,6 @@ public class CoreEventHandler {
 		//System.out.println("falling");
 		WorldProvider provider = event.entityLiving.worldObj.provider;
 		if (provider instanceof WorldProviderPlanet) {
-			System.out.println(event.damageMultiplier);
 			event.distance *= (float) ((WorldProviderPlanet)provider).getGravity() * 0.8;
 		}
 	}

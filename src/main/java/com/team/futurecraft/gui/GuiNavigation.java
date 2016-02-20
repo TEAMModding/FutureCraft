@@ -238,7 +238,6 @@ public class GuiNavigation extends GuiScreen {
 		
 		if (button.id == 1000) {
 			if (planets.get(this.selectedPlanet).isLandable()) {
-				System.out.println(planets.get(this.selectedPlanet));
 				TeleportMessage airstrikeMessageToServer = new TeleportMessage(SpaceRegistry.getDimensionForPlanet((Planet)planets.get(this.selectedPlanet)));
 				StartupCommon.simpleNetworkWrapper.sendToServer(airstrikeMessageToServer);
 			}

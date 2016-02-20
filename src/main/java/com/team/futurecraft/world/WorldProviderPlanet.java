@@ -77,11 +77,9 @@ public class WorldProviderPlanet extends WorldProvider {
 	public void setDimension(int dim) {
     	super.setDimension(dim);
 		this.planet = SpaceRegistry.getPlanetForDimension(dim);
-		System.out.println("loaded dimension for: " + planet.name);
 	}
 
 	public void registerWorldChunkManager() {
-		System.out.println("Registering chunk manager for: " + this.getDimensionName() + " as: " + SpaceRegistry.getBiomeForPlanet(this.planet));
 		this.worldChunkMgr = new PlanetChunkManager(SpaceRegistry.getBiomeForPlanet(this.planet), 0.0F);
         this.setSkyRenderer(new PlanetSkyRenderer(this.planet));
 	}

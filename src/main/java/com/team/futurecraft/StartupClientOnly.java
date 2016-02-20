@@ -117,7 +117,6 @@ public class StartupClientOnly {
 	
 	private static void registerMetaItemRendering(String name, String... modelNames) {
 		Item item = GameRegistry.findItem(FutureCraft.MODID, name);
-		System.out.println("registering item: " + item);
 		ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		String[] newModelNames = new String[modelNames.length];
 		for (int i = 0; i < modelNames.length; i++) {
@@ -127,7 +126,6 @@ public class StartupClientOnly {
 		ModelBakery.addVariantName(item, newModelNames);
 		
 		for (int i = 0; i < modelNames.length; i++) {
-			System.out.println("registering: " + modelNames[i]);
 			mesher.register(item, i, new ModelResourceLocation(FutureCraft.MODID + ":" + modelNames[i], "inventory"));
 		}
 	}
