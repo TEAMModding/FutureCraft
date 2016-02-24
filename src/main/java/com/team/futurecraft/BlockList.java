@@ -6,7 +6,6 @@ import com.team.futurecraft.block.BlockBatteryNew;
 import com.team.futurecraft.block.BlockDirtyIce;
 import com.team.futurecraft.block.BlockGenerator;
 import com.team.futurecraft.block.BlockMovingSidewalk;
-import com.team.futurecraft.block.BlockNavigator;
 import com.team.futurecraft.block.BlockPlanetStone;
 import com.team.futurecraft.block.BlockPlanetTurf;
 import com.team.futurecraft.block.BlockRocketCore;
@@ -56,7 +55,6 @@ public class BlockList  {
 	public static BlockRocketCore rocket_core;
 	
 	//misc
-	public static BlockNavigator navigator;
 	public static BlockDirtyIce dirty_ice;
 	public static BlockMovingSidewalk moving_sidewalk;
 }

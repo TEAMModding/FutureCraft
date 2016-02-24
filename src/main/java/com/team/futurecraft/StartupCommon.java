@@ -6,7 +6,6 @@ import com.team.futurecraft.block.BlockBatteryNew;
 import com.team.futurecraft.block.BlockDirtyIce;
 import com.team.futurecraft.block.BlockGenerator;
 import com.team.futurecraft.block.BlockMovingSidewalk;
-import com.team.futurecraft.block.BlockNavigator;
 import com.team.futurecraft.block.BlockPlanetStone;
 import com.team.futurecraft.block.BlockPlanetTurf;
 import com.team.futurecraft.block.BlockRocketCore;
@@ -206,7 +205,6 @@ public class StartupCommon {
 		BlockList.rocket_core = new BlockRocketCore("rocket_core");
 		
 		//misc
-		BlockList.navigator = new BlockNavigator("navigator");
 		BlockList.dirty_ice = new BlockDirtyIce(Material.rock, "dirty_ice");
 		
 		BlockList.moving_sidewalk = new BlockMovingSidewalk();

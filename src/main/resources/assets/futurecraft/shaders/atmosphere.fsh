@@ -14,7 +14,7 @@ void main(){
 
 	vec3 E = normalize(vEyeDirection);
 	vec3 R = reflect(-l,n);
-    float cosAtmo = clamp( dot( E,n ) * 5 - 0.5, 0,1 );
+    float cosAtmo = clamp( dot( E,n ) * 9 - 1.2, 0,1 );
 
-    gl_FragColor = vec4(atmosphereColor * 4 * atmosphereDensity * cosAtmo * cosTheta, 1);
+    gl_FragColor = vec4(atmosphereColor * 6 * atmosphereDensity * cosAtmo * cosTheta, 1);
 }
