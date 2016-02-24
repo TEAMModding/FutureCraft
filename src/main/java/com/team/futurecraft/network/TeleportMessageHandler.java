@@ -19,13 +19,13 @@ public class TeleportMessageHandler implements IMessageHandler<TeleportMessage, 
 {
 	public IMessage onMessage(final TeleportMessage message, MessageContext ctx) {
 		if (ctx.side != Side.SERVER) {
-			System.err.println("AirstrikeMessageToServer received on wrong side:" + ctx.side);
+			System.err.println("TeleportMessage received on wrong side:" + ctx.side);
 			return null;
 		}
 
 		final EntityPlayerMP sendingPlayer = ctx.getServerHandler().playerEntity;
 		if (sendingPlayer == null) {
-			System.err.println("EntityPlayerMP was null when AirstrikeMessageToServer was received");
+			System.err.println("EntityPlayerMP was null when TeleportMessage was received");
 			return null;
 		}
 

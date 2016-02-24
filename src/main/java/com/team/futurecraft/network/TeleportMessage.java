@@ -4,7 +4,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 /**
- * A message that can be sent to the server to teleport from the client!
+ * A message that can be sent to the server to teleport from the client.
+ * 
+ * Note: this is totally hacky and OP, so it's probably gonna get replaced once we have an actual
+ * spaceship system.
  * 
  * @author Joseph
  */
