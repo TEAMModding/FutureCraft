@@ -2,7 +2,7 @@
 A mod that adds futuristic stuff to Minecraft.
 
 
-# Some general guidelines on contributing to this mod:
+### Some general guidelines on contributing to this mod:
 
 Try to make all commits as small as possible. 
 An individual commit should only change or add one feature.
