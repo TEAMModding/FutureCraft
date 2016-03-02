@@ -2,7 +2,6 @@ package com.team.futurecraft;
 
 import com.team.futurecraft.block.BlockAlloyFurnace;
 import com.team.futurecraft.block.BlockBattery;
-import com.team.futurecraft.block.BlockBatteryNew;
 import com.team.futurecraft.block.BlockDirtyIce;
 import com.team.futurecraft.block.BlockGenerator;
 import com.team.futurecraft.block.BlockMovingSidewalk;
@@ -48,8 +47,6 @@ public class BlockList  {
 	public static BlockWire wire;
 	public static BlockGenerator generator;
 	public static BlockGenerator generator_lit;
-	
-	public static BlockBatteryNew battery_new;
 	
 	//rocket parts
 	public static BlockRocketCore rocket_core;

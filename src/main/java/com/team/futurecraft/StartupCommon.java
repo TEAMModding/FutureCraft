@@ -2,7 +2,6 @@ package com.team.futurecraft;
 
 import com.team.futurecraft.block.BlockAlloyFurnace;
 import com.team.futurecraft.block.BlockBattery;
-import com.team.futurecraft.block.BlockBatteryNew;
 import com.team.futurecraft.block.BlockDirtyIce;
 import com.team.futurecraft.block.BlockGenerator;
 import com.team.futurecraft.block.BlockMovingSidewalk;
@@ -24,7 +23,6 @@ import com.team.futurecraft.item.SimplePickaxe;
 import com.team.futurecraft.network.TeleportMessage;
 import com.team.futurecraft.network.TeleportMessageHandler;
 import com.team.futurecraft.recipe.AlloyRegistry;
-import com.team.futurecraft.tileentity.ElectricalBase;
 import com.team.futurecraft.tileentity.TileEntityAlloyFurnace;
 import com.team.futurecraft.tileentity.TileEntityGenerator;
 import com.team.futurecraft.tileentity.TileEntityMachine;
@@ -80,7 +78,6 @@ public class StartupCommon {
 		GameRegistry.registerTileEntity(TileEntityWire.class, "futurecraft:wire");
 		GameRegistry.registerTileEntity(TileEntityGenerator.class, "futurecraft:generator");
 		GameRegistry.registerTileEntity(TileEntityMovingSidewalk.class, "futurecraft:moving_sidewalk");
-		GameRegistry.registerTileEntity(ElectricalBase.class, "futurecraft:electrical_base");
 	
 		GameRegistry.registerWorldGenerator(new OreSpawn(), 1);
 		
@@ -198,8 +195,6 @@ public class StartupCommon {
 		BlockList.battery = new BlockBattery(false, "battery");
 		BlockList.creative_battery = new BlockBattery(true, "creative_battery");
 		BlockList.wire = new BlockWire("copper_wire");
-		BlockList.battery_new = new BlockBatteryNew();
-		GameRegistry.registerBlock(BlockList.battery_new, "battery_new");
 		
 		//rocket parts
 		BlockList.rocket_core = new BlockRocketCore("rocket_core");
