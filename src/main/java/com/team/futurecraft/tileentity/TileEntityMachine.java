@@ -1,7 +1,6 @@
 package com.team.futurecraft.tileentity;
 
 import com.team.futurecraft.block.EnumMachineSetting;
-import com.team.futurecraft.block.IElectric;
 import com.team.futurecraft.block.Machine;
 
 import net.minecraft.block.state.IBlockState;
@@ -10,11 +9,14 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 /**
  * This is the class that implements EnergyContainer and adds functionality
@@ -25,7 +27,7 @@ import net.minecraft.util.IChatComponent;
  * 
  * @author Joseph
  */
-public class TileEntityMachine extends EnergyContainer implements ISidedInventory {
+public class TileEntityMachine extends EnergyContainer implements ISidedInventory, IElectric {
 	private Machine theBlock;
 	private IBlockState state;
 	private ItemStack[] slots;
@@ -157,9 +159,9 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 			else {
 				energyToTransfer = this.energyTransferred();
 			}
-			if (this.theBlock.canConnectTo(this.worldObj, this.pos, side)) {
-				IElectric blockToPower = (IElectric)this.worldObj.getBlockState(dirPos).getBlock();
-				this.removeEnergy(energyToTransfer - blockToPower.onPowered(this.worldObj, dirPos, energyToTransfer, side.getOpposite()));
+			if (this.canConnectTo(this.worldObj, this.pos, side)) {
+				TileEntity te = this.worldObj.getTileEntity(dirPos);
+				this.removeEnergy(energyToTransfer - ((IElectric)te).onPowered(this.worldObj, dirPos, energyToTransfer, side.getOpposite()));
 			}
 		}
 	}
@@ -340,5 +342,27 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 	@Override
 	public IChatComponent getDisplayName() {
 		return (IChatComponent)(this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatComponentTranslation(this.getName(), new Object[0]));
+	}
+	
+	//====================================================
+	//<-----======IElectric implementations=======------->
+	//====================================================
+
+	@Override
+	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side) {
+		return this.tryToPower(amount, side);
+	}
+
+	@Override
+	public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		if (world.getTileEntity(pos.offset(side)) instanceof IElectric) 
+			return true;
+		else 
+			return false;
+	}
+
+	@Override
+	public int getEnergy(World world, BlockPos pos) {
+		return this.getEnergy();
 	}
 }

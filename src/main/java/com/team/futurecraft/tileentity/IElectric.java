@@ -1,4 +1,4 @@
-package com.team.futurecraft.block;
+package com.team.futurecraft.tileentity;
 
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;

@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -37,7 +36,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  * @author Joseph
  *
  */
-public abstract class Machine extends BlockContainer implements IElectric {
+public abstract class Machine extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	private boolean isFull;
 	
@@ -127,7 +126,7 @@ public abstract class Machine extends BlockContainer implements IElectric {
     }
 	
     /**
-     * dont override this
+     * don't override this
      */
 	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
@@ -161,27 +160,4 @@ public abstract class Machine extends BlockContainer implements IElectric {
         }
         super.breakBlock(worldIn, pos, state);
     }
-    /**
-     * You wont normally override this but you certainly can if you're not using a TE for this block.
-     */
-    @Override
-	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side) {
-		TileEntityMachine tileEntity = (TileEntityMachine)world.getTileEntity(pos);
-		if (tileEntity != null) return tileEntity.tryToPower(amount, side);
-		else return amount;
-	}
-	
-    
-	public int getEnergy(World world, BlockPos pos) {
-		return ((TileEntityMachine)world.getTileEntity(pos)).getEnergy();
-	}
-	
-	/**
-	 * You probably dont want to mess with this one.
-	 */
-	public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing side) 
-	{
-		if (world.getBlockState(pos.offset(side)).getBlock() instanceof IElectric) return true;
-		else return false;
-	}
 }

@@ -1,7 +1,7 @@
 package com.team.futurecraft.item;
 
 import com.team.futurecraft.FutureCraft;
-import com.team.futurecraft.block.IElectric;
+import com.team.futurecraft.tileentity.IElectric;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
