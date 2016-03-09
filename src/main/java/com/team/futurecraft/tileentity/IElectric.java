@@ -6,17 +6,24 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
- * This is the main class that all energy-using blocks implement.
+ * This is the main class that all energy-using TileEntities implement.
+ * 
+ * It is essentially used as a communication interface between different IElectric TileEntities throughout the world.
+ * When a n electrical TileEntity usually ticks, it checks all surrounding blocks to see if they are instances of IElectric, if
+ * they are, then it uses these functions to communicate with it. This allows electrical blocks to communicate with each other without
+ * having to know exactly what block type they're communicating with.
+ * 
+ * You generally won't ever implement this class directly. Instead, use EnergyContainer.
  * 
  * @author Joseph
  *
  */
 public interface IElectric {
 	/**
-	 * Called when the block is trying to be powered. Any block implementing this interface should
-	 * compute what to do with the energy (most commonly sending it to the tileEntity to deal with), and return
-	 * any excess energy it cant hold. Also when you call this to power blocks, side must be the side of the block
-	 * you are powering, facing the block powering it.
+	 * Called when the TileEnytity is trying to be powered. Any TileEntity implementing this interface should
+	 * compute what to do with the energy (usually storing it), and return
+	 * any excess energy it cant hold. When calling this, remember that side is the side this TileEntity is
+	 * being powered from, usually the inverse of the caller's output side.
 	 */
 	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side);
 	

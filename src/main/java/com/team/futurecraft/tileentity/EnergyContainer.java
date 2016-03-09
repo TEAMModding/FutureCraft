@@ -14,7 +14,7 @@ import net.minecraft.world.World;
  * writeToNBT(NBTTagCompound tag) and readFromNBT(NBTTagCompound tag).
  * Note that you must call super(tag) in them for this class to save energy data.
  * 
- * @author Joseph
+ * This class also has some standard IElectric implementations. These can be freely overridden.
  */
 public abstract class EnergyContainer extends TileEntity implements IUpdatePlayerListBox, IElectric {
 	private int energy = 0;
@@ -26,16 +26,10 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 		this.energyTransferred = energyTransfer;
 	}
 	
-	/**
-	 * Does exactly what you think it does, returns the energy.
-	 */
 	public int getEnergy() {
 		return this.energy;
 	}
 	
-	/**
-	 * Gets the maximum energy this can hold.
-	 */
 	public int getMaxEnergy() {
 		return this.maxEnergy;
 	}
@@ -47,9 +41,6 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 		return this.energyTransferred;
 	}
 	
-	/**
-	 * Returns if this TE's energy count is full.
-	 */
 	public boolean isFull() {
 		return this.energy == this.maxEnergy;
 	}
@@ -66,7 +57,7 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 	
 	/**
 	 * Sets this TE's energy. Dont worry about exceeding the maxEnergy limit, this will set it to the limit if
-	 * the amount is higher.
+	 * the amount is higher. Although because of this, there can be energy destruction.
 	 */
 	public void setEnergy(int amount) {
 		if (amount > this.maxEnergy) this.energy = this.maxEnergy;
@@ -100,12 +91,15 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 	}
 	
 	/**
-	 * Gets the energy amount inbetween 0 and scale. Usually used for energy level gui's.
+	 * Gets the energy amount in between 0 and scale. Usually used for energy level gui's.
 	 */
 	public int getEnergyAmountScaled(int scale) {
 		return this.energy * scale / this.maxEnergy;
 	}
 	
+	/**
+	 * Adds power to the block and returns excess.
+	 */
 	public int power(int amount)
 	{
 		if (!this.isFull()) {
