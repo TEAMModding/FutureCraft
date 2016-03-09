@@ -15,7 +15,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -27,7 +26,7 @@ import net.minecraft.world.World;
  * 
  * @author Joseph
  */
-public class TileEntityMachine extends EnergyContainer implements ISidedInventory, IElectric {
+public class TileEntityMachine extends EnergyContainer implements ISidedInventory {
 	private Machine theBlock;
 	private IBlockState state;
 	private ItemStack[] slots;
@@ -166,7 +165,14 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 		}
 	}
 	
+	@Override
+	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side) {
+		return this.tryToPower(amount, side);
+	}
+	
+	//==================================================
 	//<-------=======IInventory overrides=======------->
+	//==================================================
 	
 	/**
      * Returns if the player is close enough to use this.
@@ -342,27 +348,5 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 	@Override
 	public IChatComponent getDisplayName() {
 		return (IChatComponent)(this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatComponentTranslation(this.getName(), new Object[0]));
-	}
-	
-	//====================================================
-	//<-----======IElectric implementations=======------->
-	//====================================================
-
-	@Override
-	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side) {
-		return this.tryToPower(amount, side);
-	}
-
-	@Override
-	public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing side) {
-		if (world.getTileEntity(pos.offset(side)) instanceof IElectric) 
-			return true;
-		else 
-			return false;
-	}
-
-	@Override
-	public int getEnergy(World world, BlockPos pos) {
-		return this.getEnergy();
 	}
 }
