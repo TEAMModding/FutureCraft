@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 
 public class BlockGenerator extends Machine {
 	public BlockGenerator(boolean lit, String name) {
-		super(false, name);
+		super(name);
 		if (!lit) this.setCreativeTab(FutureCraft.tabFutureCraft);
 	}
 	

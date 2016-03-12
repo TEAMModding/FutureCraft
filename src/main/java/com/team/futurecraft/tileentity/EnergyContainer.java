@@ -53,6 +53,8 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 		this.energy += amount;
 		if (this.energy > this.maxEnergy)
 			this.energy = this.maxEnergy;
+		
+		this.markDirty();
 	}
 	
 	/**
@@ -60,8 +62,11 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 	 * the amount is higher. Although because of this, there can be energy destruction.
 	 */
 	public void setEnergy(int amount) {
-		if (amount > this.maxEnergy) this.energy = this.maxEnergy;
-		else this.energy = amount;
+		if (amount > this.maxEnergy) 
+			this.energy = this.maxEnergy;
+		else 
+			this.energy = amount;
+		this.markDirty();
 	}
 	
 	/**
@@ -69,7 +74,9 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 	 */
 	public void removeEnergy(int amount) {
 		this.energy -= amount;
-		if (this.energy < 0) this.energy = 0;
+		if (this.energy < 0) 
+			this.energy = 0;
+		this.markDirty();
 	}
 	
 	/**
@@ -77,7 +84,7 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 	 */
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
-		tag.setInteger("energy", this.energy);
+		tag.setInteger("energy", this.getEnergy());
 		super.writeToNBT(tag);
 	}
 	
@@ -86,7 +93,7 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 	 */
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
-		this.energy = tag.getInteger("energy");
+		this.setEnergy(tag.getInteger("energy"));
 		super.readFromNBT(tag);
 	}
 	

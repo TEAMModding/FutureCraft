@@ -21,10 +21,6 @@ import net.minecraft.world.World;
  * This is the class that implements EnergyContainer and adds functionality
  * usually needed in machines without having to implement them yourself, such as handling
  * in/out machine settings, transferring energy based on them, and dealing with inventory slots.
- * It's a bit of a mess right now and I need to organize and comment it all to make it an easy to use
- * api.
- * 
- * @author Joseph
  */
 public class TileEntityMachine extends EnergyContainer implements ISidedInventory {
 	private Machine theBlock;
@@ -34,7 +30,6 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 	
 	public TileEntityMachine(int energyTransfer, int maxEnergy, IBlockState state, boolean isFull, int slots) {
 		super(maxEnergy, energyTransfer);
-		System.out.println("instantiating TilEntityMachine with parameters");
 		this.theBlock = (Machine)state.getBlock();
 		this.state = state;
 		if (isFull) {
@@ -52,7 +47,6 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		this.setEnergy(tag.getInteger("energy"));
 		NBTTagList nbttaglist = tag.getTagList("Items", 10);
         this.slots = new ItemStack[this.getSizeInventory()];
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
@@ -67,14 +61,13 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 
 	/**
 	 * Saves TE data to an NBT tag for world saving. You'll need to write data tags
-	 * in here for any data you dont want lost when the game is closed.
+	 * in here for any data you don't want lost when the game is closed.
 	 * 
 	 * Just like EnergyContainer, you MUST call super(tag) if you override this.
 	 */
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		tag.setInteger("energy", this.getEnergy());
 		NBTTagList nbttaglist = new NBTTagList();
 	    for (int i = 0; i < this.slots.length; ++i) {
 	        if (this.slots[i] != null) {
@@ -85,34 +78,6 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 	        }
 	    }
 	    tag.setTag("Items", nbttaglist);
-	}
-	
-	/**
-	 * TE equivelant of IElectric's onPowered. Checks if the side is set to unput, if the energy
-	 * count is full, or if there's more energy sent in than maxEnergy - energy, and returns any unused energy.
-	 */
-	public int tryToPower(int amount, EnumFacing side) {
-		boolean flag = false;
-		
-		if (this.theBlock.getSide(rotatedFace(side, (EnumFacing)this.state.getValue(Machine.FACING))) == EnumMachineSetting.energyInput) {
-			if (this.getEnergy() < this.getMaxEnergy()) {
-				if (this.getMaxEnergy() - this.getEnergy() >= amount) {
-					this.addEnergy(amount);
-					flag = true;
-					return 0;
-				}
-				else {
-					amount = this.getMaxEnergy() - this.getEnergy();
-					this.setEnergy(this.getMaxEnergy());
-					flag = true;
-					return amount;
-				}
-			}
-		}
-		if (flag) {
-			this.markDirty();
-		}
-		return amount;
 	}
 	
 	/**
@@ -167,7 +132,21 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 	
 	@Override
 	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side) {
-		return this.tryToPower(amount, side);
+		if (this.theBlock.getSide(rotatedFace(side, (EnumFacing)this.state.getValue(Machine.FACING))) == EnumMachineSetting.energyInput) {
+			if (this.getEnergy() < this.getMaxEnergy()) {
+				if (this.getMaxEnergy() - this.getEnergy() >= amount) {
+					this.addEnergy(amount);
+					return 0;
+				}
+				else {
+					amount = this.getMaxEnergy() - this.getEnergy();
+					this.setEnergy(this.getMaxEnergy());
+					return amount;
+				}
+			}
+		}
+		
+		return amount;
 	}
 	
 	//==================================================
@@ -334,10 +313,6 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
         this.customName = name;
     }
     
-    /**
-     * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
-     * this more of a set than a get?*
-     */
     public int getInventoryStackLimit() {
         return 64;
     }

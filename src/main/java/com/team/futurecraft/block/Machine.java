@@ -38,12 +38,11 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 public abstract class Machine extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	private boolean isFull;
 	
-	public Machine(boolean full, String name) {
+	
+	public Machine(String name) {
 		super(Material.iron);
 		this.setCreativeTab(FutureCraft.tabFutureCraft);
-		this.isFull = full;
 		this.setUnlocalizedName(name);
 		GameRegistry.registerBlock(this, name);
 	}
@@ -59,22 +58,17 @@ public abstract class Machine extends BlockContainer {
 	}
 	
 	/**
-	 * Dont override this, internal override fixing BlockContainers render type.
+	 * Internal override fixing BlockContainers render type.
 	 */
-	public int getRenderType(){
+	public int getRenderType() {
 		return 3;
 	}
 
-	/**
-	 * You'll usually override this to return your machine's TE.
-	 */
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityMachine(10, 10000, this.getStateFromMeta(meta), isFull, 0);
-	}
+	public abstract TileEntity createNewTileEntity(World world, int meta);
 	
 	/**
-	 * You wont usually ovveride this but if you do make sure you call super(worldIn, pos, state) or else the block
+	 * You wont usually override this but if you do make sure you call super(worldIn, pos, state) or else the block
 	 * wont be able to have different directions.
 	 */
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
