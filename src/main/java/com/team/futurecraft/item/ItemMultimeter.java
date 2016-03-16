@@ -3,7 +3,6 @@ package com.team.futurecraft.item;
 import com.team.futurecraft.FutureCraft;
 import com.team.futurecraft.tileentity.IElectric;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -29,11 +28,11 @@ public class ItemMultimeter extends SimpleItem {
      * True if something happen and false if it don't. This is for ITEMS, not BLOCKS
      */
     public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-    	Block block = world.getBlockState(pos).getBlock();
     	
-    	if (block instanceof IElectric) {
-    		if (world.isRemote) player.addChatMessage(new ChatComponentText("Client Energy: " + ((IElectric)block).getEnergy(world, pos) + " Joules."));
-    		else player.addChatMessage(new ChatComponentText("Server Energy: " + ((IElectric)block).getEnergy(world, pos) + " Joules."));
+    	if (world.getTileEntity(pos) instanceof IElectric) {
+    		IElectric te = (IElectric)world.getTileEntity(pos);
+    		if (world.isRemote) player.addChatMessage(new ChatComponentText("Client Energy: " + te.getEnergy(world, pos) + " Units."));
+    		else player.addChatMessage(new ChatComponentText("Server Energy: " + te.getEnergy(world, pos) + " Units."));
     	}
     	return true;
     }
