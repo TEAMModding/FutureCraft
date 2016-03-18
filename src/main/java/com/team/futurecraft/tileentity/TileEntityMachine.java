@@ -22,20 +22,15 @@ import net.minecraft.world.World;
  * usually needed in machines without having to implement them yourself, such as handling
  * in/out machine settings, transferring energy based on them, and dealing with inventory slots.
  */
-public class TileEntityMachine extends EnergyContainer implements ISidedInventory {
-	private Machine theBlock;
-	private IBlockState state;
-	private ItemStack[] slots;
+public abstract class TileEntityMachine extends EnergyContainer implements ISidedInventory {
+	public ItemStack[] slots;
+	public int[] fields;
 	private String customName;
 	
-	public TileEntityMachine(int energyTransfer, int maxEnergy, IBlockState state, boolean isFull, int slots) {
+	public TileEntityMachine(int energyTransfer, int maxEnergy, int slots, int fields) {
 		super(maxEnergy, energyTransfer);
-		this.theBlock = (Machine)state.getBlock();
-		this.state = state;
-		if (isFull) {
-			this.setEnergy(maxEnergy);
-		}
 		this.slots = new ItemStack[slots];
+		this.fields = new int[fields];
 	}
 	
 	/**
@@ -99,9 +94,16 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 	 */
 	@Override
 	public void update() {
+		if (this.worldObj.isRemote) { //we don't do anything on client
+			return;
+		}
+		
+		IBlockState state = this.worldObj.getBlockState(this.pos);
+		Machine theBlock = (Machine)state.getBlock();
+		
 		int i = 0;
-		while (this.getEnergy() > this.energyTransferred() && i < 4) {
-			if (this.theBlock.getSide(rotatedFace(EnumFacing.getHorizontal(i), (EnumFacing)this.state.getValue(Machine.FACING))) == EnumMachineSetting.energyOutput) {
+		while (this.energy > this.energyTransferred && i < 4) {
+			if (theBlock.getSide(rotatedFace(EnumFacing.getHorizontal(i), (EnumFacing)state.getValue(Machine.FACING))) == EnumMachineSetting.energyOutput) {
 				this.powerNeighbor(EnumFacing.getHorizontal(i));
 				this.markDirty();
 			}
@@ -116,12 +118,12 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 		int energyToTransfer;
 		BlockPos dirPos = this.pos.offset(side);
 		
-		if (this.getEnergy() > 0) {
-			if (this.getEnergy() < this.energyTransferred()) {
-				energyToTransfer = this.getEnergy();
+		if (this.energy > 0) {
+			if (this.energy < this.energyTransferred) {
+				energyToTransfer = this.energy;
 			}
 			else {
-				energyToTransfer = this.energyTransferred();
+				energyToTransfer = this.energyTransferred;
 			}
 			if (this.canConnectTo(this.worldObj, this.pos, side)) {
 				TileEntity te = this.worldObj.getTileEntity(dirPos);
@@ -132,15 +134,18 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
 	
 	@Override
 	public int onPowered(World world, BlockPos pos, int amount, EnumFacing side) {
-		if (this.theBlock.getSide(rotatedFace(side, (EnumFacing)this.state.getValue(Machine.FACING))) == EnumMachineSetting.energyInput) {
-			if (this.getEnergy() < this.getMaxEnergy()) {
-				if (this.getMaxEnergy() - this.getEnergy() >= amount) {
+		IBlockState state = this.worldObj.getBlockState(this.pos);
+		Machine theBlock = (Machine)state.getBlock();
+		
+		if (theBlock.getSide(rotatedFace(side, (EnumFacing)state.getValue(Machine.FACING))) == EnumMachineSetting.energyInput) {
+			if (this.energy < this.maxEnergy) {
+				if (this.maxEnergy - this.energy >= amount) {
 					this.addEnergy(amount);
 					return 0;
 				}
 				else {
-					amount = this.getMaxEnergy() - this.getEnergy();
-					this.setEnergy(this.getMaxEnergy());
+					amount = this.maxEnergy - this.energy;
+					this.setEnergy(this.maxEnergy);
 					return amount;
 				}
 			}
@@ -194,25 +199,34 @@ public class TileEntityMachine extends EnergyContainer implements ISidedInventor
         return false;
     }
 
-    /**
-     * Used by vanilla to get certain tags from this TE. In this case it might be energy level or cook time.
-     * This system is really messed up and i preffer to use stuff such as getEnergy() instead.
+    /*
+     * Fields are usually used by Containers in order to synchronize the client/server data on this TileEntity. getField is called
+     * from the server so it knows what to send to the client. setField is then called on the client after the packet is received, then it update's
+     * it's internal variables accordingly. getFieldCount is just used to that the server knows how much it needs to send.
      */
+    
     public int getField(int id) {
-        return 0;
+    	if (id == 0)
+    		return this.energy; //Energy is always 0.
+    	
+    	else if (id > 0) {
+    		return fields[id + 1]; //Offset to make room for energy.
+    	}
+    	
+    	return 0;
+    }
+    
+    public void setField(int id, int value) {
+    	if (id == 0)
+    		this.energy = value; //Energy is always 0.
+    	
+    	else if (id > 0) {
+    		fields[id + 1] = value; //Offset to make room for energy.
+    	}
     }
 
-    /**
-     * Used by vanilla to set certain tags from this TE. In this case it might be energy level or cook time.
-     * This system is really messed up and i preffer to use stuff such as setEnergy() instead.
-     */
-    public void setField(int id, int value) {}
-
-    /**
-     * We dont use the setField and getField system so this is useless now.
-     */
     public int getFieldCount() {
-        return 0;
+        return fields.length + 1; //Remember energy right?
     }
 
     /**

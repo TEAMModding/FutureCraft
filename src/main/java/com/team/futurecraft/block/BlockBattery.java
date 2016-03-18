@@ -1,6 +1,6 @@
 package com.team.futurecraft.block;
 
-import com.team.futurecraft.tileentity.TileEntityMachine;
+import com.team.futurecraft.tileentity.TileEntityBattery;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,6 +29,11 @@ public class BlockBattery extends Machine {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityMachine(10, 10000, this.getStateFromMeta(meta), isFull, 0);
+		TileEntityBattery te = new TileEntityBattery();
+		
+		if (isFull)
+			te.setEnergy(te.maxEnergy);
+		
+		return te;
 	}
 }

@@ -36,7 +36,7 @@ public class GuiGenerator extends GuiContainer {
             int i1 = this.tileGenerator.getBurnTimeRemainingScaled(13);
             this.drawTexturedModalRect(k + 80, l + 36 - i1, 176, 12 - i1, 14, i1 + 1);
         }
-        if (this.tileGenerator.getEnergy() != 0) {
+        if (this.tileGenerator.energy != 0) {
         	int i2 = this.tileGenerator.getEnergyAmountScaled(47);
         	this.drawTexturedModalRect(k + 7, l + 66 - i2, 176, 61 - i2, 18, i2 + 1);
         }

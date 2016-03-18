@@ -17,28 +17,13 @@ import net.minecraft.world.World;
  * This class also has some standard IElectric implementations. These can be freely overridden.
  */
 public abstract class EnergyContainer extends TileEntity implements IUpdatePlayerListBox, IElectric {
-	private int energy = 0;
-	private int energyTransferred;
-	private int maxEnergy;
+	public int energy = 0;
+	public int energyTransferred;
+	public int maxEnergy;
 	
 	public EnergyContainer(int maxEnergy, int energyTransfer) {
 		this.maxEnergy = maxEnergy;
 		this.energyTransferred = energyTransfer;
-	}
-	
-	public int getEnergy() {
-		return this.energy;
-	}
-	
-	public int getMaxEnergy() {
-		return this.maxEnergy;
-	}
-	
-	/**
-	 * Gets how much energy is transferred every tick.
-	 */
-	public int energyTransferred() {
-		return this.energyTransferred;
 	}
 	
 	public boolean isFull() {
@@ -84,7 +69,7 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 	 */
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
-		tag.setInteger("energy", this.getEnergy());
+		tag.setInteger("energy", this.energy);
 		super.writeToNBT(tag);
 	}
 	
@@ -110,13 +95,13 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 	public int power(int amount)
 	{
 		if (!this.isFull()) {
-			if (this.getMaxEnergy() - this.getEnergy() > amount) {
+			if (this.maxEnergy - this.maxEnergy > amount) {
 				this.addEnergy(amount);
 				return 0;
 			}
 			else {
-				int difference = this.getMaxEnergy() - this.getEnergy();
-				this.setEnergy(this.getMaxEnergy());
+				int difference = this.maxEnergy - this.energy;
+				this.setEnergy(this.maxEnergy);
 				return amount - difference;
 			}
 		}
@@ -142,6 +127,6 @@ public abstract class EnergyContainer extends TileEntity implements IUpdatePlaye
 
 	@Override
 	public int getEnergy(World world, BlockPos pos) {
-		return this.getEnergy();
+		return this.energy;
 	}
 }

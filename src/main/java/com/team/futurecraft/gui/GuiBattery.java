@@ -32,7 +32,7 @@ public class GuiBattery extends GuiContainer
         int l = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 		
-		if (this.tileEntity.getEnergy() != 0) {
+		if (this.tileEntity.energy != 0) {
         	int i2 = this.tileEntity.getEnergyAmountScaled(47);
         	this.drawTexturedModalRect(k + 79, l + 66 - i2, 176, 61 - i2, 18, i2 + 1);
         }

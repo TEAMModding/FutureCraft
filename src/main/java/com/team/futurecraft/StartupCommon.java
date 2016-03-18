@@ -24,8 +24,8 @@ import com.team.futurecraft.network.TeleportMessage;
 import com.team.futurecraft.network.TeleportMessageHandler;
 import com.team.futurecraft.recipe.AlloyRegistry;
 import com.team.futurecraft.tileentity.TileEntityAlloyFurnace;
+import com.team.futurecraft.tileentity.TileEntityBattery;
 import com.team.futurecraft.tileentity.TileEntityGenerator;
-import com.team.futurecraft.tileentity.TileEntityMachine;
 import com.team.futurecraft.tileentity.TileEntityMovingSidewalk;
 import com.team.futurecraft.tileentity.TileEntityWire;
 import com.team.futurecraft.world.OreSpawn;
@@ -74,7 +74,7 @@ public class StartupCommon {
 		FMLCommonHandler.instance().bus().register(events);
 		
 		GameRegistry.registerTileEntity(TileEntityAlloyFurnace.class, "futurecraft:alloy_furnace");
-		GameRegistry.registerTileEntity(TileEntityMachine.class, "futurecraft:machine");
+		GameRegistry.registerTileEntity(TileEntityBattery.class, "futurecraft:battery");
 		GameRegistry.registerTileEntity(TileEntityWire.class, "futurecraft:wire");
 		GameRegistry.registerTileEntity(TileEntityGenerator.class, "futurecraft:generator");
 		GameRegistry.registerTileEntity(TileEntityMovingSidewalk.class, "futurecraft:moving_sidewalk");

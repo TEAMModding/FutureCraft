@@ -26,7 +26,7 @@ public class TileEntityWire extends EnergyContainer {
 			EnumFacing dir = (EnumFacing)sides[i];
 			TileEntity te = this.worldObj.getTileEntity(this.pos.offset(dir));
 			if (te instanceof IElectric) {
-				int energyToUse = this.getEnergy() / passesLeft;
+				int energyToUse = this.energy / passesLeft;
 				this.removeEnergy(energyToUse - ((IElectric)te).onPowered(worldObj, this.pos.offset(dir), energyToUse, dir.getOpposite()));
 			}
 		}

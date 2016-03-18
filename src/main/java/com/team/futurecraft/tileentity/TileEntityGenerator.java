@@ -22,7 +22,7 @@ public class TileEntityGenerator extends TileEntityMachine {
 	public int currentItemBurnTime;
 	
 	public TileEntityGenerator(IBlockState block) {
-		super(10, 500, block, false, 1);
+		super(100, 1000, 1, 0);
 	}
 	
 	public void readFromNBT(NBTTagCompound tag) {
