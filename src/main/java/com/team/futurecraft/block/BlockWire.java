@@ -26,7 +26,7 @@ public class BlockWire extends BlockContainer {
 
 	@Override
 	public int getRenderType() {
-		return 1000;
+		return 0;
 	}
 	
 	public boolean isOpaqueCube() {

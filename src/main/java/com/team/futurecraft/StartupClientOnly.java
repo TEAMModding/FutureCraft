@@ -2,12 +2,15 @@ package com.team.futurecraft;
 
 import com.team.futurecraft.entity.ChunkEntity;
 import com.team.futurecraft.rendering.entity.RenderChunkEntity;
+import com.team.futurecraft.tileentity.TileEntityWire;
+import com.team.futurecraft.tileentity.rendering.RenderWire;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -22,6 +25,7 @@ public class StartupClientOnly {
 	 */
 	public static void init() {	
 		RenderingRegistry.registerEntityRenderingHandler(ChunkEntity.class, new RenderChunkEntity(Minecraft.getMinecraft().getRenderManager()));
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWire.class, new RenderWire());
 		
 		//metal blocks
 		registerItemRendering("steel_plating");
@@ -59,6 +63,7 @@ public class StartupClientOnly {
 		registerItemRendering("generator_lit");
 		registerItemRendering("battery");
 		registerItemRendering("creative_battery");
+		registerItemRendering("copper_wire");
 		
 		//rocket parts
 		registerItemRendering("rocket_core");

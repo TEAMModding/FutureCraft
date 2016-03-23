@@ -78,7 +78,7 @@ public class StartupCommon {
 		GameRegistry.registerTileEntity(TileEntityWire.class, "futurecraft:wire");
 		GameRegistry.registerTileEntity(TileEntityGenerator.class, "futurecraft:generator");
 		GameRegistry.registerTileEntity(TileEntityMovingSidewalk.class, "futurecraft:moving_sidewalk");
-	
+		
 		GameRegistry.registerWorldGenerator(new OreSpawn(), 1);
 		
 		simpleNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("futurecraft:teleport_channel");
