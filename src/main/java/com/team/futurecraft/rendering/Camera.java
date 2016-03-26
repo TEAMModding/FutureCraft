@@ -1,12 +1,12 @@
 package com.team.futurecraft.rendering;
 
-import net.minecraft.util.Vec3;
+import com.team.futurecraft.Vec3f;
 
 public class Camera {
-	public Vec3 pos;
-	public Vec3 rot;
+	public Vec3f pos;
+	public Vec3f rot;
 	
-	public Camera(Vec3 pos, Vec3 rot) {
+	public Camera(Vec3f pos, Vec3f rot) {
 		this.pos = pos;
 		this.rot = rot;
 	}

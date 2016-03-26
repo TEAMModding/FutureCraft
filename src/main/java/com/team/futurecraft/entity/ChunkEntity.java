@@ -3,11 +3,12 @@ package com.team.futurecraft.entity;
 import java.util.ArrayList;
 
 import com.team.futurecraft.BlockList;
-import com.team.futurecraft.Mat4;
+import com.team.futurecraft.Mat4f;
 import com.team.futurecraft.OBB;
 import com.team.futurecraft.RayTrace;
 import com.team.futurecraft.RayTrace.EnumAxis;
-import com.team.futurecraft.Vec4;
+import com.team.futurecraft.Vec3f;
+import com.team.futurecraft.Vec4f;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -20,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class ChunkEntity extends Entity {
@@ -48,10 +48,10 @@ public class ChunkEntity extends Entity {
 	}
 
 	public OBB getOBB(BlockPos pos) {
-		Mat4 entity = Mat4.translate(this.posX, this.posY - 1.5, this.posZ);
-		Mat4 blockPos = Mat4.translate(pos.getX() - 8.5, pos.getY(), pos.getZ() - 8.5);
-		Mat4 rot = Mat4.rotate(this.rotationYaw, 0.0, 1.0, 0.0).multiply(Mat4.rotate(this.rotationPitch, 1, 0, 0));
-		return new OBB(new Vec3(0, 0, 0), new Vec3(1, 1, 1), entity.multiply(rot).multiply(blockPos));
+		Mat4f entity = Mat4f.translate((float)this.posX, (float)this.posY - 1.5f, (float)this.posZ);
+		Mat4f blockPos = Mat4f.translate((float)pos.getX() - 8.5f, (float)pos.getY(), (float)pos.getZ() - 8.5f);
+		Mat4f rot = Mat4f.rotate(this.rotationYaw, 0.0f, 1.0f, 0.0f).multiply(Mat4f.rotate(this.rotationPitch, 1.0f, 0.0f, 0.0f));
+		return new OBB(new Vec3f(0, 0, 0), new Vec3f(1, 1, 1), entity.multiply(rot).multiply(blockPos));
 	}
 	
 	public double getMountedYOffset()
@@ -72,9 +72,9 @@ public class ChunkEntity extends Entity {
 			if (entity instanceof EntityLivingBase) {
 				EntityLivingBase entityLiving = (EntityLivingBase)entity;
 				if (!this.worldObj.isRemote) {
-					Vec3 velocity = this.riddenByEntity.getLookVec();
-					this.setPosition(this.posX + velocity.xCoord * entityLiving.moveForward, this.posY + velocity.yCoord * entityLiving.moveForward, this.posZ + velocity.zCoord * entityLiving.moveForward);
-					entityLiving.setPosition(entityLiving.posX + velocity.xCoord * entityLiving.moveForward, entityLiving.posY + velocity.yCoord * entityLiving.moveForward, entityLiving.posZ + velocity.zCoord * entityLiving.moveForward);
+					Vec3f velocity = new Vec3f(this.riddenByEntity.getLookVec());
+					this.setPosition(this.posX + velocity.x * entityLiving.moveForward, this.posY + velocity.y * entityLiving.moveForward, this.posZ + velocity.z * entityLiving.moveForward);
+					entityLiving.setPosition(entityLiving.posX + velocity.x * entityLiving.moveForward, entityLiving.posY + velocity.y * entityLiving.moveForward, entityLiving.posZ + velocity.z * entityLiving.moveForward);
 				}
 				this.rotationPitch = this.riddenByEntity.rotationPitch;
 				this.rotationYaw = -this.riddenByEntity.rotationYaw;
@@ -159,9 +159,9 @@ public class ChunkEntity extends Entity {
 			return true;
 		}
 		
-		Vec3 look = playerIn.getLookVec();
-		Vec3 pos = playerIn.getPositionVector();
-		Vec4 nearestBlock = new Vec4(0, 0, 0, 1000);
+		Vec3f look = new Vec3f(playerIn.getLookVec());
+		Vec3f pos = new Vec3f(playerIn.getPositionVector());
+		Vec4f nearestBlock = new Vec4f(0, 0, 0, 1000);
 		EnumAxis blockAxis = null;
 		for (int x = 0; x < 16; x++) {
         	for (int y = 0; y < 16; y++) {
@@ -171,8 +171,8 @@ public class ChunkEntity extends Entity {
     					if (trace != null) {
     						double distance = trace.distance;
     						if (distance > 0 && distance < 5) {
-    							if (distance < nearestBlock.wCoord) {
-    								nearestBlock = new Vec4(x, y, z, distance);
+    							if (distance < nearestBlock.w) {
+    								nearestBlock = new Vec4f(x, y, z, (float)distance);
     								blockAxis = trace.axis;
     							}
     						}
@@ -181,35 +181,35 @@ public class ChunkEntity extends Entity {
     			}
         	}
 		}
-		Vec3 rotLook = look.rotateYaw((float) Math.toRadians(-this.rotationYaw)).rotatePitch((float) Math.toRadians(-this.rotationPitch));
-		System.out.println(rotLook.xCoord + ", " + rotLook.zCoord);
+		Vec3f rotLook = look.rotateYaw((float) Math.toRadians(-this.rotationYaw)).rotatePitch((float) Math.toRadians(-this.rotationPitch));
+		System.out.println(rotLook.x + ", " + rotLook.z);
 		
 		if (blockAxis == EnumAxis.X) {
 			System.out.println("axis is X");
-			if (rotLook.xCoord < 0)
-				if (nearestBlock.xCoord < 15)
-					this.blocks[(int)nearestBlock.xCoord + 1][(int)nearestBlock.yCoord][(int)nearestBlock.zCoord] = stateToPlace;
-			if (rotLook.xCoord > 0)
-				if (nearestBlock.xCoord > 1)
-					this.blocks[(int)nearestBlock.xCoord - 1][(int)nearestBlock.yCoord][(int)nearestBlock.zCoord] = stateToPlace;
+			if (rotLook.x < 0)
+				if (nearestBlock.x < 15)
+					this.blocks[(int)nearestBlock.x + 1][(int)nearestBlock.y][(int)nearestBlock.z] = stateToPlace;
+			if (rotLook.x > 0)
+				if (nearestBlock.x > 1)
+					this.blocks[(int)nearestBlock.x - 1][(int)nearestBlock.y][(int)nearestBlock.z] = stateToPlace;
 		}
 		if (blockAxis == EnumAxis.Y) {
 			System.out.println("axis is Y");
-			if (rotLook.yCoord < 0)
-				if (nearestBlock.yCoord < 15)
-					this.blocks[(int)nearestBlock.xCoord][(int)nearestBlock.yCoord + 1][(int)nearestBlock.zCoord] = stateToPlace;
-			if (rotLook.yCoord > 0)
-				if (nearestBlock.yCoord > 1)
-					this.blocks[(int)nearestBlock.xCoord][(int)nearestBlock.yCoord - 1][(int)nearestBlock.zCoord] = stateToPlace;
+			if (rotLook.y < 0)
+				if (nearestBlock.y < 15)
+					this.blocks[(int)nearestBlock.x][(int)nearestBlock.y + 1][(int)nearestBlock.z] = stateToPlace;
+			if (rotLook.y > 0)
+				if (nearestBlock.y > 1)
+					this.blocks[(int)nearestBlock.x][(int)nearestBlock.y - 1][(int)nearestBlock.z] = stateToPlace;
 		}
 		if (blockAxis == EnumAxis.Z) {
 			System.out.println("axis is Z");
-			if (rotLook.zCoord < 0)
-				if (nearestBlock.zCoord < 15)
-					this.blocks[(int)nearestBlock.xCoord][(int)nearestBlock.yCoord][(int)nearestBlock.zCoord + 1] = stateToPlace;
-			if (rotLook.zCoord > 0)
-				if (nearestBlock.zCoord > 1)
-					this.blocks[(int)nearestBlock.xCoord][(int)nearestBlock.yCoord][(int)nearestBlock.zCoord - 1] = stateToPlace;
+			if (rotLook.z < 0)
+				if (nearestBlock.z < 15)
+					this.blocks[(int)nearestBlock.x][(int)nearestBlock.y][(int)nearestBlock.z + 1] = stateToPlace;
+			if (rotLook.z > 0)
+				if (nearestBlock.z > 1)
+					this.blocks[(int)nearestBlock.x][(int)nearestBlock.y][(int)nearestBlock.z - 1] = stateToPlace;
 		}
 		return true;
     }
@@ -217,9 +217,9 @@ public class ChunkEntity extends Entity {
 	public boolean hitByEntity(Entity entityIn)
     {
 		System.out.println("hitting");
-		Vec3 look = entityIn.getLookVec();
-		Vec3 pos = entityIn.getPositionVector();
-		Vec4 nearestBlock = new Vec4(0, 0, 0, 1000);
+		Vec3f look = new Vec3f(entityIn.getLookVec());
+		Vec3f pos = new Vec3f(entityIn.getPositionVector());
+		Vec4f nearestBlock = new Vec4f(0, 0, 0, 1000);
 		for (int x = 0; x < 16; x++) {
         	for (int y = 0; y < 16; y++) {
     			for (int z = 0; z < 16; z++) {
@@ -228,8 +228,8 @@ public class ChunkEntity extends Entity {
     					if (trace != null) {
     						double distance = trace.distance;
     						if (distance > 0 && distance < 5) {
-    							if (distance < nearestBlock.wCoord) {
-    								nearestBlock = new Vec4(x, y, z, distance);
+    							if (distance < nearestBlock.w) {
+    								nearestBlock = new Vec4f(x, y, z, (float)distance);
     							}
     						}
     					}
@@ -237,7 +237,7 @@ public class ChunkEntity extends Entity {
     			}
         	}
 		}
-		this.blocks[(int)nearestBlock.xCoord][(int)nearestBlock.yCoord][(int)nearestBlock.zCoord] = Blocks.air.getDefaultState();
+		this.blocks[(int)nearestBlock.x][(int)nearestBlock.y][(int)nearestBlock.z] = Blocks.air.getDefaultState();
 		
 		
 		this.testForEmpty();

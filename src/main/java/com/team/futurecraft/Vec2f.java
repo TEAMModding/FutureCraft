@@ -1,53 +1,31 @@
 package com.team.futurecraft;
 
-import java.nio.DoubleBuffer;
-
+import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 
-import net.minecraft.util.Vec3;
+public class Vec2f {
 
-/**
- * This class represents a (x,y,z,w)-Vector. GLSL equivalent to vec4.
- *
- * @author Heiko Brumme
- */
-public class Vec4 {
-
-    public double xCoord;
-    public double yCoord;
-    public double zCoord;
-    public double wCoord;
+    public float x;
+    public float y;
 
     /**
-     * Creates a default 4-tuple vector with all values set to 0.
+     * Creates a default 3-tuple vector with all values set to 0.
      */
-    public Vec4() {
-        this.xCoord = 0f;
-        this.yCoord = 0f;
-        this.zCoord = 0f;
-        this.wCoord = 0f;
+    public Vec2f() {
+        this.x = 0f;
+        this.y = 0f;
     }
 
     /**
-     * Creates a 4-tuple vector with specified values.
+     * Creates a 3-tuple vector with specified values.
      *
      * @param x x value
      * @param y y value
      * @param z z value
-     * @param w w value
      */
-    public Vec4(double x, double y, double z, double w) {
-        this.xCoord = x;
-        this.yCoord = y;
-        this.zCoord = z;
-        this.wCoord = w;
-    }
-    
-    public Vec4(Vec3 vec, double w) {
-    	this.xCoord = vec.xCoord;
-        this.yCoord = vec.yCoord;
-        this.zCoord = vec.zCoord;
-        this.wCoord = w;
+    public Vec2f(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -55,8 +33,8 @@ public class Vec4 {
      *
      * @return Squared length of this vector
      */
-    public double lengthSquared() {
-        return xCoord * xCoord + yCoord * yCoord + zCoord * zCoord + wCoord * wCoord;
+    public float lengthSquared() {
+        return x * x + y * y;
     }
 
     /**
@@ -73,7 +51,7 @@ public class Vec4 {
      *
      * @return Normalized vector
      */
-    public Vec4 normalize() {
+    public Vec2f normalize() {
         float length = length();
         return divide(length);
     }
@@ -84,12 +62,16 @@ public class Vec4 {
      * @param other The other vector
      * @return Sum of this + other
      */
-    public Vec4 add(Vec4 other) {
-        double x = this.xCoord + other.xCoord;
-        double y = this.yCoord + other.yCoord;
-        double z = this.zCoord + other.zCoord;
-        double w = this.wCoord + other.wCoord;
-        return new Vec4(x, y, z, w);
+    public Vec2f add(Vec2f other) {
+        float x = this.x + other.x;
+        float y = this.y + other.y;
+        return new Vec2f(x, y);
+    }
+    
+    public Vec2f multiply(Vec2f other) {
+        float x = this.x * other.x;
+        float y = this.y * other.y;
+        return new Vec2f(x, y);
     }
 
     /**
@@ -97,7 +79,7 @@ public class Vec4 {
      *
      * @return Negated vector
      */
-    public Vec4 negate() {
+    public Vec2f negate() {
         return scale(-1f);
     }
 
@@ -107,7 +89,7 @@ public class Vec4 {
      * @param other The other vector
      * @return Difference of this - other
      */
-    public Vec4 subtract(Vec4 other) {
+    public Vec2f subtract(Vec2f other) {
         return this.add(other.negate());
     }
 
@@ -117,12 +99,10 @@ public class Vec4 {
      * @param scalar Scalar to multiply
      * @return Scalar product of this * scalar
      */
-    public Vec4 scale(double scalar) {
-        double x = this.xCoord * scalar;
-        double y = this.yCoord * scalar;
-        double z = this.zCoord * scalar;
-        double w = this.wCoord * scalar;
-        return new Vec4(x, y, z, w);
+    public Vec2f scale(float scalar) {
+        float x = this.x * scalar;
+        float y = this.y * scalar;
+        return new Vec2f(x, y);
     }
 
     /**
@@ -131,7 +111,7 @@ public class Vec4 {
      * @param scalar Scalar to multiply
      * @return Scalar quotient of this / scalar
      */
-    public Vec4 divide(float scalar) {
+    public Vec2f divide(float scalar) {
         return scale(1f / scalar);
     }
 
@@ -141,8 +121,8 @@ public class Vec4 {
      * @param other The other vector
      * @return Dot product of this * other
      */
-    public double dot(Vec4 other) {
-        return this.xCoord * other.xCoord + this.yCoord * other.yCoord + this.zCoord * other.zCoord + this.wCoord * other.wCoord;
+    public float dot(Vec2f other) {
+        return this.x * other.x + this.y * other.y;
     }
 
     /**
@@ -153,7 +133,7 @@ public class Vec4 {
      * @param alpha The alpha value, must be between 0.0 and 1.0
      * @return Linear interpolated vector
      */
-    public Vec4 lerp(Vec4 other, float alpha) {
+    public Vec2f lerp(Vec2f other, float alpha) {
         return this.scale(1f - alpha).add(other.scale(alpha));
     }
 
@@ -162,9 +142,9 @@ public class Vec4 {
      *
      * @return Vector as FloatBuffer
      */
-    public DoubleBuffer getBuffer() {
-        DoubleBuffer buffer = BufferUtils.createDoubleBuffer(4);
-        buffer.put(xCoord).put(yCoord).put(zCoord).put(wCoord);
+    public FloatBuffer getBuffer() {
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(2);
+        buffer.put(x).put(y);
         buffer.flip();
         return buffer;
     }

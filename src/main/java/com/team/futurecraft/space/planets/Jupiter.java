@@ -1,6 +1,6 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.Vec4;
+import com.team.futurecraft.Vec4f;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.GasGiant;
 import com.team.futurecraft.space.OrbitalParameters;
@@ -14,7 +14,7 @@ public class Jupiter extends GasGiant {
 		this.orbit = new OrbitalParameters(63082497600L, 4329.63f, 775.247f, 0.048f, 1.305f, 100.556f, -85.802f, 19.650f);
 		this.physical = new PhysicalParameters(2.5297f, 142984f, 0, 0.41351f, 305.4f, 2.222f, -22.203f);
 		this.name = "Jupiter";
-		this.atmosphere = new Vec4(0.5, 0.5, 0.5, 0.1);
+		this.atmosphere = new Vec4f(0.5f, 0.5f, 0.5f, 0.1f);
 		
 		this.add(new Io(this));
 		this.add(new Europa(this));

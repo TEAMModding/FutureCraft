@@ -2,6 +2,7 @@ package com.team.futurecraft.world;
 
 import com.team.futurecraft.FutureCraft;
 import com.team.futurecraft.SpaceRegistry;
+import com.team.futurecraft.Vec3f;
 import com.team.futurecraft.rendering.PlanetSkyRenderer;
 import com.team.futurecraft.space.Planet;
 
@@ -34,18 +35,18 @@ public class WorldProviderPlanet extends WorldProvider {
     @Override
 	public Vec3 getFogColor(float p_76562_1_, float p_76562_2_) {
     	float time = (float) (System.nanoTime() * 0.000000001 * 0.0003f)  + FutureCraft.timeOffset;
-    	Vec3 planetToLight = new Vec3(0, 0, 0).subtract(this.planet.getPosition(time)).normalize();
-    	float value = (float) this.planet.getDirection(time).dotProduct(planetToLight) * 4.0f;
+    	Vec3f planetToLight = new Vec3f(0, 0, 0).subtract(this.planet.getPosition(time)).normalize();
+    	float value = (float) this.planet.getDirection(time).dot(planetToLight) * 4.0f;
     	if (value < -1) value = -1;
     	
-    	float r = (float) this.planet.atmosphere.xCoord;
-    	float g = (float) this.planet.atmosphere.yCoord;
-    	float b = (float) this.planet.atmosphere.zCoord;
+    	float r = (float) this.planet.atmosphere.x;
+    	float g = (float) this.planet.atmosphere.y;
+    	float b = (float) this.planet.atmosphere.z;
     	
-    	Vec3 color = new Vec3(Math.min(r * value, r), Math.min(g * value, g), Math.min(b * value, b));
+    	Vec3f color = new Vec3f(Math.min(r * value, r), Math.min(g * value, g), Math.min(b * value, b));
     	
-    	if (this.planet.atmosphere.wCoord > 0)
-    		return color;
+    	if (this.planet.atmosphere.w > 0)
+    		return color.toVec3();
     	else
     		return new Vec3(-1.0, -1.0, -1.0);
 	}
@@ -54,8 +55,8 @@ public class WorldProviderPlanet extends WorldProvider {
     public float getSunBrightness(float par1)
     {
     	float time = (float) (System.nanoTime() * 0.000000001 * 0.0003f)  + FutureCraft.timeOffset;
-    	Vec3 planetToLight = new Vec3(0, 0, 0).subtract(this.planet.getPosition(time)).normalize();
-    	float value = (float) this.planet.getDirection(time).dotProduct(planetToLight) * 4.0f;
+    	Vec3f planetToLight = new Vec3f(0, 0, 0).subtract(this.planet.getPosition(time)).normalize();
+    	float value = (float) this.planet.getDirection(time).dot(planetToLight) * 4.0f;
     	if (value < 0) value = 0;
     	if (value > 1) value = 1;
     	//System.out.println(value);
@@ -69,7 +70,7 @@ public class WorldProviderPlanet extends WorldProvider {
     }
     
     public boolean hasAtmosphere() {
-    	if (this.planet.atmosphere.wCoord == 0.0f) return false;
+    	if (this.planet.atmosphere.w == 0.0f) return false;
     	return true;
     }
 

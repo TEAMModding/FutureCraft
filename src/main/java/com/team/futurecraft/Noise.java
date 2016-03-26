@@ -2,7 +2,6 @@ package com.team.futurecraft;
 
 import java.util.Random;
 
-import net.minecraft.util.Vec3;
 import net.minecraft.world.gen.NoiseGeneratorSimplex;
 
 /**
@@ -23,7 +22,7 @@ public class Noise {
 		this.simplex = new NoiseGeneratorSimplex(new Random(seed));
 	}
 	
-	public float defaultNoise(Vec3 position, int octaves, float frequency, float persistence) {
+	public float defaultNoise(Vec3f position, int octaves, float frequency, float persistence) {
 		float total = 0.0f;
 	    float maxAmplitude = 0.0f;
 	    float amplitude = 1.0f;
@@ -31,7 +30,7 @@ public class Noise {
 	    for (int i = 0; i < octaves; i++) {
 
 	        // Get the noise sample
-	        total += simplex.func_151605_a(position.xCoord * frequency, position.zCoord * frequency) * amplitude;
+	        total += simplex.func_151605_a(position.x * frequency, position.z * frequency) * amplitude;
 
 	        // Make the wavelength twice as small
 	        frequency *= 2.0;
@@ -47,7 +46,7 @@ public class Noise {
 	    return total / maxAmplitude;
 	}
 	
-	public float ridgedNoise(Vec3 position, int octaves, float frequency, float persistence) {
+	public float ridgedNoise(Vec3f position, int octaves, float frequency, float persistence) {
 		float total = 0.0f;
 	    float maxAmplitude = 0.0f;
 	    float amplitude = 1.0f;
@@ -55,7 +54,7 @@ public class Noise {
 	    for (int i = 0; i < octaves; i++) {
 
 	        // Get the noise sample
-	        total += ((1.0 - Math.abs(simplex.func_151605_a(position.xCoord * frequency, position.zCoord * frequency))) * 2.0 - 1.0) * amplitude;
+	        total += ((1.0 - Math.abs(simplex.func_151605_a(position.x * frequency, position.z * frequency))) * 2.0 - 1.0) * amplitude;
 
 	        // Make the wavelength twice as small
 	        frequency *= 2.0;
@@ -71,7 +70,7 @@ public class Noise {
 	    return total / maxAmplitude;
 	}
 	
-	public float cubedNoise(Vec3 position, int octaves, float frequency, float persistence) {
+	public float cubedNoise(Vec3f position, int octaves, float frequency, float persistence) {
 		float total = 0.0f;
 	    float maxAmplitude = 0.0f;
 	    float amplitude = 1.0f;
@@ -79,7 +78,7 @@ public class Noise {
 	    for (int i = 0; i < octaves; i++) {
 
 	        // Get the noise sample
-	    	float tmp = (float) (simplex.func_151605_a(position.xCoord * frequency, position.zCoord * frequency) * amplitude);
+	    	float tmp = (float) (simplex.func_151605_a(position.x * frequency, position.z * frequency) * amplitude);
 	        total += tmp * tmp * tmp * amplitude;
 
 	        // Make the wavelength twice as small
@@ -96,7 +95,7 @@ public class Noise {
 	    return total / maxAmplitude;
 	}
 	
-	public float thresholdNoise(Vec3 position, float frequency) {
+	public float thresholdNoise(Vec3f position, float frequency) {
 		float noise = this.cubedNoise(position, 1, frequency, 1) * 2f;
 		
 		if (noise < 0) noise = 0;

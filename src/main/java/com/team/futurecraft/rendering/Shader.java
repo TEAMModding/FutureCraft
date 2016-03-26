@@ -25,11 +25,11 @@ import java.util.Set;
 
 import org.lwjgl.opengl.GL20;
 
-import com.team.futurecraft.Mat4;
+import com.team.futurecraft.Mat4f;
+import com.team.futurecraft.Vec3f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 
 public class Shader {
 	public int id;
@@ -50,7 +50,7 @@ public class Shader {
 		GL20.glUseProgram(0);
 	}
 	
-	public void uniformMat4(Mat4 mat, String name) {
+	public void uniformMat4(Mat4f mat, String name) {
 		int uniform = GL20.glGetUniformLocation(this.id, name);
         GL20.glUniformMatrix4(uniform, false, mat.getBuffer());
 	}
@@ -60,9 +60,9 @@ public class Shader {
 		GL20.glUniform1f(uniform, value);
 	}
 	
-	public void uniformVec3(Vec3 vec, String name) {
+	public void uniformVec3f(Vec3f vec, String name) {
 		int uniform = GL20.glGetUniformLocation(this.id, name);
-		GL20.glUniform3f(uniform, (float)vec.xCoord, (float)vec.yCoord, (float)vec.zCoord);
+		GL20.glUniform3f(uniform, (float)vec.x, (float)vec.y, (float)vec.z);
 	}
 	
 	public static Shader loadShader(String name) {

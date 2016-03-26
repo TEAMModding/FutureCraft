@@ -13,7 +13,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
 import com.team.futurecraft.FutureCraft;
-import com.team.futurecraft.Mat4;
+import com.team.futurecraft.Mat4f;
+import com.team.futurecraft.Vec3f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
@@ -21,24 +22,23 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 
 public class SpaceRenderer {
 	private static Minecraft mc = Minecraft.getMinecraft();
 	private static FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
 	
-	public static Mat4 getViewMatrix(Vec3 pos, Vec3 rot) {
-		Mat4 mat = new Mat4();
-		mat = mat.multiply(Mat4.rotate((float)rot.zCoord, 0, 0F, 1f));
-		mat = mat.multiply(Mat4.rotate((float)rot.yCoord, 1F, 0F, 0F));
-		mat = mat.multiply(Mat4.rotate((float)rot.xCoord, 0F, 1F, 0F));
-		mat = mat.multiply(Mat4.translate(-pos.xCoord, -pos.yCoord, -pos.zCoord));
+	public static Mat4f getViewMatrix(Vec3f pos, Vec3f rot) {
+		Mat4f mat = new Mat4f();
+		mat = mat.multiply(Mat4f.rotate((float)rot.z, 0, 0F, 1f));
+		mat = mat.multiply(Mat4f.rotate((float)rot.y, 1F, 0F, 0F));
+		mat = mat.multiply(Mat4f.rotate((float)rot.x, 0F, 1F, 0F));
+		mat = mat.multiply(Mat4f.translate(-pos.x, -pos.y, -pos.z));
 		
 		return mat;
 	}
 	
-	public static Mat4 getProjectionMatrix() {
-		return Mat4.perspective(mc.gameSettings.fovSetting, (float)mc.displayWidth / mc.displayHeight, 0.000001F, 10);
+	public static Mat4f getProjectionMatrix() {
+		return Mat4f.perspective(mc.gameSettings.fovSetting, (float)mc.displayWidth / mc.displayHeight, 0.000001F, 10);
 	}
 	
 	public void render(Camera cam, long time, boolean renderOrbits) {
@@ -64,11 +64,11 @@ public class SpaceRenderer {
         GlStateManager.loadIdentity();
         Project.gluPerspective(mc.gameSettings.fovSetting, (float)mc.displayWidth / mc.displayHeight, 0.001F, 50000);
         
-        GL11.glRotatef((float)cam.rot.yCoord, 1F, 0F, 0F);
-        GL11.glRotatef((float)cam.rot.xCoord, 0F, 1F, 0F);
-        GL11.glRotatef((float)cam.rot.zCoord, 0F, 0F, 1F);
+        GL11.glRotatef((float)cam.rot.y, 1F, 0F, 0F);
+        GL11.glRotatef((float)cam.rot.x, 0F, 1F, 0F);
+        GL11.glRotatef((float)cam.rot.z, 0F, 0F, 1F);
         
-        GL11.glTranslatef((float)-cam.pos.xCoord, (float)-cam.pos.yCoord, (float)-cam.pos.zCoord);
+        GL11.glTranslatef((float)-cam.pos.x, (float)-cam.pos.y, (float)-cam.pos.z);
         //sets up the model space
         GlStateManager.matrixMode(GL_MODELVIEW);
         GlStateManager.pushMatrix();
@@ -110,7 +110,7 @@ public class SpaceRenderer {
         GlStateManager.popMatrix();
 	}
 	
-	private void renderSkybox(Vec3 pos) {
+	private void renderSkybox(Vec3f pos) {
 		ResourceLocation SKY_POS_X = new ResourceLocation("futurecraft","textures/environment/sky_pos_x.png");
 		ResourceLocation SKY_NEG_X = new ResourceLocation("futurecraft","textures/environment/sky_neg_x.png");
 		ResourceLocation SKY_POS_Y = new ResourceLocation("futurecraft","textures/environment/sky_pos_y.png");
@@ -123,7 +123,7 @@ public class SpaceRenderer {
         WorldRenderer renderer = tessellator.getWorldRenderer();
         
         GL11.glPushMatrix();
-        GL11.glTranslated(pos.xCoord, pos.yCoord, pos.zCoord);
+        GL11.glTranslated(pos.x, pos.y, pos.z);
 
         for (int i = 0; i < 6; ++i) {
             GL11.glPushMatrix();

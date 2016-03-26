@@ -2,7 +2,8 @@ package com.team.futurecraft.rendering;
 
 import org.lwjgl.opengl.GL11;
 
-import com.team.futurecraft.Vec4;
+import com.team.futurecraft.Vec4f;
+import com.team.futurecraft.Vec3f;
 import com.team.futurecraft.space.Planet;
 
 import net.minecraft.client.Minecraft;
@@ -10,7 +11,6 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IRenderHandler;
 
 /**
@@ -35,7 +35,7 @@ public class PlanetSkyRenderer extends IRenderHandler {
 		GlStateManager.enableAlpha();
 		
 		SpaceRenderer render = new SpaceRenderer();
-		Camera cam = new Camera(this.planet.getPosition(time), new Vec3(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, 0));
+		Camera cam = new Camera(this.planet.getPosition(time), new Vec3f(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, 0));
 		render.render(cam, time, false);
 		renderAtmosphere(mc);
 		GL11.glDepthMask(true);
@@ -44,7 +44,7 @@ public class PlanetSkyRenderer extends IRenderHandler {
 	private void renderAtmosphere(Minecraft mc) {
 		Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
-		Vec4 colors = this.planet.atmosphere;
+		Vec4f colors = this.planet.atmosphere;
         
         for (int i = 0; i < 2; i++) {
         	GL11.glPushMatrix();
@@ -60,10 +60,10 @@ public class PlanetSkyRenderer extends IRenderHandler {
         	GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         	GlStateManager.shadeModel(7425);
         	renderer.startDrawingQuads();
-        	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, (float)colors.wCoord);
+        	renderer.setColorRGBA_F((float)colors.x, (float)colors.y, (float)colors.z, (float)colors.w);
         	renderer.addVertex(-500.0D, -100.0D, -100.0D);
         	renderer.addVertex(500.0D, -100.0D, -100.0D);
-        	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, (float)colors.wCoord - 0.5f);
+        	renderer.setColorRGBA_F((float)colors.x, (float)colors.y, (float)colors.z, (float)colors.w - 0.5f);
         	renderer.addVertex(500.0D, 100.0D, -100.0D);
         	renderer.addVertex(-500.0D, 100.0D, -100.0D);
         	tessellator.draw();
@@ -72,7 +72,7 @@ public class PlanetSkyRenderer extends IRenderHandler {
         GL11.glPushMatrix();
         GL11.glRotatef(-mc.thePlayer.rotationYaw, 0, 1, 0);
         renderer.startDrawingQuads();
-    	renderer.setColorRGBA_F((float)colors.xCoord, (float)colors.yCoord, (float)colors.zCoord, (float)colors.wCoord - 0.5f);
+    	renderer.setColorRGBA_F((float)colors.x, (float)colors.y, (float)colors.z, (float)colors.w - 0.5f);
     	renderer.addVertex(-500.0D, 100.0D, -100.0D);
     	renderer.addVertex(500.0D, 100.0D, -100.0D);
     	renderer.addVertex(500.0D, 100.0D, 100.0D);

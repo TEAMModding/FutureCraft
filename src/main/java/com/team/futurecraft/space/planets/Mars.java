@@ -1,6 +1,6 @@
 package com.team.futurecraft.space.planets;
 
-import com.team.futurecraft.Vec4;
+import com.team.futurecraft.Vec4f;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.OrbitalParameters;
 import com.team.futurecraft.space.PhysicalParameters;
@@ -16,6 +16,6 @@ public class Mars extends Planet {
 		this.physical = new PhysicalParameters(0.37902f, 6792f, 0, 1.026f, 136.005f, 26.72f, 82.91f);
 		this.name = "Mars";
 		this.type = new PlanetTypeDesert();
-		this.atmosphere = new Vec4(0.703, 0.467, 0.271, 0.3);
+		this.atmosphere = new Vec4f(0.703f, 0.467f, 0.271f, 0.3f);
 	}
 }

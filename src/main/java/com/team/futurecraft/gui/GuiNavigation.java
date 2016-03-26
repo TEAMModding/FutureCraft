@@ -11,6 +11,7 @@ import org.lwjgl.input.Mouse;
 import com.team.futurecraft.FutureCraft;
 import com.team.futurecraft.SpaceRegistry;
 import com.team.futurecraft.StartupCommon;
+import com.team.futurecraft.Vec3f;
 import com.team.futurecraft.network.TeleportMessage;
 import com.team.futurecraft.rendering.Camera;
 import com.team.futurecraft.rendering.Shader;
@@ -21,7 +22,6 @@ import com.team.futurecraft.space.Planet;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Vec3;
 
 /**
  * This is the gui screen class of the navigation gui.
@@ -124,13 +124,13 @@ public class GuiNavigation extends GuiScreen {
 		double horizontal = Math.toRadians(xRot);
 		double vertical = Math.toRadians(yRot);
 		
-		Vec3 direction = new Vec3(
+		Vec3f direction = new Vec3f(
 			Math.cos(vertical) * Math.sin(horizontal),
 			Math.sin(vertical),
 			Math.cos(vertical) * Math.cos(horizontal)
 		);
 		
-		Vec3 right = new Vec3(
+		Vec3f right = new Vec3f(
 			Math.sin(horizontal - 3.14f/2.0f),
 			0,
 			Math.cos(horizontal - 3.14f/2.0f)
@@ -155,24 +155,24 @@ public class GuiNavigation extends GuiScreen {
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			this.xPos += (float) direction.xCoord * movementSpeed;
-			this.yPos -= (float) direction.yCoord * movementSpeed;
-			this.zPos -= (float) direction.zCoord * movementSpeed;
+			this.xPos += (float) direction.x * movementSpeed;
+			this.yPos -= (float) direction.y * movementSpeed;
+			this.zPos -= (float) direction.z * movementSpeed;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			this.xPos -= (float) direction.xCoord * movementSpeed;
-			this.yPos += (float) direction.yCoord * movementSpeed;
-			this.zPos += (float) direction.zCoord * movementSpeed;
+			this.xPos -= (float) direction.x * movementSpeed;
+			this.yPos += (float) direction.y * movementSpeed;
+			this.zPos += (float) direction.z * movementSpeed;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			this.xPos += (float) right.xCoord * movementSpeed;
-			this.zPos -= (float) right.zCoord * movementSpeed;
+			this.xPos += (float) right.x * movementSpeed;
+			this.zPos -= (float) right.z * movementSpeed;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			this.xPos -= (float) right.xCoord * movementSpeed;
-			this.zPos += (float) right.zCoord * movementSpeed;
+			this.xPos -= (float) right.x * movementSpeed;
+			this.zPos += (float) right.z * movementSpeed;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
@@ -203,7 +203,7 @@ public class GuiNavigation extends GuiScreen {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		Camera cam = new Camera(new Vec3(this.xPos, this.yPos, this.zPos).add(planets.get(this.selectedPlanet).getPosition(time)), new Vec3(this.xRot, this.yRot, this.zRot));
+		Camera cam = new Camera(new Vec3f(this.xPos, this.yPos, this.zPos).add(planets.get(this.selectedPlanet).getPosition(time)), new Vec3f(this.xRot, this.yRot, this.zRot));
 		this.spaceRender.render(cam, time, true);
         
         super.drawScreen(mouseX, mouseY, partialTicks);

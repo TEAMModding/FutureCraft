@@ -8,15 +8,15 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
-import com.team.futurecraft.Mat4;
-import com.team.futurecraft.Vec4;
+import com.team.futurecraft.Mat4f;
+import com.team.futurecraft.Vec3f;
+import com.team.futurecraft.Vec4f;
 import com.team.futurecraft.rendering.Camera;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.util.Vec3;
 
 /**
  * Represents any celestial object (stars, planets, moons, asteroids, etc).
@@ -80,8 +80,8 @@ public abstract class CelestialObject {
         	float parentObliquity = this.getParent().physical.obliquity;
         	float parentEqAscNode = this.getParent().physical.eqAscNode;
         
-        	Vec3 parentPos = this.getParent().getPosition(time);
-        	GL11.glTranslated(parentPos.xCoord, parentPos.yCoord, parentPos.zCoord);
+        	Vec3f parentPos = this.getParent().getPosition(time);
+        	GL11.glTranslated(parentPos.x, parentPos.y, parentPos.z);
         	GL11.glRotatef(parentEqAscNode, 0F, 1F, 0F);
         	GL11.glRotatef(parentObliquity, 0F, 0F, 1F);
         	
@@ -94,14 +94,14 @@ public abstract class CelestialObject {
         	GlStateManager.enableAlpha();
         	glLineWidth(1);
         	renderer.startDrawing(3);
-        	Vec3 color = new Vec3(0, 150, 0);
+        	Vec3f color = new Vec3f(0, 150, 0);
         	
         	if (this.parent.getType() == EnumCelestialType.PLANET || this.parent.getType() == EnumCelestialType.BARYCENTER) {
-        		color = new Vec3(150, 75, 0);
+        		color = new Vec3f(150, 75, 0);
         	}
         	
         	for (int k = 0; k < 360; k++) {
-        		renderer.setColorRGBA((int)color.xCoord, (int)color.yCoord, (int)color.zCoord, (int)(((330 - k) / 200.0f) * 255));
+        		renderer.setColorRGBA((int)color.x, (int)color.y, (int)color.z, (int)(((330 - k) / 200.0f) * 255));
         		double radians = Math.toRadians(k);
         		renderer.addVertex((Math.cos(radians) * this.orbit.semiMajorAxis), 0, Math.sin(radians) * this.orbit.semiMajorAxis);
         	}
@@ -110,9 +110,9 @@ public abstract class CelestialObject {
         	glPopMatrix();
         }
         
-        Vec3 pos = this.getPosition(time);
+        Vec3f pos = this.getPosition(time);
         glPushMatrix();
-        GL11.glTranslated(pos.xCoord, pos.yCoord, pos.zCoord);
+        GL11.glTranslated(pos.x, pos.y, pos.z);
         renderer.startDrawing(3);
     	renderer.setColorRGBA(150, 0, 0, 255);
     	renderer.addVertex(0, 0, 0);
@@ -130,43 +130,43 @@ public abstract class CelestialObject {
 		GL11.glDepthMask(true);
 	}
 	
-	public Vec3 getPosition(float time) {
-		Vec3 offsetPos = new Vec3(0, 0, 0);
+	public Vec3f getPosition(float time) {
+		Vec3f offsetPos = new Vec3f(0, 0, 0);
 		if (this.orbit != null && this.parent != null) {
-			Vec3 parentPos = this.getParent().getPosition(time);
+			Vec3f parentPos = this.getParent().getPosition(time);
 			
 			float parentObliquity = this.getParent().physical.obliquity;
         	float parentEqAscNode = this.getParent().physical.eqAscNode;
 			
-			Mat4 mat = new Mat4();
-			mat = mat.multiply(Mat4.translate(parentPos.xCoord, parentPos.yCoord, parentPos.zCoord));
+			Mat4f mat = new Mat4f();
+			mat = mat.multiply(Mat4f.translate(parentPos.x, parentPos.y, parentPos.z));
 			
-			mat = mat.multiply(Mat4.rotate(parentEqAscNode, 0F, 1F, 0F));
-	        mat = mat.multiply(Mat4.rotate(parentObliquity, 0F, 0F, 1F));
+			mat = mat.multiply(Mat4f.rotate(parentEqAscNode, 0F, 1F, 0F));
+	        mat = mat.multiply(Mat4f.rotate(parentObliquity, 0F, 0F, 1F));
 			
-			mat = mat.multiply(Mat4.rotate(this.orbit.ascendingNode, 0, 1, 0));
-			mat = mat.multiply(Mat4.rotate(this.orbit.inclination, 0, 0, 1));
-			mat = mat.multiply(Mat4.rotate(this.orbit.argOfPericenter, 0, 1, 0));
-			mat = mat.multiply(Mat4.translate(0, 0, -(this.orbit.semiMajorAxis * this.orbit.eccentricity)));
-			mat = mat.multiply(Mat4.scale((1 - this.orbit.eccentricity), 1, 1));
+			mat = mat.multiply(Mat4f.rotate(this.orbit.ascendingNode, 0, 1, 0));
+			mat = mat.multiply(Mat4f.rotate(this.orbit.inclination, 0, 0, 1));
+			mat = mat.multiply(Mat4f.rotate(this.orbit.argOfPericenter, 0, 1, 0));
+			mat = mat.multiply(Mat4f.translate(0, 0, -(this.orbit.semiMajorAxis * this.orbit.eccentricity)));
+			mat = mat.multiply(Mat4f.scale((1 - this.orbit.eccentricity), 1, 1));
 			
 			
 			double radians = Math.toRadians(-(((time - this.orbit.epoch) / 86400) / this.orbit.period * 360) - this.orbit.meanAnomaly + 90);
-			Vec3 orbitPos = new Vec3(Math.cos(radians) * this.orbit.semiMajorAxis, 0, Math.sin(radians) * this.orbit.semiMajorAxis);
+			Vec3f orbitPos = new Vec3f(Math.cos(radians) * this.orbit.semiMajorAxis, 0, Math.sin(radians) * this.orbit.semiMajorAxis);
 			
-			Vec4 finalPos = mat.multiply(new Vec4(orbitPos, 1));
+			Vec4f finalPos = mat.multiply(new Vec4f(orbitPos, 1));
 			
-			return new Vec3(finalPos.xCoord, finalPos.yCoord, finalPos.zCoord);
+			return new Vec3f(finalPos.x, finalPos.y, finalPos.z);
 		}
 		return offsetPos;
 	}
 	
 	//TODO: this is soooo outdated now
-	public Vec3 getDirection(float time) {
+	public Vec3f getDirection(float time) {
 		if (this.orbit != null)
-			return new Vec3(-1, 1, 0).rotateYaw((float) Math.toRadians(time * this.physical.rotationPeriod));
+			return new Vec3f(-1, 1, 0).rotateYaw((float) Math.toRadians(time * this.physical.rotationPeriod));
 		else 
-			return new Vec3(-1, 1, 0);
+			return new Vec3f(-1, 1, 0);
 	}
 	
 	public void init() {
