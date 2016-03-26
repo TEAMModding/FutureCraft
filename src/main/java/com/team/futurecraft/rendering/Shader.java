@@ -1,18 +1,7 @@
 package com.team.futurecraft.rendering;
 
-import static org.lwjgl.opengl.GL11.GL_TRUE;
-import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
-import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
-import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
-import static org.lwjgl.opengl.GL20.glAttachShader;
-import static org.lwjgl.opengl.GL20.glCompileShader;
-import static org.lwjgl.opengl.GL20.glCreateProgram;
-import static org.lwjgl.opengl.GL20.glCreateShader;
-import static org.lwjgl.opengl.GL20.glDeleteShader;
-import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
-import static org.lwjgl.opengl.GL20.glGetShaderi;
-import static org.lwjgl.opengl.GL20.glLinkProgram;
-import static org.lwjgl.opengl.GL20.glShaderSource;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,8 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import org.lwjgl.opengl.GL20;
 
 import com.team.futurecraft.Mat4f;
 import com.team.futurecraft.Vec3f;
@@ -43,26 +30,26 @@ public class Shader {
 	}
 	
 	public void bind() {
-		GL20.glUseProgram(id);
+		glUseProgram(id);
 	}
 	
 	public void unBind() {
-		GL20.glUseProgram(0);
+		glUseProgram(0);
 	}
 	
 	public void uniformMat4(Mat4f mat, String name) {
-		int uniform = GL20.glGetUniformLocation(this.id, name);
-        GL20.glUniformMatrix4(uniform, false, mat.getBuffer());
+		int uniform = glGetUniformLocation(this.id, name);
+        glUniformMatrix4(uniform, false, mat.getBuffer());
 	}
 	
 	public void uniformFloat(float value, String name) {
-		int uniform = GL20.glGetUniformLocation(this.id, name);
-		GL20.glUniform1f(uniform, value);
+		int uniform = glGetUniformLocation(this.id, name);
+		glUniform1f(uniform, value);
 	}
 	
 	public void uniformVec3f(Vec3f vec, String name) {
-		int uniform = GL20.glGetUniformLocation(this.id, name);
-		GL20.glUniform3f(uniform, (float)vec.x, (float)vec.y, (float)vec.z);
+		int uniform = glGetUniformLocation(this.id, name);
+		glUniform3f(uniform, (float)vec.x, (float)vec.y, (float)vec.z);
 	}
 	
 	public static Shader loadShader(String name) {
@@ -90,8 +77,8 @@ public class Shader {
 			String key = entry.getKey();
 			int value = entry.getValue();
 			
-			GL20.glDetachShader(value, BoundVsh.get(value));
-			GL20.glDetachShader(value, BoundFsh.get(value));
+			glDetachShader(value, BoundVsh.get(value));
+			glDetachShader(value, BoundFsh.get(value));
 			
 			loadProgram(key + ".vsh", key + ".fsh", value);
 		}

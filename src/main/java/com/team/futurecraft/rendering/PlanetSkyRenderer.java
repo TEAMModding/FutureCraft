@@ -1,6 +1,6 @@
 package com.team.futurecraft.rendering;
 
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
 
 import com.team.futurecraft.Vec4f;
 import com.team.futurecraft.Vec3f;
@@ -21,8 +21,7 @@ import net.minecraftforge.client.IRenderHandler;
  */
 public class PlanetSkyRenderer extends IRenderHandler {
 	private Planet planet;
-	private long time = 62755776000L
-			;
+	private long time = 62755776000L;
 	
 	public PlanetSkyRenderer(Planet planet) {
 		this.planet = planet;
@@ -30,15 +29,15 @@ public class PlanetSkyRenderer extends IRenderHandler {
 	
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
-		GL11.glDepthMask(false);
-		GL11.glDisable(GL11.GL_FOG);
+		glDepthMask(false);
+		glDisable(GL_FOG);
 		GlStateManager.enableAlpha();
 		
 		SpaceRenderer render = new SpaceRenderer();
 		Camera cam = new Camera(this.planet.getPosition(time), new Vec3f(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, 0));
 		render.render(cam, time, false);
 		renderAtmosphere(mc);
-		GL11.glDepthMask(true);
+		glDepthMask(true);
 	}
 	
 	private void renderAtmosphere(Minecraft mc) {
@@ -47,11 +46,11 @@ public class PlanetSkyRenderer extends IRenderHandler {
 		Vec4f colors = this.planet.atmosphere;
         
         for (int i = 0; i < 2; i++) {
-        	GL11.glPushMatrix();
-        	GL11.glRotatef(-mc.thePlayer.rotationYaw, 0, 1, 0);
+        	glPushMatrix();
+        	glRotatef(-mc.thePlayer.rotationYaw, 0, 1, 0);
         	
         	//if (i == 1) GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-        	if (i == 1) GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+        	if (i == 1) glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
         	//if (i == 3) GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
         	
         	GlStateManager.disableTexture2D();
@@ -67,10 +66,10 @@ public class PlanetSkyRenderer extends IRenderHandler {
         	renderer.addVertex(500.0D, 100.0D, -100.0D);
         	renderer.addVertex(-500.0D, 100.0D, -100.0D);
         	tessellator.draw();
-        	GL11.glPopMatrix();
+        	glPopMatrix();
         }
-        GL11.glPushMatrix();
-        GL11.glRotatef(-mc.thePlayer.rotationYaw, 0, 1, 0);
+        glPushMatrix();
+        glRotatef(-mc.thePlayer.rotationYaw, 0, 1, 0);
         renderer.startDrawingQuads();
     	renderer.setColorRGBA_F((float)colors.x, (float)colors.y, (float)colors.z, (float)colors.w - 0.5f);
     	renderer.addVertex(-500.0D, 100.0D, -100.0D);
@@ -78,7 +77,7 @@ public class PlanetSkyRenderer extends IRenderHandler {
     	renderer.addVertex(500.0D, 100.0D, 100.0D);
     	renderer.addVertex(-500.0D, 100.0D, 100.0D);
     	tessellator.draw();
-    	GL11.glPopMatrix();
+    	glPopMatrix();
         
         GlStateManager.enableTexture2D();
 	}

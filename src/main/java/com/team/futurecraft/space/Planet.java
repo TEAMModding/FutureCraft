@@ -1,22 +1,8 @@
 package com.team.futurecraft.space;
 
-import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
-import static org.lwjgl.opengl.GL11.GL_ONE;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_QUAD_STRIP;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glColor3f;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glNormal3d;
-import static org.lwjgl.opengl.GL11.glRotatef;
-import static org.lwjgl.opengl.GL11.glScalef;
-import static org.lwjgl.opengl.GL11.glTexCoord2d;
-import static org.lwjgl.opengl.GL11.glTexCoord2f;
-import static org.lwjgl.opengl.GL11.glVertex2f;
-import static org.lwjgl.opengl.GL11.glVertex3d;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL20.*;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -28,9 +14,7 @@ import java.nio.IntBuffer;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
+
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
@@ -183,28 +167,28 @@ public abstract class Planet extends CelestialObject {
 		
 		
 		if (hasLightmap) {
-        	GL13.glActiveTexture(GL13.GL_TEXTURE2);
+        	glActiveTexture(GL_TEXTURE2);
         	Textures.loadTexture(nightPath);
         }
         else {
-        	GL13.glActiveTexture(GL13.GL_TEXTURE2);
-        	GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        	glActiveTexture(GL_TEXTURE2);
+        	glBindTexture(GL_TEXTURE_2D, 0);
         }
         if (hasOceanmap) {
-        	GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        	glActiveTexture(GL_TEXTURE1);
         	Textures.loadTexture(oceanPath);
         }
         else {
-        	GL13.glActiveTexture(GL13.GL_TEXTURE1);
-        	GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        	glActiveTexture(GL_TEXTURE1);
+        	glBindTexture(GL_TEXTURE_2D, 0);
         }
         if (hasSurfacemap) {
-        	GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        	glActiveTexture(GL_TEXTURE0);
         	Textures.loadTexture(surfacePath);
         }
         else {
-        	GL13.glActiveTexture(GL13.GL_TEXTURE1);
-        	GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        	glActiveTexture(GL_TEXTURE1);
+        	glBindTexture(GL_TEXTURE_2D, 0);
         }
 	}
 	
@@ -251,8 +235,8 @@ public abstract class Planet extends CelestialObject {
         	planetShader.uniformFloat((float)atmosphere.w, "atmosphereDensity");
         	planetShader.uniformFloat(this.getNightMultiplier(), "nightMultiplier");
         	
-        	int uniform = GL20.glGetUniformLocation(planetShader.id, "texture");
-        	GL20.glUniform1(uniform, intBuf);
+        	int uniform = glGetUniformLocation(planetShader.id, "texture");
+        	glUniform1(uniform, intBuf);
         
         	Sphere sphere = new Sphere();
         	sphere.setTextureFlag(true);
@@ -268,12 +252,12 @@ public abstract class Planet extends CelestialObject {
         	atmosphereShader.uniformFloat((float)atmosphere.w, "atmosphereDensity");
         	atmosphereShader.uniformFloat(this.getNightMultiplier(), "nightMultiplier");
         
-        	GL11.glBlendFunc(GL_ONE, GL_ONE);
+        	glBlendFunc(GL_ONE, GL_ONE);
         	Sphere sphere2 = new Sphere();
         	sphere2.setTextureFlag(true);
         	sphere2.setOrientation(GLU.GLU_INSIDE);
         	sphere2.draw(((this.physical.diameter / 1000000) / 2) * 1.02f, lod, lod);
-        	GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         
         	if (hasCloudmap) {
         		cloudShader.bind();
@@ -305,7 +289,7 @@ public abstract class Planet extends CelestialObject {
     		
         		drawRing(0, this.ringSize / 1000000, 1, 300);
         	}
-        	GL20.glUseProgram(0);
+        	glUseProgram(0);
         }
 	}
 	

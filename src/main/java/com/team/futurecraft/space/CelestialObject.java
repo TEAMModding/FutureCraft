@@ -1,12 +1,8 @@
 package com.team.futurecraft.space;
 
-import static org.lwjgl.opengl.GL11.glLineWidth;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.*;
 
 import java.util.ArrayList;
-
-import org.lwjgl.opengl.GL11;
 
 import com.team.futurecraft.Mat4f;
 import com.team.futurecraft.Vec3f;
@@ -71,7 +67,7 @@ public abstract class CelestialObject {
 		Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
         
-        GL11.glDepthMask(false);
+        glDepthMask(false);
         GlStateManager.disableTexture2D();
     	GlStateManager.disableLighting();
         if (this.getParent() != null) {
@@ -81,16 +77,16 @@ public abstract class CelestialObject {
         	float parentEqAscNode = this.getParent().physical.eqAscNode;
         
         	Vec3f parentPos = this.getParent().getPosition(time);
-        	GL11.glTranslated(parentPos.x, parentPos.y, parentPos.z);
-        	GL11.glRotatef(parentEqAscNode, 0F, 1F, 0F);
-        	GL11.glRotatef(parentObliquity, 0F, 0F, 1F);
+        	glTranslated(parentPos.x, parentPos.y, parentPos.z);
+        	glRotatef(parentEqAscNode, 0F, 1F, 0F);
+        	glRotatef(parentObliquity, 0F, 0F, 1F);
         	
-        	GL11.glRotatef(this.orbit.ascendingNode, 0, 1, 0);
-        	GL11.glRotatef(this.orbit.inclination, 0, 0, 1);
-        	GL11.glRotatef(this.orbit.argOfPericenter, 0, 1, 0);
-        	GL11.glTranslated(0, 0, - (this.orbit.semiMajorAxis * this.orbit.eccentricity));
-        	GL11.glScalef((1 - this.orbit.eccentricity), 1, 1);
-        	GL11.glRotatef((((time - this.orbit.epoch) / 86400) / this.orbit.period * 360) + this.orbit.meanAnomaly - 90, 0F, 1F, 0F);
+        	glRotatef(this.orbit.ascendingNode, 0, 1, 0);
+        	glRotatef(this.orbit.inclination, 0, 0, 1);
+        	glRotatef(this.orbit.argOfPericenter, 0, 1, 0);
+        	glTranslated(0, 0, - (this.orbit.semiMajorAxis * this.orbit.eccentricity));
+        	glScalef((1 - this.orbit.eccentricity), 1, 1);
+        	glRotatef((((time - this.orbit.epoch) / 86400) / this.orbit.period * 360) + this.orbit.meanAnomaly - 90, 0F, 1F, 0F);
         	GlStateManager.enableAlpha();
         	glLineWidth(1);
         	renderer.startDrawing(3);
@@ -112,7 +108,7 @@ public abstract class CelestialObject {
         
         Vec3f pos = this.getPosition(time);
         glPushMatrix();
-        GL11.glTranslated(pos.x, pos.y, pos.z);
+        glTranslated(pos.x, pos.y, pos.z);
         renderer.startDrawing(3);
     	renderer.setColorRGBA(150, 0, 0, 255);
     	renderer.addVertex(0, 0, 0);
@@ -127,7 +123,7 @@ public abstract class CelestialObject {
 		for (int i = 0; i < children.length; i++) {
 			children[i].renderOrbits(time);
 		}
-		GL11.glDepthMask(true);
+		glDepthMask(true);
 	}
 	
 	public Vec3f getPosition(float time) {
