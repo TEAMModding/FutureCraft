@@ -14,7 +14,7 @@ import com.team.futurecraft.StartupCommon;
 import com.team.futurecraft.Vec3f;
 import com.team.futurecraft.network.TeleportMessage;
 import com.team.futurecraft.rendering.Camera;
-import com.team.futurecraft.rendering.Shader;
+import com.team.futurecraft.rendering.ShaderOld;
 import com.team.futurecraft.rendering.SpaceRenderer;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.Planet;
@@ -188,7 +188,7 @@ public class GuiNavigation extends GuiScreen {
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_F10)) {
-			Shader.reloadShaders();
+			ShaderOld.reloadShaders();
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SUBTRACT)) {

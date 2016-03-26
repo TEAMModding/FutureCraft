@@ -3,12 +3,23 @@ package com.team.futurecraft.rendering;
 import com.team.futurecraft.Mat4f;
 import com.team.futurecraft.Vec3f;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import net.minecraft.client.Minecraft;
 
 public class SpaceRenderer {
 	private static Minecraft mc = Minecraft.getMinecraft();
+	private Mesh triangle;
+	private Shader standardShader;
+	
+	float[] vertices = {
+		    -0.5f, -0.5f, 0.0f,
+		     0.5f, -0.5f, 0.0f,
+		     0.0f,  0.5f, 0.0f
+	}; 
+	
+	public SpaceRenderer() {
+		triangle = new Mesh(vertices);
+		standardShader = new Shader("default");
+	}
 	
 	public static Mat4f getViewMatrix(Vec3f pos, Vec3f rot) {
 		Mat4f mat = new Mat4f();
@@ -25,20 +36,16 @@ public class SpaceRenderer {
 	}
 	
 	public void render(Camera cam, long time, boolean renderOrbits) {
-		setupRendering(cam, time);
-		doRendering();
-		revertRendering();
-	}
-	
-	private void setupRendering(Camera cam, long time) {
+		//glClear(GL_COLOR_BUFFER_BIT);
 		
-	}
-	
-	private void doRendering() {
+		standardShader.bind();
 		
-	}
-	
-	private void revertRendering() {
-		glClear(GL_COLOR_BUFFER_BIT);
+		triangle.bind();
+		
+		triangle.draw();
+		
+		triangle.unBind();
+		
+		standardShader.unBind();
 	}
 }

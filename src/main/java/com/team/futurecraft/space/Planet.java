@@ -22,7 +22,7 @@ import com.team.futurecraft.Mat4f;
 import com.team.futurecraft.Vec3f;
 import com.team.futurecraft.Vec4f;
 import com.team.futurecraft.rendering.Camera;
-import com.team.futurecraft.rendering.Shader;
+import com.team.futurecraft.rendering.ShaderOld;
 import com.team.futurecraft.rendering.SpaceRenderer;
 import com.team.futurecraft.rendering.Textures;
 
@@ -56,10 +56,10 @@ public abstract class Planet extends CelestialObject {
 	private String cloudPath;
 	private String ringPath;
 	
-	private Shader planetShader;
-	private Shader atmosphereShader;
-	private Shader cloudShader;
-	private Shader ringShader;
+	private ShaderOld planetShader;
+	private ShaderOld atmosphereShader;
+	private ShaderOld cloudShader;
+	private ShaderOld ringShader;
 	
 	public Planet(CelestialObject parent) {
 		super(parent);
@@ -68,10 +68,10 @@ public abstract class Planet extends CelestialObject {
 	}
 	
 	public void init() {
-		planetShader = Shader.loadShader("planet");
-		atmosphereShader = Shader.loadShader("atmosphere");
-		cloudShader = Shader.loadShader("clouds");
-		ringShader = Shader.loadShader("rings");
+		planetShader = ShaderOld.loadShader("planet");
+		atmosphereShader = ShaderOld.loadShader("atmosphere");
+		cloudShader = ShaderOld.loadShader("clouds");
+		ringShader = ShaderOld.loadShader("rings");
 		
 		this.readColormap();
 		
