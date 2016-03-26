@@ -1,10 +1,7 @@
 package com.team.futurecraft.gui;
 
-import static org.lwjgl.opengl.GL11.GL_SMOOTH;
-
 import org.lwjgl.opengl.GL11;
 
-import com.team.futurecraft.rendering.SpaceRenderer;
 import com.team.futurecraft.space.CelestialObject;
 
 import net.minecraft.client.Minecraft;
@@ -35,17 +32,6 @@ public class GuiPlanetButton extends GuiButton
     {
         if (this.visible)
         {
-        	GlStateManager.enableLighting();
-            GlStateManager.enableLight(0);
-            
-            GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, SpaceRenderer.setColorBuffer(1f, 0f, -1f, 0f));
-            GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, SpaceRenderer.setColorBuffer(1f, 1f, 1f, 1.0F));
-            GL11.glLight(GL11.GL_LIGHT0, GL11.GL_AMBIENT, SpaceRenderer.setColorBuffer(0.0F, 0.0F, 0.0F, 1.0F));
-            GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, SpaceRenderer.setColorBuffer(1f, 1f, 1f, 1.0F));
-            
-            GlStateManager.shadeModel(GL_SMOOTH);
-            GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, SpaceRenderer.setColorBuffer(0f, 0f, 0f, 1.0F));
-        	
         	GL11.glPushMatrix();
         	GL11.glTranslatef(this.xPosition + 25, this.yPosition + 25, 30);
         	GL11.glRotatef(-90, 1, 0, 0);
