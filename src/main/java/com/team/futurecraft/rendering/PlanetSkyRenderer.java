@@ -34,8 +34,8 @@ public class PlanetSkyRenderer extends IRenderHandler {
 		GlStateManager.enableAlpha();
 		
 		SpaceRenderer render = new SpaceRenderer();
-		Camera cam = new Camera(this.planet.getPosition(time), new Vec3f(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, 0));
-		render.render(cam, time, false);
+		//Camera cam = new Camera(this.planet.getPosition(time), new Vec3f(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, 0));
+		render.render(new Camera(), time, false);
 		renderAtmosphere(mc);
 		glDepthMask(true);
 	}

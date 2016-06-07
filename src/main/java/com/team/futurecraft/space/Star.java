@@ -61,12 +61,12 @@ public abstract class Star extends CelestialObject {
         glPopMatrix();
         
         //draw the star glow
-        glPushMatrix();
+        /*glPushMatrix();
         GlStateManager.enableTexture2D();
         glBlendFunc(GL_ONE, GL_ONE);
         Textures.loadTexture("textures/environment/star_glow.png");
-        glRotatef((float)-cam.rot.x, 0, 1, 0);
-        glRotatef((float)-cam.rot.y, 1, 0, 0);
+        //glRotatef((float)-cam.rot.x, 0, 1, 0);
+        //glRotatef((float)-cam.rot.y, 1, 0, 0);
         float glowSize = ((this.physical.diameter / 1000000) * 2) * 20;
         
         renderer.startDrawingQuads();
@@ -78,7 +78,7 @@ public abstract class Star extends CelestialObject {
         tessellator.draw();
         
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glPopMatrix();
+        glPopMatrix();*/
         
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();

@@ -8,7 +8,12 @@ varying vec4 color;
 
 void main()
 {
-    gl_Position = projection * view * model * gl_Vertex;
+	mat4 newview = view;
+	newview[3][0] = 0;
+	newview[3][1] = 0;
+	newview[3][2] = 0;
+
+    gl_Position = projection * newview * model * gl_Vertex;
     color = gl_Color;
     gl_TexCoord[0] = gl_MultiTexCoord0;
 }

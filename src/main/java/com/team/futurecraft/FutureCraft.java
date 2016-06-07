@@ -1,5 +1,6 @@
 package com.team.futurecraft;
 
+import com.team.futurecraft.rendering.SpaceRenderer;
 import com.team.futurecraft.space.Sol;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,6 +24,7 @@ public class FutureCraft {
 	public static final String VERSION = "0.2";
 	public static long timeOffset = 0;
 	public static final Sol SOL = new Sol(null);
+	public static SpaceRenderer spacerenderer;
 	
 	//creative tab
 	public static final CreativeTabs tabFutureCraft = new CreativeTabs("futurecraft") {
@@ -48,6 +50,7 @@ public class FutureCraft {
 		StartupCommon.preInit();
 		if (event.getSide() == Side.CLIENT) {
 			StartupClientOnly.preInit();
+			spacerenderer = new SpaceRenderer();
 		}
 	}
   

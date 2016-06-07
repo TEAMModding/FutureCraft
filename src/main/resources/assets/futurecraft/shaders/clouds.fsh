@@ -28,10 +28,5 @@ void main(){
 	
 	vec3 diffuse = (lightColor * cosTheta) * vec3(1, 1, 1) * greyscale;
     
-    if (atmosphereDensity > 0) {
-    	gl_FragColor = vec4(mix(atmosphereColor * cosTheta * atmosphereDensity, diffuse, cosAtmo), greyscale);
-    }
-    else {
-    	gl_FragColor = vec4(diffuse, greyscale);
-    }
+    gl_FragColor = vec4(textureColor, 1.0);
 }

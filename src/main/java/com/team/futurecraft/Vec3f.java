@@ -219,6 +219,10 @@ public class Vec3f {
     public Vec3f lerp(Vec3f other, float alpha) {
         return this.scale(1f - alpha).add(other.scale(alpha));
     }
+    
+    public String toString() {
+    	return "(" + this.x + ", " + this.y + ", " + this.z + ")";
+    }
 
     /**
      * Returns the Buffer representation of this vector.

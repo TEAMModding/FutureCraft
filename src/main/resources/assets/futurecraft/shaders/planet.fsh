@@ -31,10 +31,5 @@ void main() {
     vec3 diffuse = ((lightColor * cosTheta) * textureColor) * ( 1 - isWater);
 	vec3 night = nightColor * negCosTheta * nightMultiplier;
     
-    if (atmosphereDensity > 0) {
-    	gl_FragColor = vec4(mix(atmosphereColor * cosTheta, (diffuse + waterColor + night + specular), cosAtmo), 1.0);
-    }
-    else {
-    	gl_FragColor = vec4(diffuse + waterColor + night + specular, 1.0);
-    }
+    gl_FragColor = vec4(textureColor, 1.0);
 }

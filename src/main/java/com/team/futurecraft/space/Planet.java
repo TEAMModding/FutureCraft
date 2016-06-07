@@ -200,7 +200,7 @@ public abstract class Planet extends CelestialObject {
         Vec3f PlanetPos = this.getPosition(time);
         this.renderChildren(cam, time);
         
-        double distance = cam.pos.distanceTo(PlanetPos);
+        double distance = cam.position.distanceTo(PlanetPos);
         int lod = 100;
         
         if (distance < 5) {
@@ -208,29 +208,18 @@ public abstract class Planet extends CelestialObject {
         	bindTextures();
         
         	Mat4f model = new Mat4f();
-        	model = model.multiply(Mat4f.translate(PlanetPos.x - cam.pos.x, PlanetPos.y - cam.pos.y, PlanetPos.z - cam.pos.z));
+        	model = model.multiply(Mat4f.translate(PlanetPos.x, PlanetPos.y, PlanetPos.z));
         	model = model.multiply(Mat4f.rotate(this.physical.eqAscNode, 0F, 1F, 0F));
         	model = model.multiply(Mat4f.rotate(this.physical.obliquity, 0F, 0F, 1F));
         	model = model.multiply(Mat4f.rotate(90, 1F, 0F, 0F));
         	model = model.multiply(Mat4f.rotate(-90, 0F, 0F, 1F));
         	model = model.multiply(Mat4f.rotate(-(((time - this.orbit.epoch) / 86400) / this.physical.rotationPeriod * 360) - this.physical.rotationOffset, 0F, 0F, 1F));
         	
-        	Mat4f realModel = new Mat4f();
-        	realModel = realModel.multiply(Mat4f.translate(PlanetPos.x, PlanetPos.y, PlanetPos.z));
-        	realModel = realModel.multiply(Mat4f.rotate(this.physical.eqAscNode, 0F, 1F, 0F));
-        	realModel = realModel.multiply(Mat4f.rotate(this.physical.obliquity, 0F, 0F, 1F));
-        	realModel = realModel.multiply(Mat4f.rotate(90, 1F, 0F, 0F));
-        	realModel = realModel.multiply(Mat4f.rotate(-90, 0F, 0F, 1F));
-        	realModel = realModel.multiply(Mat4f.rotate(-(((time - this.orbit.epoch) / 86400) / this.physical.rotationPeriod * 360) - this.physical.rotationOffset, 0F, 0F, 1F));
-        
-        	
         	planetShader.bind();
         	planetShader.uniformMat4(model, "model");
-        	planetShader.uniformMat4(realModel, "realModel");
-        	planetShader.uniformMat4(SpaceRenderer.getViewMatrix(new Vec3f(0, 0, 0), cam.rot), "view");
-        	planetShader.uniformMat4(SpaceRenderer.getViewMatrix(cam.pos, cam.rot), "realView");
-        	planetShader.uniformMat4(SpaceRenderer.getProjectionMatrix(), "projection");
-        	planetShader.uniformVec3f(cam.pos, "eyePos");
+        	planetShader.uniformMat4(cam.getView(), "view");
+        	planetShader.uniformMat4(cam.getProjection(), "projection");
+        	planetShader.uniformVec3f(cam.position, "eyePos");
         	planetShader.uniformVec3f(new Vec3f(atmosphere.x, atmosphere.y, atmosphere.z), "atmosphereColor");
         	planetShader.uniformFloat((float)atmosphere.w, "atmosphereDensity");
         	planetShader.uniformFloat(this.getNightMultiplier(), "nightMultiplier");
@@ -244,10 +233,8 @@ public abstract class Planet extends CelestialObject {
         
         	atmosphereShader.bind();
         	atmosphereShader.uniformMat4(model, "model");
-        	atmosphereShader.uniformMat4(realModel, "realModel");
-        	atmosphereShader.uniformMat4(SpaceRenderer.getViewMatrix(new Vec3f(0, 0, 0), cam.rot), "view");
-        	atmosphereShader.uniformMat4(SpaceRenderer.getViewMatrix(cam.pos, cam.rot), "realView");
-        	atmosphereShader.uniformMat4(SpaceRenderer.getProjectionMatrix(), "projection");
+        	atmosphereShader.uniformMat4(cam.getView(), "view");
+        	atmosphereShader.uniformMat4(cam.getProjection(), "projection");
         	atmosphereShader.uniformVec3f(new Vec3f(atmosphere.x, atmosphere.y, atmosphere.z), "atmosphereColor");
         	atmosphereShader.uniformFloat((float)atmosphere.w, "atmosphereDensity");
         	atmosphereShader.uniformFloat(this.getNightMultiplier(), "nightMultiplier");
@@ -262,10 +249,8 @@ public abstract class Planet extends CelestialObject {
         	if (hasCloudmap) {
         		cloudShader.bind();
         		cloudShader.uniformMat4(model, "model");
-        		cloudShader.uniformMat4(realModel, "realModel");
-        		cloudShader.uniformMat4(SpaceRenderer.getViewMatrix(new Vec3f(0, 0, 0), cam.rot), "view");
-        		cloudShader.uniformMat4(SpaceRenderer.getViewMatrix(cam.pos, cam.rot), "realView");
-        		cloudShader.uniformMat4(SpaceRenderer.getProjectionMatrix(), "projection");
+            	cloudShader.uniformMat4(cam.getView(), "view");
+            	cloudShader.uniformMat4(cam.getProjection(), "projection");
         		cloudShader.uniformVec3f(new Vec3f(atmosphere.x, atmosphere.y, atmosphere.z), "atmosphereColor");
         		cloudShader.uniformFloat((float)atmosphere.w, "atmosphereDensity");
         		cloudShader.uniformFloat(this.getNightMultiplier(), "nightMultiplier");
@@ -280,10 +265,8 @@ public abstract class Planet extends CelestialObject {
         	if (this.ringSize > 0 && this.hasRingmap) {
         		ringShader.bind();
         		ringShader.uniformMat4(model, "model");
-        		ringShader.uniformMat4(realModel, "realModel");
-        		ringShader.uniformMat4(SpaceRenderer.getViewMatrix(new Vec3f(0, 0, 0), cam.rot), "view");
-        		ringShader.uniformMat4(SpaceRenderer.getViewMatrix(cam.pos, cam.rot), "realView");
-        		ringShader.uniformMat4(SpaceRenderer.getProjectionMatrix(), "projection");
+            	ringShader.uniformMat4(cam.getView(), "view");
+            	ringShader.uniformMat4(cam.getProjection(), "projection");
         		
         		Textures.loadTexture(this.ringPath);
     		

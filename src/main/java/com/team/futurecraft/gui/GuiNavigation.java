@@ -39,7 +39,7 @@ public class GuiNavigation extends GuiScreen {
 	private static float movementSpeed = 0.001f;
 	private ArrayList<CelestialObject> planets = new ArrayList<CelestialObject>();
 	private int selectedPlanet = 0;
-	private SpaceRenderer spaceRender;
+	private Camera cam = new Camera();
 	
 	/**
 	 * No idea why this is even here, i guess we might need it someday.
@@ -47,7 +47,6 @@ public class GuiNavigation extends GuiScreen {
 	 * @param player
 	 */
 	public GuiNavigation(EntityPlayer player) {
-		
 	}
 	
 	/**
@@ -72,44 +71,43 @@ public class GuiNavigation extends GuiScreen {
 		}
 		this.buttonList.add(new GuiSpaceButton(1000, this.width - 110, this.height - 30, 100, 20, "travel"));
 		
-		spaceRender = new SpaceRenderer();
+		//cam.position = FutureCraft.SOL.getChildren()[2].getPosition(time);
 	}
 	
 	/**
 	 * Handles the mouse input to rotate the camera.
 	 */
 	public void handleMouseInput() throws IOException
-    {
+    {	
 		if (Mouse.isButtonDown(1)) {
 			Mouse.setGrabbed(true);
-			float mouseSpeed = 0.1f;
-			double mouseX = Mouse.getEventX();
-			double mouseY = Mouse.getEventY();
-			xRot -= (float) (mouseSpeed * (this.mc.displayWidth /2 - mouseX));
-			yRot += (float) (mouseSpeed * (this.mc.displayHeight /2 - mouseY));
-			Mouse.setCursorPosition(this.mc.displayWidth / 2, this.mc.displayHeight / 2);
+
+			float xoffset = Mouse.getEventDX();
+			float yoffset = Mouse.getEventDY();
+
+			float sensitivity = 0.35f;
+			xoffset *= sensitivity;
+			yoffset *= sensitivity;
+			
+			Vec3f offsetVec = new Vec3f(xoffset, yoffset, 0);
+
+			cam.yaw   += offsetVec.x;
+			cam.pitch += offsetVec.y;
+
+			if(cam.pitch > 89.0f)
+				cam.pitch =  89.0f;
+			if(cam.pitch < -89.0f)
+				cam.pitch = -89.0f;
 		}
 		else {
 			Mouse.setGrabbed(false);
 		}
-		//this.movementSpeed += ((float)Mouse.getEventDWheel() / 120f) * 0.001f;
 		
-		int mouseMove = Mouse.getEventDWheel();
-		if (mouseMove != 0) {
-			@SuppressWarnings("rawtypes")
-			Iterator iterator = this.buttonList.iterator();
-			
-			while (iterator.hasNext()) {
-				Object obj = iterator.next();
-				if (obj instanceof GuiPlanetButton) {
-					GuiPlanetButton button = (GuiPlanetButton)obj;
-					button.yPosition += mouseMove / 10;
-				}
-			}
-		}
+		cam.front.x = (float) (Math.cos(Math.toRadians(cam.pitch)) * Math.cos(Math.toRadians(cam.yaw)));
+		cam.front.y = (float) Math.sin(Math.toRadians(cam.pitch));
+		cam.front.z = (float) (Math.cos(Math.toRadians(cam.pitch)) * Math.sin(Math.toRadians(cam.yaw)));
 		
-		if (movementSpeed < 0f)
-			movementSpeed = 0;
+		cam.front = cam.front.normalize();
 		
 		super.handleMouseInput();
     }
@@ -121,80 +119,40 @@ public class GuiNavigation extends GuiScreen {
 	 */
 	public void handleKeyboardInput() throws IOException
     {
-		double horizontal = Math.toRadians(xRot);
-		double vertical = Math.toRadians(yRot);
-		
-		Vec3f direction = new Vec3f(
-			Math.cos(vertical) * Math.sin(horizontal),
-			Math.sin(vertical),
-			Math.cos(vertical) * Math.cos(horizontal)
-		);
-		
-		Vec3f right = new Vec3f(
-			Math.sin(horizontal - 3.14f/2.0f),
-			0,
-			Math.cos(horizontal - 3.14f/2.0f)
-		);
-		
 		Keyboard.enableRepeatEvents(true);
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-			if (Keyboard.isKeyDown(Keyboard.KEY_N))
-				time += (3600L * 24L);
-			else if (Keyboard.isKeyDown(Keyboard.KEY_M))
-				time += (3600L * 24L * 365L);
-			else
-				time += 3600L;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			if (Keyboard.isKeyDown(Keyboard.KEY_N))
-				time -= (3600L * 24L);
-			else if (Keyboard.isKeyDown(Keyboard.KEY_M))
-				time -= (3600L * 24L * 365L);
-			else
-				time -= 3600L;
-		}
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			this.xPos += (float) direction.x * movementSpeed;
-			this.yPos -= (float) direction.y * movementSpeed;
-			this.zPos -= (float) direction.z * movementSpeed;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			this.xPos -= (float) direction.x * movementSpeed;
-			this.yPos += (float) direction.y * movementSpeed;
-			this.zPos += (float) direction.z * movementSpeed;
-		}
+		cam.front.x = (float) (Math.cos(Math.toRadians(cam.pitch)) * Math.cos(Math.toRadians(cam.yaw)));
+		cam.front.y = (float) Math.sin(Math.toRadians(cam.pitch));
+		cam.front.z = (float) (Math.cos(Math.toRadians(cam.pitch)) * Math.sin(Math.toRadians(cam.yaw)));
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			this.xPos += (float) right.x * movementSpeed;
-			this.zPos -= (float) right.z * movementSpeed;
-		}
+		cam.front = cam.front.normalize();
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			this.xPos -= (float) right.x * movementSpeed;
-			this.zPos += (float) right.z * movementSpeed;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
-			this.zRot += 1;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
-			this.zRot -= 1;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_ADD)) {
-			movementSpeed *= 1.1f;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_F10)) {
-			ShaderOld.reloadShaders();
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_SUBTRACT)) {
-			movementSpeed *= 0.9f;
-		}
-		super.handleKeyboardInput();
+		float cameraSpeed = 0.1f;
+	    if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
+	    	cam.position = cam.position.add((cam.front.multiply(cameraSpeed)));
+	    }
+	    if(Keyboard.isKeyDown(Keyboard.KEY_S)) {
+	    	cam.position = cam.position.subtract((cam.front.multiply(cameraSpeed)));
+	    }
+	    if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
+	    	cam.position = cam.position.subtract(((cam.front.cross(cam.up)).normalize()).multiply(cameraSpeed));
+	    }
+	    if(Keyboard.isKeyDown(Keyboard.KEY_D)) {
+	    	cam.position = cam.position.add(((cam.front.cross(cam.up)).normalize()).multiply(cameraSpeed));
+	    }
+	    if(Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+	    	//roll += 0.5f;
+	    }
+	    if(Keyboard.isKeyDown(Keyboard.KEY_E)) {
+	    	///roll -= 0.5f;
+	    }
+	    if(Keyboard.isKeyDown(Keyboard.KEY_R)) {
+	    	cam.position = cam.position.add(new Vec3f(0, cameraSpeed, 0));
+	    }
+	    if(Keyboard.isKeyDown(Keyboard.KEY_F)) {
+	    	cam.position = cam.position.add(new Vec3f(0, -cameraSpeed, 0));
+	    }
+	    super.handleKeyboardInput();
     }
 	
 	/**
@@ -203,8 +161,7 @@ public class GuiNavigation extends GuiScreen {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		Camera cam = new Camera(new Vec3f(this.xPos, this.yPos, this.zPos).add(planets.get(this.selectedPlanet).getPosition(time)), new Vec3f(this.xRot, this.yRot, this.zRot));
-		this.spaceRender.render(cam, time, true);
+		FutureCraft.spacerenderer.render(cam, time, true);
         
         super.drawScreen(mouseX, mouseY, partialTicks);
         
@@ -220,6 +177,9 @@ public class GuiNavigation extends GuiScreen {
         this.drawCenteredString(this.fontRendererObj, timeDisplay, this.width / 2, 10, 0xFFFFFF);
         this.drawCenteredString(this.fontRendererObj, "speed: " + String.valueOf(movementSpeed), (this.width / 2) + 250, 10, 0xFFFFFF);
         this.drawCenteredString(this.fontRendererObj, this.mc.debug, (this.width / 2) + 250, 110, 0xFFFFFF);
+        this.drawCenteredString(this.fontRendererObj, "X: " + this.cam.position.x, (this.width / 2) + 250, 130, 0xFFFFFF);
+        this.drawCenteredString(this.fontRendererObj, "Y: " + this.cam.position.y, (this.width / 2) + 250, 140, 0xFFFFFF);
+        this.drawCenteredString(this.fontRendererObj, "Z: " + this.cam.position.z, (this.width / 2) + 250, 150, 0xFFFFFF);
 	}
 	
 	/**
