@@ -111,39 +111,6 @@ public class GuiNavigation extends GuiScreen {
 	    	cam.position = cam.position.add(new Vec3f(0, -cameraSpeed, 0));
 	    }
 	    
-	    //mouse input
-	    /*if (Mouse.isButtonDown(1)) {
-	    	Mouse.setGrabbed(true);
-	    	//Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
-	    	if (true) {
-	    		mc.mouseHelper.mouseXYChange();
-
-				float xoffset = mc.mouseHelper.deltaX;
-				float yoffset = mc.mouseHelper.deltaY;
-				
-				System.out.println(xoffset + ", " + yoffset);
-
-				float sensitivity = 0.35f;
-				xoffset *= sensitivity;
-				yoffset *= sensitivity;
-				
-				Vec3f offsetVec = new Vec3f(xoffset, yoffset, 0);
-
-				cam.yaw   += offsetVec.x;
-				cam.pitch += offsetVec.y;
-
-				if(cam.pitch > 89.0f)
-					cam.pitch =  89.0f;
-				if(cam.pitch < -89.0f)
-					cam.pitch = -89.0f;
-				
-			}
-	    }
-	    
-		else {
-			Mouse.setGrabbed(false);
-		}*/
-	    
 	    if (Mouse.isButtonDown(1)) {
 			Mouse.setGrabbed(true);
 			float mouseSpeed = 0.1f;
