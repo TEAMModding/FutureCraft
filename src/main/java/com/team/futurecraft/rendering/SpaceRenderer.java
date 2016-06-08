@@ -24,7 +24,7 @@ public class SpaceRenderer {
 		     1.0f, -1.0f, -1.0f,
 		     1.0f, -1.0f, -1.0f,
 		     1.0f,  1.0f, -1.0f,
-		    -1.0f,  1.0f, -1.0f
+		    -1.0f,  1.0f, -1.0f 
 	};
 	
 	private static float[] colors = new float[] {

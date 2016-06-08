@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 
 import com.team.futurecraft.FutureCraft;
 import com.team.futurecraft.SpaceRegistry;
@@ -74,53 +75,10 @@ public class GuiNavigation extends GuiScreen {
 		//cam.position = FutureCraft.SOL.getChildren()[2].getPosition(time);
 	}
 	
-	/**
-	 * Handles the mouse input to rotate the camera.
-	 */
-	public void handleMouseInput() throws IOException
-    {	
-		if (Mouse.isButtonDown(1)) {
-			Mouse.setGrabbed(true);
-
-			float xoffset = Mouse.getEventDX();
-			float yoffset = Mouse.getEventDY();
-
-			float sensitivity = 0.35f;
-			xoffset *= sensitivity;
-			yoffset *= sensitivity;
-			
-			Vec3f offsetVec = new Vec3f(xoffset, yoffset, 0);
-
-			cam.yaw   += offsetVec.x;
-			cam.pitch += offsetVec.y;
-
-			if(cam.pitch > 89.0f)
-				cam.pitch =  89.0f;
-			if(cam.pitch < -89.0f)
-				cam.pitch = -89.0f;
-		}
-		else {
-			Mouse.setGrabbed(false);
-		}
-		
-		cam.front.x = (float) (Math.cos(Math.toRadians(cam.pitch)) * Math.cos(Math.toRadians(cam.yaw)));
-		cam.front.y = (float) Math.sin(Math.toRadians(cam.pitch));
-		cam.front.z = (float) (Math.cos(Math.toRadians(cam.pitch)) * Math.sin(Math.toRadians(cam.yaw)));
-		
-		cam.front = cam.front.normalize();
-		
-		super.handleMouseInput();
-    }
 	
-	
-	
-	/**
-	 * Handles keyboard input to move the player.
-	 */
-	public void handleKeyboardInput() throws IOException
+	public void doInput()
     {
-		Keyboard.enableRepeatEvents(true);
-		
+		//keyboard input
 		cam.front.x = (float) (Math.cos(Math.toRadians(cam.pitch)) * Math.cos(Math.toRadians(cam.yaw)));
 		cam.front.y = (float) Math.sin(Math.toRadians(cam.pitch));
 		cam.front.z = (float) (Math.cos(Math.toRadians(cam.pitch)) * Math.sin(Math.toRadians(cam.yaw)));
@@ -152,7 +110,59 @@ public class GuiNavigation extends GuiScreen {
 	    if(Keyboard.isKeyDown(Keyboard.KEY_F)) {
 	    	cam.position = cam.position.add(new Vec3f(0, -cameraSpeed, 0));
 	    }
-	    super.handleKeyboardInput();
+	    
+	    //mouse input
+	    /*if (Mouse.isButtonDown(1)) {
+	    	Mouse.setGrabbed(true);
+	    	//Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
+	    	if (true) {
+	    		mc.mouseHelper.mouseXYChange();
+
+				float xoffset = mc.mouseHelper.deltaX;
+				float yoffset = mc.mouseHelper.deltaY;
+				
+				System.out.println(xoffset + ", " + yoffset);
+
+				float sensitivity = 0.35f;
+				xoffset *= sensitivity;
+				yoffset *= sensitivity;
+				
+				Vec3f offsetVec = new Vec3f(xoffset, yoffset, 0);
+
+				cam.yaw   += offsetVec.x;
+				cam.pitch += offsetVec.y;
+
+				if(cam.pitch > 89.0f)
+					cam.pitch =  89.0f;
+				if(cam.pitch < -89.0f)
+					cam.pitch = -89.0f;
+				
+			}
+	    }
+	    
+		else {
+			Mouse.setGrabbed(false);
+		}*/
+	    
+	    if (Mouse.isButtonDown(1)) {
+			Mouse.setGrabbed(true);
+			float mouseSpeed = 0.1f;
+			double mouseX = Mouse.getEventX();
+			double mouseY = Mouse.getEventY();
+			cam.yaw -= (float) (mouseSpeed * (this.mc.displayWidth /2 - mouseX));
+			cam.pitch -= (float) (mouseSpeed * (this.mc.displayHeight /2 - mouseY));
+			Mouse.setCursorPosition(this.mc.displayWidth / 2, this.mc.displayHeight / 2);
+		}
+		else {
+			Mouse.setGrabbed(false);
+		}
+		
+		cam.front.x = (float) (Math.cos(Math.toRadians(cam.pitch)) * Math.cos(Math.toRadians(cam.yaw)));
+		cam.front.y = (float) Math.sin(Math.toRadians(cam.pitch));
+		cam.front.z = (float) (Math.cos(Math.toRadians(cam.pitch)) * Math.sin(Math.toRadians(cam.yaw)));
+		
+		cam.front = cam.front.normalize();
+		//Mouse.setCursorPosition(10, 10);
     }
 	
 	/**
@@ -161,6 +171,7 @@ public class GuiNavigation extends GuiScreen {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		doInput();
 		FutureCraft.spacerenderer.render(cam, time, true);
         
         super.drawScreen(mouseX, mouseY, partialTicks);
