@@ -5,17 +5,13 @@ import com.team.futurecraft.Mat4f;
 import com.team.futurecraft.Vec3f;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
 
 import net.minecraft.client.Minecraft;
 
 public class SpaceRenderer {
 	private static Minecraft mc = Minecraft.getMinecraft();
-	private Shader standardShader;
-	private Shader skyboxShader;
 	private Mesh skyboxMesh;
 	private Mesh mesh;
-	private Cubemap skybox;
 	
 	private static float[] vertices = new float[] {
 			// Positions
@@ -54,27 +50,9 @@ public class SpaceRenderer {
 			0.0f, 1.0f
 	};
 	
-	private static String[] cubemapTextures = new String[] {
-			"textures/environment/sky_pos_x.png",
-			"textures/environment/sky_neg_x.png",
-			"textures/environment/sky_pos_y.png",
-			"textures/environment/sky_neg_y.png",
-			"textures/environment/sky_pos_z.png",
-			"textures/environment/sky_neg_z.png"
-			/*"textures/environment/right.jpg",
-			"textures/environment/left.jpg",
-			"textures/environment/top.jpg",
-			"textures/environment/bottom.jpg",
-			"textures/environment/back.jpg",
-			"textures/environment/front.jpg",*/
-	};
-	
 	public SpaceRenderer() {
-		standardShader = new Shader("default");
-		skyboxShader = new Shader("skybox");
 		skyboxMesh = new Mesh(vertices, null, skyboxUvs, null);
 		mesh = new Mesh(vertices, null, uvs, null);
-		//skybox = new Cubemap(cubemapTextures);
 	}
 	
 	public static Mat4f getViewMatrix(Vec3f pos, Vec3f rot) {
@@ -96,16 +74,16 @@ public class SpaceRenderer {
 		//glDisable(GL_CULL_FACE);
 		renderSkybox(cam);
 		
-		standardShader.bind();
+		Assets.defaultShader.bind();
 		
-		standardShader.uniformMat4("view", cam.getView());
-		standardShader.uniformMat4("projection", cam.getProjection());
-		standardShader.uniformMat4("model", Mat4f.translate(0.0f, 0.5f, -2.0f));
+		Assets.defaultShader.uniformMat4("view", cam.getView());
+		Assets.defaultShader.uniformMat4("projection", cam.getProjection());
+		Assets.defaultShader.uniformMat4("model", Mat4f.translate(0.0f, 0.5f, -2.0f));
 		Textures.loadTexture("textures/blocks/desert_iron_ore.png");
 		
 		mesh.draw();
 		
-		standardShader.unBind();
+		Assets.defaultShader.unBind();
 		
 		FutureCraft.SOL.render(cam, time);
 		
@@ -114,36 +92,36 @@ public class SpaceRenderer {
 	
 	private void renderSkybox(Camera cam) {
 		glDepthMask(false);
-		skyboxShader.bind();
+		Assets.skyboxShader.bind();
 		
-		skyboxShader.uniformMat4("view", cam.getView());
-		skyboxShader.uniformMat4("projection", cam.getProjection());
+		Assets.skyboxShader.uniformMat4("view", cam.getView());
+		Assets.skyboxShader.uniformMat4("projection", cam.getProjection());
 		
-		skyboxShader.uniformMat4("model", Mat4f.rotate(-90.0f, 0.0f, 1.0f, 0.0f));
-		Textures.loadTexture(cubemapTextures[0]);
+		Assets.skyboxShader.uniformMat4("model", Mat4f.rotate(-90.0f, 0.0f, 1.0f, 0.0f));
+		Assets.spaceSkybox[0].bind();
 		skyboxMesh.draw();
 		
-		skyboxShader.uniformMat4("model", Mat4f.rotate(90.0f, 0.0f, 1.0f, 0.0f));
-		Textures.loadTexture(cubemapTextures[1]);
+		Assets.skyboxShader.uniformMat4("model", Mat4f.rotate(90.0f, 0.0f, 1.0f, 0.0f));
+		Assets.spaceSkybox[1].bind();
 		skyboxMesh.draw();
 		
-		skyboxShader.uniformMat4("model", Mat4f.rotate(180.0f, 0.0f, 0.0f, 1.0f).multiply(Mat4f.rotate(-90.0f, 1.0f, 0.0f, 0.0f)));
-		Textures.loadTexture(cubemapTextures[2]);
+		Assets.skyboxShader.uniformMat4("model", Mat4f.rotate(180.0f, 0.0f, 0.0f, 1.0f).multiply(Mat4f.rotate(-90.0f, 1.0f, 0.0f, 0.0f)));
+		Assets.spaceSkybox[2].bind();
+		skyboxMesh.draw();
+
+		Assets.skyboxShader.uniformMat4("model", Mat4f.rotate(180.0f, 0.0f, 0.0f, 1.0f).multiply(Mat4f.rotate(90.0f, 1.0f, 0.0f, 0.0f)));
+		Assets.spaceSkybox[3].bind();
 		skyboxMesh.draw();
 		
-		skyboxShader.uniformMat4("model", Mat4f.rotate(180.0f, 0.0f, 0.0f, 1.0f).multiply(Mat4f.rotate(90.0f, 1.0f, 0.0f, 0.0f)));
-		Textures.loadTexture(cubemapTextures[3]);
+		Assets.skyboxShader.uniformMat4("model", Mat4f.rotate(180.0f, 0.0f, 1.0f, 0.0f));
+		Assets.spaceSkybox[4].bind();
 		skyboxMesh.draw();
 		
-		skyboxShader.uniformMat4("model", Mat4f.rotate(180.0f, 0.0f, 1.0f, 0.0f));
-		Textures.loadTexture(cubemapTextures[4]);
+		Assets.skyboxShader.uniformMat4("model", Mat4f.rotate(0.0f, 0.0f, 1.0f, 0.0f));
+		Assets.spaceSkybox[5].bind();
 		skyboxMesh.draw();
 		
-		skyboxShader.uniformMat4("model", Mat4f.rotate(0.0f, 0.0f, 1.0f, 0.0f));
-		Textures.loadTexture(cubemapTextures[5]);
-		skyboxMesh.draw();
-		
-		skyboxShader.unBind();
+		Assets.skyboxShader.unBind();
 		glDepthMask(true);
 	}
 }

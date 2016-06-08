@@ -1,6 +1,7 @@
 package com.team.futurecraft;
 
 import com.team.futurecraft.entity.ChunkEntity;
+import com.team.futurecraft.rendering.Assets;
 import com.team.futurecraft.rendering.entity.RenderChunkEntity;
 
 import net.minecraft.client.Minecraft;
@@ -22,6 +23,7 @@ public class StartupClientOnly {
 	 */
 	public static void init() {	
 		RenderingRegistry.registerEntityRenderingHandler(ChunkEntity.class, new RenderChunkEntity(Minecraft.getMinecraft().getRenderManager()));
+		Assets.loadAssets();
 		
 		//metal blocks
 		registerItemRendering("steel_plating");

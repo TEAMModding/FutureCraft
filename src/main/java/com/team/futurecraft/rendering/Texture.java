@@ -1,8 +1,8 @@
 package com.team.futurecraft.rendering;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL30.*;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -18,52 +18,68 @@ import org.lwjgl.BufferUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
-public class Cubemap {
+public class Texture {
 	public int id;
-	
-	public Cubemap(String[] images) {
-		this.id = id;
-		glBindTexture(GL_TEXTURE_CUBE_MAP, this.id);
-		
-		for (int i = 0; i < 6; i++) {
-			RawImage image = getRawImage(images[i]);
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA8, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data);
-		}
-		
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	public Texture(String path) {
+		this(path, false);
 	}
-	
+
 	/**
-	 * Binds the texture for rendering in the specified texture location. Multiple textures can be sent
-	 * to the same shader if they are in different locations.
+	 * Creates a new texture object that can be bound later, from the specified
+	 * path. This actually uses the entire path including the resources folder,
+	 * whereas shader already appends the resources/shaders folder. Maybe we
+	 * should do the same here?
 	 */
-	public void bind(int num) {
-		glActiveTexture(GL_TEXTURE0 + num);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, id);
-		glActiveTexture(GL_TEXTURE0);
+	public Texture(String path, boolean pixelated) {
+		id = glGenTextures();
+		// System.out.println(handle);
+		glBindTexture(GL_TEXTURE_2D, id);
+
+		RawImage img = getRawImage(path);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, img.width, img.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.data);
+
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+		// GL_LINEAR_MIPMAP_LINEAR);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-	
-	public static void unBind(int num) {
-		glActiveTexture(GL_TEXTURE0 + num);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-		glActiveTexture(GL_TEXTURE0);
-	}
-	
+
 	/**
 	 * Binds the texture for rendering in the first texture location.
 	 */
 	public void bind() {
-		glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+		glBindTexture(GL_TEXTURE_2D, id);
 	}
-	
+
+	/**
+	 * Binds the texture for rendering in the specified texture location.
+	 * Multiple textures can be sent to the same shader if they are in different
+	 * locations.
+	 */
+	public void bind(int num) {
+		glActiveTexture(GL_TEXTURE0 + num);
+		glBindTexture(GL_TEXTURE_2D, id);
+		glActiveTexture(GL_TEXTURE0);
+	}
+
+	public static void unBind(int num) {
+		glActiveTexture(GL_TEXTURE0 + num);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glActiveTexture(GL_TEXTURE0);
+	}
+
 	protected static RawImage getRawImage(String path) {
-		
+
 		ResourceLocation loc = new ResourceLocation("futurecraft", path);
-		
+
 		InputStream in;
 		BufferedImage image;
 		try {
@@ -74,18 +90,18 @@ public class Cubemap {
 			e.printStackTrace();
 			return null;
 		}
-	
-		//AffineTransform transform = AffineTransform.getScaleInstance(-1f, 1f);
-		//transform.translate(-image.getWidth(), 0);
-		//AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-		//image = operation.filter(image, null);
-	
+
+		AffineTransform transform = AffineTransform.getScaleInstance(1f, -1f);
+		transform.translate(0, -image.getHeight());
+		AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		image = operation.filter(image, null);
+
 		int width = image.getWidth();
 		int height = image.getHeight();
 
 		int[] pixels = new int[width * height];
 		image.getRGB(0, 0, width, height, pixels, 0, width);
-	
+
 		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
 
 		for (int y = 0; y < height; y++) {
@@ -107,9 +123,7 @@ public class Cubemap {
 			}
 		}
 		buffer.flip();
-		
+
 		return new RawImage(buffer, width, height);
 	}
 }
-
-
