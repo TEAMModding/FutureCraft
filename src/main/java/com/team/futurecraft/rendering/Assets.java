@@ -5,6 +5,9 @@ public class Assets {
 	
 	public static Shader defaultShader;
 	public static Shader skyboxShader;
+	public static Shader framebufferShader;
+	
+	public static Mesh framebufferMesh;
 	
 	public static void loadAssets() {
 		System.out.println("Loading Futurecraft assets from disk...");
@@ -20,6 +23,25 @@ public class Assets {
 		
 		defaultShader = new Shader("default");
 		skyboxShader = new Shader("skybox");
+		framebufferShader = new Shader("framebuffer");
+		
+		framebufferMesh = new Mesh(
+			new float[] {
+				-1.0f,  1.0f, 0.0f,
+			    -1.0f, -1.0f, 0.0f,
+			     1.0f, -1.0f, 0.0f,
+			     1.0f, -1.0f, 0.0f,
+			     1.0f,  1.0f, 0.0f,
+			    -1.0f,  1.0f, 0.0f
+			},
+			null, new float[] {
+				0.0f, 1.0f,
+				0.0f, 0.0f,
+				1.0f, 0.0f,
+				1.0f, 0.0f,
+				1.0f, 1.0f,
+				0.0f, 1.0f
+			}, null);
 		
 		System.out.println("Load finished");
 	}

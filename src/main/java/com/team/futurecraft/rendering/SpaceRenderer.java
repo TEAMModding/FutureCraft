@@ -1,6 +1,5 @@
 package com.team.futurecraft.rendering;
 
-import com.team.futurecraft.FutureCraft;
 import com.team.futurecraft.Mat4f;
 import com.team.futurecraft.Vec3f;
 
@@ -12,6 +11,7 @@ public class SpaceRenderer {
 	private static Minecraft mc = Minecraft.getMinecraft();
 	private Mesh skyboxMesh;
 	private Mesh mesh;
+	private GLFramebuffer buffer;
 	
 	private static float[] vertices = new float[] {
 			// Positions
@@ -21,15 +21,6 @@ public class SpaceRenderer {
 		     1.0f, -1.0f, -1.0f,
 		     1.0f,  1.0f, -1.0f,
 		    -1.0f,  1.0f, -1.0f 
-	};
-	
-	private static float[] colors = new float[] {
-			1.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			0.0f, 0.0f, 1.0f,
-			1.0f, 1.0f, 0.0f,
-			1.0f, 0.0f, 0.0f
 	};
 	
 	private static float[] skyboxUvs = new float[] {
@@ -70,8 +61,12 @@ public class SpaceRenderer {
 	}
 	
 	public void render(Camera cam, long time, boolean renderOrbits) {
+		if (buffer == null) {
+			buffer = new GLFramebuffer(mc.displayWidth, mc.displayHeight, 1);
+		}
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//glDisable(GL_CULL_FACE);
+		
+		buffer.bind();
 		renderSkybox(cam);
 		
 		Assets.defaultShader.bind();
@@ -83,11 +78,9 @@ public class SpaceRenderer {
 		
 		mesh.draw();
 		
-		Assets.defaultShader.unBind();
+		buffer.render(Assets.framebufferShader);
 		
-		FutureCraft.SOL.render(cam, time);
-		
-		//glEnable(GL_CULL_FACE);
+		//FutureCraft.SOL.render(cam, time);
 	}
 	
 	private void renderSkybox(Camera cam) {
@@ -121,7 +114,7 @@ public class SpaceRenderer {
 		Assets.spaceSkybox[5].bind();
 		skyboxMesh.draw();
 		
-		Assets.skyboxShader.unBind();
+		Assets.skyboxShader.unbind();
 		glDepthMask(true);
 	}
 }

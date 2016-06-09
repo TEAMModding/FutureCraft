@@ -46,7 +46,7 @@ public class Shader {
 		glUseProgram(this.id);
 	}
 	
-	public void unBind() {
+	public static void unbind() {
 		glUseProgram(0);
 	}
 	

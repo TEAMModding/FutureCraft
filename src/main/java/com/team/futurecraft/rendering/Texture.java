@@ -24,6 +24,10 @@ public class Texture {
 	public Texture(String path) {
 		this(path, false);
 	}
+	
+	public Texture(int id) {
+		this.id = id;
+	}
 
 	/**
 	 * Creates a new texture object that can be bound later, from the specified
