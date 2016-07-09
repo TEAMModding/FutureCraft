@@ -21,9 +21,12 @@ import org.lwjgl.util.glu.Sphere;
 import com.team.futurecraft.Mat4f;
 import com.team.futurecraft.Vec3f;
 import com.team.futurecraft.Vec4f;
+import com.team.futurecraft.rendering.Assets;
 import com.team.futurecraft.rendering.Camera;
+import com.team.futurecraft.rendering.Shader;
 import com.team.futurecraft.rendering.ShaderOld;
 import com.team.futurecraft.rendering.SpaceRenderer;
+import com.team.futurecraft.rendering.Texture;
 import com.team.futurecraft.rendering.Textures;
 
 import net.minecraft.client.Minecraft;
@@ -34,7 +37,7 @@ import net.minecraft.util.ResourceLocation;
  * 
  * @author Joseph
  */
-public abstract class Planet extends CelestialObject {
+public class Planet extends CelestialObject {
 	public int[] turfmap;
 	public int[] stonemap;
 	
@@ -60,6 +63,8 @@ public abstract class Planet extends CelestialObject {
 	private ShaderOld atmosphereShader;
 	private ShaderOld cloudShader;
 	private ShaderOld ringShader;
+	
+	private Texture surfaceTexture;
 	
 	public Planet(CelestialObject parent) {
 		super(parent);
@@ -91,6 +96,8 @@ public abstract class Planet extends CelestialObject {
 			hasCloudmap = true;
 		if (Textures.exists(ringPath))
 			hasRingmap = true;
+		
+		surfaceTexture = new Texture(surfacePath);
 		
 		super.init();
 	}
@@ -198,7 +205,7 @@ public abstract class Planet extends CelestialObject {
 	 */
 	public void render(Camera cam, float time) {
         Vec3f PlanetPos = this.getPosition(time);
-        this.renderChildren(cam, time);
+        /*this.renderChildren(cam, time);
         
         double distance = cam.position.distanceTo(PlanetPos);
         int lod = 100;
@@ -273,6 +280,53 @@ public abstract class Planet extends CelestialObject {
         		drawRing(0, this.ringSize / 1000000, 1, 300);
         	}
         	glUseProgram(0);
+        }
+        */
+        
+        float distance = cam.position.distanceTo(PlanetPos);
+        float magnitude = (this.physical.diameter / 1000000) / distance;
+        int LOD = 0;
+        
+        if (magnitude > 0.0002) {
+        	LOD = 1;
+        }
+        if (magnitude > 0.001) {
+        	LOD = 2;
+        }
+        if (magnitude > 0.004) {
+        	LOD = 4;
+        }
+        if (magnitude > 0.008) {
+        	LOD = 6;
+        }
+        if (magnitude > 0.016) {
+        	LOD = 8;
+        }
+    	
+        if (true) {
+        	Mat4f model = new Mat4f();
+        	//model = model.translate(PlanetPos.x, PlanetPos.y, PlanetPos.z);
+        	model = model.rotate(this.physical.eqAscNode, 0F, 1F, 0F);
+        	model = model.rotate(this.physical.obliquity, 0F, 0F, 1F);
+        	model = model.rotate(90, 1F, 0F, 0F);
+        	model = model.rotate(-90, 0F, 0F, 1F);
+        	model = model.rotate(-((time - this.orbit.epoch) / this.physical.rotationPeriod * 360) - this.physical.rotationOffset, 0F, 0F, 1F);
+        	
+        	float scaling = 1000000000f;
+        	
+        	//System.out.println(this.physical.rotationOffset);
+	        Assets.planetSurfaceShader.bind();
+	        Assets.planetSurfaceShader.uniformMat4("model", model);
+	        Assets.planetSurfaceShader.uniformMat4("view", cam.getViewSkybox().translate((-cam.position.x + PlanetPos.x) / scaling, (-cam.position.y + PlanetPos.y) / scaling, (-cam.position.z + PlanetPos.z) / scaling));
+	        Assets.planetSurfaceShader.uniformMat4("projection", cam.getProjection(0.0001f, 100));
+	        surfaceTexture.bind();
+	        
+	        Sphere sphere = new Sphere();
+	        sphere.setTextureFlag(true);		  //             |
+	        sphere.setNormals(GLU.GLU_SMOOTH);	  //scale factor V
+	        sphere.draw((this.physical.diameter / 2 / 1000000000f) * 1, 10 * 6, 10 * 6);
+	        
+	        Shader.unbind();
         }
 	}
 	

@@ -124,12 +124,12 @@ public class Vec3f {
         return scale(-1f);
     }
     
-    public double distanceTo(Vec3f vec)
+    public float distanceTo(Vec3f vec)
     {
-        double d0 = vec.x - this.x;
-        double d1 = vec.y - this.y;
-        double d2 = vec.z - this.z;
-        return (double)MathHelper.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
+        float d0 = vec.x - this.x;
+        float d1 = vec.y - this.y;
+        float d2 = vec.z - this.z;
+        return (float)MathHelper.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
     }
     
     public Vec3f rotatePitch(float pitch)

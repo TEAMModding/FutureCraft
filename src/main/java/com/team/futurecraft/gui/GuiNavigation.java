@@ -14,12 +14,14 @@ import com.team.futurecraft.SpaceRegistry;
 import com.team.futurecraft.StartupCommon;
 import com.team.futurecraft.Vec3f;
 import com.team.futurecraft.network.TeleportMessage;
+import com.team.futurecraft.rendering.Assets;
 import com.team.futurecraft.rendering.Camera;
 import com.team.futurecraft.rendering.ShaderOld;
 import com.team.futurecraft.rendering.SpaceRenderer;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.Planet;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,7 +39,7 @@ public class GuiNavigation extends GuiScreen {
 	private float xRot = 0;
 	private float yRot = 30;
 	private float zRot = 0;
-	private static float movementSpeed = 0.001f;
+	private static float movementSpeed = 10000000f;
 	private ArrayList<CelestialObject> planets = new ArrayList<CelestialObject>();
 	private int selectedPlanet = 0;
 	private Camera cam = new Camera();
@@ -84,8 +86,8 @@ public class GuiNavigation extends GuiScreen {
 		cam.front.z = (float) (Math.cos(Math.toRadians(cam.pitch)) * Math.sin(Math.toRadians(cam.yaw)));
 		
 		cam.front = cam.front.normalize();
-		
-		float cameraSpeed = 0.1f;
+		//1391400000
+		float cameraSpeed = 100000000f;
 	    if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
 	    	cam.position = cam.position.add((cam.front.multiply(cameraSpeed)));
 	    }
@@ -109,6 +111,15 @@ public class GuiNavigation extends GuiScreen {
 	    }
 	    if(Keyboard.isKeyDown(Keyboard.KEY_F)) {
 	    	cam.position = cam.position.add(new Vec3f(0, -cameraSpeed, 0));
+	    }
+	    
+	    if (Keyboard.isKeyDown(Keyboard.KEY_T)) {
+	    	System.out.println("teleporting");
+	    	cam.position.y = 10000000000000000000000000000000000000f;
+	    }
+	    
+	    if (Keyboard.isKeyDown(Keyboard.KEY_F8)) {
+	    	Assets.loadAssets();
 	    }
 	    
 	    if (Mouse.isButtonDown(1)) {
@@ -182,6 +193,7 @@ public class GuiNavigation extends GuiScreen {
 		}
 		else {
 			this.selectedPlanet = button.id;
+			cam.position = ((Planet)planets.get(this.selectedPlanet)).getPosition(time);
 		}
 	}
 }

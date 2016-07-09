@@ -24,6 +24,7 @@ import com.team.futurecraft.item.SimplePickaxe;
 import com.team.futurecraft.network.TeleportMessage;
 import com.team.futurecraft.network.TeleportMessageHandler;
 import com.team.futurecraft.recipe.AlloyRegistry;
+import com.team.futurecraft.space.SpaceJSONLoader;
 import com.team.futurecraft.tileentity.ElectricalBase;
 import com.team.futurecraft.tileentity.TileEntityAlloyFurnace;
 import com.team.futurecraft.tileentity.TileEntityGenerator;
@@ -99,6 +100,19 @@ public class StartupCommon {
 		
 		SpaceRegistry.registerSystem(FutureCraft.SOL);
 		FutureCraft.SOL.init();
+		
+		System.out.println(MetricUtil.multiDistanceToMeters("105au"));
+		System.out.println(MetricUtil.multiDistanceToMeters("10m"));
+		System.out.println(MetricUtil.multiDistanceToMeters("5m"));
+		System.out.println(MetricUtil.multiDistanceToMeters("6km"));
+		System.out.println(MetricUtil.multiDistanceToMeters("70km"));
+		System.out.println(MetricUtil.multiDistanceToMeters("1047km"));
+		System.out.println(MetricUtil.multiDistanceToMeters("1"));
+		System.out.println(MetricUtil.multiDistanceToMeters("16"));
+		System.out.println(MetricUtil.multiDistanceToMeters("196"));
+		System.out.println(MetricUtil.multiDistanceToMeters(""));
+		System.out.println(MetricUtil.multiDistanceToMeters("awkyitvawkm"));
+		SpaceJSONLoader.load();
 		
 		EntityRegistry.registerModEntity(ChunkEntity.class, "chunk_entity", 540, "futurecraft", 800, 1, true);
 	}

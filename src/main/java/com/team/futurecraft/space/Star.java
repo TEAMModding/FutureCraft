@@ -5,7 +5,10 @@ import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
+import com.team.futurecraft.Mat4f;
+import com.team.futurecraft.rendering.Assets;
 import com.team.futurecraft.rendering.Camera;
+import com.team.futurecraft.rendering.Shader;
 import com.team.futurecraft.rendering.Textures;
 
 import net.minecraft.client.Minecraft;
@@ -18,7 +21,7 @@ import net.minecraft.client.renderer.WorldRenderer;
  * 
  * @author Joseph
  */
-public abstract class Star extends CelestialObject {
+public class Star extends CelestialObject {
 	public Star(CelestialObject parent) {
 		super(parent);
 	}
@@ -45,43 +48,21 @@ public abstract class Star extends CelestialObject {
 	 * Render's an awesome star.
 	 */
 	public void render(Camera cam, float time) {
-		Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer renderer = tessellator.getWorldRenderer();
+        Assets.starSurfaceShader.bind();
+        float scaling = 1000000000f;
+        //we translate the model by the camera position, and letthe actual view matrix stay at 0. This way the camera is the center
+        //of the coordinate space and we won't get accuracy problems. We also scale down space so that 1 unit = 1,000,000,000 meters.
+        Assets.starSurfaceShader.uniformMat4("model", new Mat4f().translate(-cam.position.x / scaling, -cam.position.y / scaling, -cam.position.z / scaling));
+        Assets.starSurfaceShader.uniformMat4("view", cam.getViewSkybox());
+        Assets.starSurfaceShader.uniformMat4("projection", cam.getProjection(0.1f, 1000f));
         
-        //draw the star itself
-		glPushMatrix();
-		GlStateManager.disableLighting();
-		GlStateManager.disableTexture2D();
-		glTranslatef(0, 0, 0);
-		glColor3f(2.0f, 2.0f, 2.0f);
         Sphere sphere = new Sphere();
         sphere.setTextureFlag(false);
         sphere.setNormals(GLU.GLU_SMOOTH);
-        sphere.draw((this.physical.diameter / 1000000) * 2, 100, 100);
-        glPopMatrix();
+        sphere.draw((this.physical.diameter / 2) / 1000000000f, 100, 100);
         
-        //draw the star glow
-        /*glPushMatrix();
-        GlStateManager.enableTexture2D();
-        glBlendFunc(GL_ONE, GL_ONE);
-        Textures.loadTexture("textures/environment/star_glow.png");
-        //glRotatef((float)-cam.rot.x, 0, 1, 0);
-        //glRotatef((float)-cam.rot.y, 1, 0, 0);
-        float glowSize = ((this.physical.diameter / 1000000) * 2) * 20;
+        Shader.unbind();
         
-        renderer.startDrawingQuads();
-        renderer.setColorRGBA(255, 255, 255, 255);
-        renderer.addVertexWithUV(-glowSize, -glowSize, 0, 0, 1);
-        renderer.addVertexWithUV(glowSize, -glowSize, 0, 1, 1);
-        renderer.addVertexWithUV(glowSize, glowSize, 0, 1, 0);
-        renderer.addVertexWithUV(-glowSize, glowSize, 0, 0, 0);
-        tessellator.draw();
-        
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glPopMatrix();*/
-        
-        GlStateManager.enableLighting();
-        GlStateManager.enableTexture2D();
         this.renderChildren(cam, time);
 	}
 }

@@ -6,6 +6,10 @@ public class Assets {
 	public static Shader defaultShader;
 	public static Shader skyboxShader;
 	public static Shader framebufferShader;
+	public static Shader starSurfaceShader;
+	public static Shader planetSurfaceShader;
+	public static Shader orbitShader;
+	public static Shader gridShader;
 	
 	public static Mesh framebufferMesh;
 	
@@ -24,6 +28,10 @@ public class Assets {
 		defaultShader = new Shader("default");
 		skyboxShader = new Shader("skybox");
 		framebufferShader = new Shader("framebuffer");
+		starSurfaceShader = new Shader("star_surface");
+		planetSurfaceShader = new Shader("planet_surface");
+		orbitShader = new Shader("orbit");
+		gridShader = new Shader("grid");
 		
 		framebufferMesh = new Mesh(
 			new float[] {

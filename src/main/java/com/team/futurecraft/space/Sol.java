@@ -15,8 +15,7 @@ public class Sol extends Star {
 		
 		this.name = "Sol";
 		this.orbit = null;
-		this.physical = new PhysicalParameters(500, 152550f, 0, 0, 0, 0, 0);
-		
+		this.physical = new PhysicalParameters(500, 1391400f, 0, 0, 0, 0, 0);
 		this.add(new Mercury(this));
 		this.add(new Venus(this));
 		this.add(new EarthMoon(this));

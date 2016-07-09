@@ -180,29 +180,29 @@ public class Mat4f {
      * @return Matrix product of this * other
      */
     public Mat4f multiply(Mat4f other) {
-        Mat4f result = new Mat4f();
+    	 Mat4f result = new Mat4f();
 
-        result.m00 = this.m00 * other.m00 + this.m01 * other.m10 + this.m02 * other.m20 + this.m03 * other.m30;
-        result.m10 = this.m10 * other.m00 + this.m11 * other.m10 + this.m12 * other.m20 + this.m13 * other.m30;
-        result.m20 = this.m20 * other.m00 + this.m21 * other.m10 + this.m22 * other.m20 + this.m23 * other.m30;
-        result.m30 = this.m30 * other.m00 + this.m31 * other.m10 + this.m32 * other.m20 + this.m33 * other.m30;
+         result.m00 = this.m00 * other.m00 + this.m01 * other.m10 + this.m02 * other.m20 + this.m03 * other.m30;
+         result.m10 = this.m10 * other.m00 + this.m11 * other.m10 + this.m12 * other.m20 + this.m13 * other.m30;
+         result.m20 = this.m20 * other.m00 + this.m21 * other.m10 + this.m22 * other.m20 + this.m23 * other.m30;
+         result.m30 = this.m30 * other.m00 + this.m31 * other.m10 + this.m32 * other.m20 + this.m33 * other.m30;
 
-        result.m01 = this.m00 * other.m01 + this.m01 * other.m11 + this.m02 * other.m21 + this.m03 * other.m31;
-        result.m11 = this.m10 * other.m01 + this.m11 * other.m11 + this.m12 * other.m21 + this.m13 * other.m31;
-        result.m21 = this.m20 * other.m01 + this.m21 * other.m11 + this.m22 * other.m21 + this.m23 * other.m31;
-        result.m31 = this.m30 * other.m01 + this.m31 * other.m11 + this.m32 * other.m21 + this.m33 * other.m31;
+         result.m01 = this.m00 * other.m01 + this.m01 * other.m11 + this.m02 * other.m21 + this.m03 * other.m31;
+         result.m11 = this.m10 * other.m01 + this.m11 * other.m11 + this.m12 * other.m21 + this.m13 * other.m31;
+         result.m21 = this.m20 * other.m01 + this.m21 * other.m11 + this.m22 * other.m21 + this.m23 * other.m31;
+         result.m31 = this.m30 * other.m01 + this.m31 * other.m11 + this.m32 * other.m21 + this.m33 * other.m31;
 
-        result.m02 = this.m00 * other.m02 + this.m01 * other.m12 + this.m02 * other.m22 + this.m03 * other.m32;
-        result.m12 = this.m10 * other.m02 + this.m11 * other.m12 + this.m12 * other.m22 + this.m13 * other.m32;
-        result.m22 = this.m20 * other.m02 + this.m21 * other.m12 + this.m22 * other.m22 + this.m23 * other.m32;
-        result.m32 = this.m30 * other.m02 + this.m31 * other.m12 + this.m32 * other.m22 + this.m33 * other.m32;
+         result.m02 = this.m00 * other.m02 + this.m01 * other.m12 + this.m02 * other.m22 + this.m03 * other.m32;
+         result.m12 = this.m10 * other.m02 + this.m11 * other.m12 + this.m12 * other.m22 + this.m13 * other.m32;
+         result.m22 = this.m20 * other.m02 + this.m21 * other.m12 + this.m22 * other.m22 + this.m23 * other.m32;
+         result.m32 = this.m30 * other.m02 + this.m31 * other.m12 + this.m32 * other.m22 + this.m33 * other.m32;
 
-        result.m03 = this.m00 * other.m03 + this.m01 * other.m13 + this.m02 * other.m23 + this.m03 * other.m33;
-        result.m13 = this.m10 * other.m03 + this.m11 * other.m13 + this.m12 * other.m23 + this.m13 * other.m33;
-        result.m23 = this.m20 * other.m03 + this.m21 * other.m13 + this.m22 * other.m23 + this.m23 * other.m33;
-        result.m33 = this.m30 * other.m03 + this.m31 * other.m13 + this.m32 * other.m23 + this.m33 * other.m33;
+         result.m03 = this.m00 * other.m03 + this.m01 * other.m13 + this.m02 * other.m23 + this.m03 * other.m33;
+         result.m13 = this.m10 * other.m03 + this.m11 * other.m13 + this.m12 * other.m23 + this.m13 * other.m33;
+         result.m23 = this.m20 * other.m03 + this.m21 * other.m13 + this.m22 * other.m23 + this.m23 * other.m33;
+         result.m33 = this.m30 * other.m03 + this.m31 * other.m13 + this.m32 * other.m23 + this.m33 * other.m33;
 
-        return result;
+         return result;
     }
 
     /**
@@ -271,7 +271,7 @@ public class Mat4f {
     		mat.m21 = -forward.y;
     		mat.m22 = -forward.z;
 
-    		return mat.multiply(Mat4f.translate(-eye.x, -eye.y, -eye.z));
+    		return mat.translate(-eye.x, -eye.y, -eye.z);
     }
 
     /**
@@ -377,7 +377,7 @@ public class Mat4f {
         return perspective;
     }
 
-    /**
+    /** TODO: outdated comment
      * Creates a translation matrix. Similar to
      * <code>glTranslate(x, y, z)</code>.
      *
@@ -386,14 +386,14 @@ public class Mat4f {
      * @param z z coordinate of translation vector
      * @return Translation matrix
      */
-    public static Mat4f translate(float x, float y, float z) {
+    public Mat4f translate(float x, float y, float z) {
         Mat4f translation = new Mat4f();
 
         translation.m03 = x;
         translation.m13 = y;
         translation.m23 = z;
-
-        return translation;
+        
+        return this.multiply(translation);
     }
 
     /**
@@ -406,7 +406,7 @@ public class Mat4f {
      * @param z z coordinate of the rotation vector
      * @return Rotation matrix
      */
-    public static Mat4f rotate(float angle, float x, float y, float z) {
+    public Mat4f rotate(float angle, float x, float y, float z) {
         Mat4f rotation = new Mat4f();
 
         float c = (float) Math.cos(Math.toRadians(angle));
@@ -429,7 +429,7 @@ public class Mat4f {
         rotation.m12 = y * z * (1f - c) - x * s;
         rotation.m22 = z * z * (1f - c) + c;
 
-        return rotation;
+        return this.multiply(rotation);
     }
 
     /**
@@ -440,14 +440,17 @@ public class Mat4f {
      * @param z Scale factor along the z coordinate
      * @return Scaling matrix
      */
-    public static Mat4f scale(float x, float y, float z) {
+    public Mat4f scale(float x, float y, float z) {
         Mat4f scaling = new Mat4f();
 
         scaling.m00 = x;
         scaling.m11 = y;
         scaling.m22 = z;
-
-        return scaling;
+        return this.multiply(scaling);
+    }
+    
+    public Mat4f scale(float scale) {
+    	return this.scale(scale, scale, scale);
     }
     
     private static float determinant3x3(float t00, float t01, float t02, float t10, float t11, float t12, float t20, float t21, float t22) {

@@ -1,0 +1,51 @@
+{
+	"name": "Sol",
+	"type": "star",
+	"gravity": 500,
+	"diameter": "1391400km",
+
+	"children": [
+		{
+			"name": "Mercury",
+			"type": "planet",
+			"gravity": 0.37773,
+			"diameter": "4480km",
+			"oblateness": 0,
+			"rotationPeriod": "58.646h",
+			"rotationOffset": 291.2,
+			"obliquity": 7.01,
+			"eqAscNode": 48.42,
+
+			"orbit": {
+				"period": "87.95d",
+				"semimajorAxis": "0.387098au",
+				"eccentricity": 0.206,
+				"inclination": 7.005,
+				"ascendingNode": 48.332,
+				"argOfPericenter": 29.124,
+				"meanAnomaly": 174.195
+			}
+		},
+		{
+			"name": "Venus",
+			"type": "planet",
+			"gravity": 0.90521,
+			"diameter": "12104km",
+			"oblateness": 0,
+			"rotationPeriod": "243.02h",
+			"rotationOffset": 137.45,
+			"obliquity": 176.78,
+			"eqAscNode": 300.22,
+
+			"orbit": {
+				"period": "224.697d",
+				"semimajorAxis": "0.723332au",
+				"eccentricity": 0.007,
+				"inclination": 3.395,
+				"ascendingNode": 76.681,
+				"argOfPericenter": 54.852,
+				"meanAnomaly": 50.446
+			}
+		}
+	]
+}

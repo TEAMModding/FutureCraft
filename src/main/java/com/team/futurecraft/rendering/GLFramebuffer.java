@@ -32,8 +32,7 @@ public class GLFramebuffer {
 	
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		    
 			glBindTexture(GL_TEXTURE_2D, 0);
 			
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textures[i], 0);
@@ -45,10 +44,23 @@ public class GLFramebuffer {
 			tex[i] = new Texture(textures[i]);
 		}
 		
+		if (true) {
+			int rbo = glGenRenderbuffers();
+			glBindRenderbuffer(GL_RENDERBUFFER, rbo); 
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);  
+			glBindRenderbuffer(GL_RENDERBUFFER, 0);
+			
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+			
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+				System.out.println("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+			}
+		}
+		
 		//int[] attachments = new int[] { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
 		//glDrawBuffers(GLBuffers.StaticBuffer(attachments));
 		
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);  
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 	
 	public void render(Shader shader) {

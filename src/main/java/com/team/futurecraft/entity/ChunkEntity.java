@@ -48,9 +48,9 @@ public class ChunkEntity extends Entity {
 	}
 
 	public OBB getOBB(BlockPos pos) {
-		Mat4f entity = Mat4f.translate((float)this.posX, (float)this.posY - 1.5f, (float)this.posZ);
-		Mat4f blockPos = Mat4f.translate((float)pos.getX() - 8.5f, (float)pos.getY(), (float)pos.getZ() - 8.5f);
-		Mat4f rot = Mat4f.rotate(this.rotationYaw, 0.0f, 1.0f, 0.0f).multiply(Mat4f.rotate(this.rotationPitch, 1.0f, 0.0f, 0.0f));
+		Mat4f entity = new Mat4f().translate((float)this.posX, (float)this.posY - 1.5f, (float)this.posZ);
+		Mat4f blockPos = new Mat4f().translate((float)pos.getX() - 8.5f, (float)pos.getY(), (float)pos.getZ() - 8.5f);
+		Mat4f rot = new Mat4f().rotate(this.rotationYaw, 0.0f, 1.0f, 0.0f).rotate(this.rotationPitch, 1.0f, 0.0f, 0.0f);
 		return new OBB(new Vec3f(0, 0, 0), new Vec3f(1, 1, 1), entity.multiply(rot).multiply(blockPos));
 	}
 	
