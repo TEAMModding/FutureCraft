@@ -10,6 +10,7 @@ import com.team.futurecraft.Vec4f;
 import com.team.futurecraft.rendering.Assets;
 import com.team.futurecraft.rendering.Camera;
 import com.team.futurecraft.rendering.Shader;
+import com.team.futurecraft.rendering.SpaceRenderer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -73,8 +74,7 @@ public abstract class CelestialObject {
         	Assets.orbitShader.bind();
         	Mat4f model = new Mat4f();
         	
-        	float scaling = 1000000000f;
-        	float scaledAxis = this.orbit.semiMajorAxis / 1000000000f;
+        	float scaledAxis = this.orbit.semiMajorAxis / SpaceRenderer.SCALE;
         	
         	//System.out.println("radius is: " + scaledAxis);
         	
@@ -82,7 +82,7 @@ public abstract class CelestialObject {
         	float parentEqAscNode = this.getParent().physical.eqAscNode;
         
         	Vec3f parentPos = this.getParent().getPosition(time);
-        	model = model.translate(parentPos.x / scaling, parentPos.y / scaling, parentPos.z / scaling);
+        	model = model.translate(parentPos.x / SpaceRenderer.SCALE, parentPos.y / SpaceRenderer.SCALE, parentPos.z / SpaceRenderer.SCALE);
         	model = model.rotate(parentEqAscNode, 0F, 1F, 0F);
         	model = model.rotate(parentObliquity, 0F, 0F, 1F);
         	
@@ -97,27 +97,27 @@ public abstract class CelestialObject {
         	model = model.rotate(rotation, 0F, 1F, 0F);
         	
         	Assets.orbitShader.uniformMat4("model", model);
-        	Assets.orbitShader.uniformMat4("view", cam.getViewSkybox().translate(-cam.position.x / scaling, -cam.position.y / scaling, -cam.position.z / scaling));
-        	Assets.orbitShader.uniformMat4("projection", cam.getProjection(0.1f, 1000f));
+        	Assets.orbitShader.uniformMat4("view", cam.getViewSkybox().translate(-cam.position.x / SpaceRenderer.SCALE, -cam.position.y / SpaceRenderer.SCALE, -cam.position.z / SpaceRenderer.SCALE));
+        	Assets.orbitShader.uniformMat4("projection", cam.getProjection(1f, 1000000000000000f));
         	
         	glLineWidth(1);
         	
         	glBegin(GL_LINES);
-        	Vec3f color = new Vec3f(0, 150, 0);
+        	Vec3f color = new Vec3f(0, 0.3, 0);
         	
-        	if (this.parent.getType() == EnumCelestialType.PLANET || this.parent.getType() == EnumCelestialType.BARYCENTER) {
-        		color = new Vec3f(150, 75, 0);
-        	}
+        	//if (this.parent.getType() == EnumCelestialType.PLANET || this.parent.getType() == EnumCelestialType.BARYCENTER) {
+        		//color = new Vec3f(150, 75, 0);
+        	//}
         	
         	for (int k = 0; k < 360; k++) {
         		//glColor4f((int)color.x, (int)color.y, (int)color.z, (int)(((330 - k) / 200.0f) * 255));
         		float opacity = ((330 - k) / 200.0f);
-        		glColor4f(1.0f, 0.0f, 0.0f, opacity);
+        		glColor4f(color.x, color.y, color.z, opacity);
         		double radians = Math.toRadians(k);
         		glVertex3f((float)(Math.cos(radians) * scaledAxis), 0, (float)Math.sin(radians) * scaledAxis);
         		
         		float opacity2 = ((330 - (k + 1)) / 200.0f);
-        		glColor4f(1.0f, 0.0f, 0.0f, opacity2);
+        		glColor4f(color.x, color.y, color.z, opacity2);
         		double radians2 = Math.toRadians(k + 1);
         		glVertex3f((float)(Math.cos(radians2) * scaledAxis), 0, (float)Math.sin(radians2) * scaledAxis);
         	}

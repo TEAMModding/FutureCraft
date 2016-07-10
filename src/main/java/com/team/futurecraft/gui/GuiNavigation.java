@@ -20,6 +20,7 @@ import com.team.futurecraft.rendering.ShaderOld;
 import com.team.futurecraft.rendering.SpaceRenderer;
 import com.team.futurecraft.space.CelestialObject;
 import com.team.futurecraft.space.Planet;
+import com.team.futurecraft.space.SpaceJSONLoader;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -39,7 +40,7 @@ public class GuiNavigation extends GuiScreen {
 	private float xRot = 0;
 	private float yRot = 30;
 	private float zRot = 0;
-	private static float movementSpeed = 10000000f;
+	private static float movementSpeed = 1000f;
 	private ArrayList<CelestialObject> planets = new ArrayList<CelestialObject>();
 	private int selectedPlanet = 0;
 	private Camera cam = new Camera();
@@ -58,7 +59,7 @@ public class GuiNavigation extends GuiScreen {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui() {
-		CelestialObject[] objects = FutureCraft.SOL.getChildren();
+		CelestialObject[] objects = SpaceJSONLoader.starSystem.getChildren();
 		int buttonCount = 0;
 		for (int i = 0; i < objects.length; i++) {
 			this.buttonList.add(new GuiPlanetButton(buttonCount, 0, buttonCount * 50, objects[i]));
@@ -87,7 +88,7 @@ public class GuiNavigation extends GuiScreen {
 		
 		cam.front = cam.front.normalize();
 		//1391400000
-		float cameraSpeed = 100000000f;
+		float cameraSpeed = 100000f;
 	    if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
 	    	cam.position = cam.position.add((cam.front.multiply(cameraSpeed)));
 	    }
@@ -119,7 +120,7 @@ public class GuiNavigation extends GuiScreen {
 	    }
 	    
 	    if (Keyboard.isKeyDown(Keyboard.KEY_F8)) {
-	    	Assets.loadAssets();
+	    	Assets.loadShaders();
 	    }
 	    
 	    if (Mouse.isButtonDown(1)) {

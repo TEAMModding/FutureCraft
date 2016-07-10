@@ -25,13 +25,7 @@ public class Assets {
 				new Texture("textures/environment/sky_neg_z.png")
 		};
 		
-		defaultShader = new Shader("default");
-		skyboxShader = new Shader("skybox");
-		framebufferShader = new Shader("framebuffer");
-		starSurfaceShader = new Shader("star_surface");
-		planetSurfaceShader = new Shader("planet_surface");
-		orbitShader = new Shader("orbit");
-		gridShader = new Shader("grid");
+		loadShaders();
 		
 		framebufferMesh = new Mesh(
 			new float[] {
@@ -52,5 +46,15 @@ public class Assets {
 			}, null);
 		
 		System.out.println("Load finished");
+	}
+	
+	public static void loadShaders() {
+		defaultShader = new Shader("default");
+		skyboxShader = new Shader("skybox");
+		framebufferShader = new Shader("framebuffer");
+		starSurfaceShader = new Shader("star_surface");
+		planetSurfaceShader = new Shader("planet_surface");
+		orbitShader = new Shader("orbit");
+		gridShader = new Shader("grid");
 	}
 }

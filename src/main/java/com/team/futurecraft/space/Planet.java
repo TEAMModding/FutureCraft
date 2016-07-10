@@ -312,19 +312,18 @@ public class Planet extends CelestialObject {
         	model = model.rotate(-90, 0F, 0F, 1F);
         	model = model.rotate(-((time - this.orbit.epoch) / this.physical.rotationPeriod * 360) - this.physical.rotationOffset, 0F, 0F, 1F);
         	
-        	float scaling = 1000000000f;
-        	
         	//System.out.println(this.physical.rotationOffset);
 	        Assets.planetSurfaceShader.bind();
 	        Assets.planetSurfaceShader.uniformMat4("model", model);
-	        Assets.planetSurfaceShader.uniformMat4("view", cam.getViewSkybox().translate((-cam.position.x + PlanetPos.x) / scaling, (-cam.position.y + PlanetPos.y) / scaling, (-cam.position.z + PlanetPos.z) / scaling));
-	        Assets.planetSurfaceShader.uniformMat4("projection", cam.getProjection(0.0001f, 100));
+	        Assets.planetSurfaceShader.uniformMat4("view", cam.getViewSkybox().translate((-cam.position.x + PlanetPos.x) / SpaceRenderer.SCALE, (-cam.position.y + PlanetPos.y) / SpaceRenderer.SCALE, (-cam.position.z + PlanetPos.z) / SpaceRenderer.SCALE));
+	        Assets.planetSurfaceShader.uniformMat4("projection", cam.getProjection(100f, 100000000f));
+	        Assets.planetSurfaceShader.uniformVec3f("lightDirection", PlanetPos.normalize().negate());
 	        surfaceTexture.bind();
 	        
 	        Sphere sphere = new Sphere();
-	        sphere.setTextureFlag(true);		  //             |
-	        sphere.setNormals(GLU.GLU_SMOOTH);	  //scale factor V
-	        sphere.draw((this.physical.diameter / 2 / 1000000000f) * 1, 10 * 6, 10 * 6);
+	        sphere.setTextureFlag(true);
+	        sphere.setNormals(GLU.GLU_SMOOTH);
+	        sphere.draw((this.physical.diameter / 2 / SpaceRenderer.SCALE) * 1, 10 * 6, 10 * 6);
 	        
 	        Shader.unbind();
         }

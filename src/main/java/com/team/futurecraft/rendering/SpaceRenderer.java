@@ -15,6 +15,8 @@ public class SpaceRenderer {
 	private Mesh mesh;
 	private GLFramebuffer buffer;
 	
+	public static final float SCALE = 1000f;
+	
 	private static float[] vertices = new float[] {
 			// Positions
 			-1.0f,  1.0f, -1.0f,
@@ -81,7 +83,6 @@ public class SpaceRenderer {
 		//glDepthMask(true);
 		
 		Assets.defaultShader.bind();
-		float scaling = 1000000000f;
 		
 		renderGrid(cam);
 		
@@ -106,13 +107,12 @@ public class SpaceRenderer {
 	}
 	
 	private void renderGrid(Camera cam) {
-		float scaling = 1000000000f;
 		
 		Assets.gridShader.bind();
 		
-		Assets.gridShader.uniformMat4("view", cam.getViewSkybox().translate(-cam.position.x / scaling, -cam.position.y / scaling, -cam.position.z / scaling));
-		Assets.gridShader.uniformMat4("projection", cam.getProjection(0.01f, 10000));
-		Assets.gridShader.uniformMat4("model", new Mat4f().translate((int)(cam.position.x / scaling), 0, (int)(cam.position.z / scaling)));
+		Assets.gridShader.uniformMat4("view", cam.getViewSkybox().translate(-cam.position.x / SCALE + (int)(cam.position.x / SCALE), -cam.position.y / SCALE, -cam.position.z / SCALE + (int)(cam.position.z / SCALE)));
+		Assets.gridShader.uniformMat4("projection", cam.getProjection(0.1f, 100));
+		Assets.gridShader.uniformMat4("model", new Mat4f().translate(0, 0, 0));
 		
 		int size = 20;
 		
