@@ -43,6 +43,16 @@ public class Vec3bd {
         this.y = y;
         this.z = z;
     }
+    
+    public Vec3bd(Vec3f vec) {
+    	this.x = new BigDecimal(vec.x);
+        this.y = new BigDecimal(vec.y);
+        this.z = new BigDecimal(vec.z);
+    }
+    
+    public Vec3f toVec3f() {
+    	return new Vec3f(x.floatValue(), y.floatValue(), z.floatValue());
+    }
 
     /**
      * Calculates the squared length of the vector.
@@ -84,6 +94,13 @@ public class Vec3bd {
         BigDecimal z = this.z.add(other.z);
         return new Vec3bd(x, y, z);
     }
+    
+    public Vec3bd add(Vec3f other) {
+        BigDecimal x = this.x.add(new BigDecimal(other.x));
+        BigDecimal y = this.y.add(new BigDecimal(other.y));
+        BigDecimal z = this.z.add(new BigDecimal(other.z));
+        return new Vec3bd(x, y, z);
+    }
 
     /**
      * Negates this vector.
@@ -101,6 +118,10 @@ public class Vec3bd {
      * @return Difference of this - other
      */
     public Vec3bd subtract(Vec3bd other) {
+        return this.add(other.negate());
+    }
+    
+    public Vec3bd subtract(Vec3f other) {
         return this.add(other.negate());
     }
 
