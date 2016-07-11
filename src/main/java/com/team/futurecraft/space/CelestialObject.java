@@ -111,12 +111,12 @@ public abstract class CelestialObject {
         	
         	for (int k = 0; k < 360; k++) {
         		//glColor4f((int)color.x, (int)color.y, (int)color.z, (int)(((330 - k) / 200.0f) * 255));
-        		float opacity = ((330 - k) / 200.0f);
+        		float opacity = ((440 - k) / 200.0f);
         		glColor4f(color.x, color.y, color.z, opacity);
         		double radians = Math.toRadians(k);
         		glVertex3f((float)(Math.cos(radians) * scaledAxis), 0, (float)Math.sin(radians) * scaledAxis);
         		
-        		float opacity2 = ((330 - (k + 1)) / 200.0f);
+        		float opacity2 = ((440 - (k + 1)) / 200.0f);
         		glColor4f(color.x, color.y, color.z, opacity2);
         		double radians2 = Math.toRadians(k + 1);
         		glVertex3f((float)(Math.cos(radians2) * scaledAxis), 0, (float)Math.sin(radians2) * scaledAxis);

@@ -54,7 +54,7 @@ public class Star extends CelestialObject {
         //of the coordinate space and we won't get accuracy problems. We also scale down space so that 1 unit = 1,000,000,000 meters.
         Assets.starSurfaceShader.uniformMat4("model", new Mat4f().translate(-cam.position.x / SpaceRenderer.SCALE, -cam.position.y / SpaceRenderer.SCALE, -cam.position.z / SpaceRenderer.SCALE));
         Assets.starSurfaceShader.uniformMat4("view", cam.getViewSkybox());
-        Assets.starSurfaceShader.uniformMat4("projection", cam.getProjection(100f, 100000000f));
+        Assets.starSurfaceShader.uniformMat4("projection", cam.getProjection(1000f, 100000000000f));
         
         Sphere sphere = new Sphere();
         sphere.setTextureFlag(false);

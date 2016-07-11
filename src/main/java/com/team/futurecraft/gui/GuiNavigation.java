@@ -88,18 +88,17 @@ public class GuiNavigation extends GuiScreen {
 		
 		cam.front = cam.front.normalize();
 		//1391400000
-		float cameraSpeed = 100000f;
 	    if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
-	    	cam.position = cam.position.add((cam.front.multiply(cameraSpeed)));
+	    	cam.position = cam.position.add((cam.front.multiply(movementSpeed)));
 	    }
 	    if(Keyboard.isKeyDown(Keyboard.KEY_S)) {
-	    	cam.position = cam.position.subtract((cam.front.multiply(cameraSpeed)));
+	    	cam.position = cam.position.subtract((cam.front.multiply(movementSpeed)));
 	    }
 	    if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
-	    	cam.position = cam.position.subtract(((cam.front.cross(cam.up)).normalize()).multiply(cameraSpeed));
+	    	cam.position = cam.position.subtract(((cam.front.cross(cam.up)).normalize()).multiply(movementSpeed));
 	    }
 	    if(Keyboard.isKeyDown(Keyboard.KEY_D)) {
-	    	cam.position = cam.position.add(((cam.front.cross(cam.up)).normalize()).multiply(cameraSpeed));
+	    	cam.position = cam.position.add(((cam.front.cross(cam.up)).normalize()).multiply(movementSpeed));
 	    }
 	    if(Keyboard.isKeyDown(Keyboard.KEY_Q)) {
 	    	//roll += 0.5f;
@@ -108,10 +107,10 @@ public class GuiNavigation extends GuiScreen {
 	    	///roll -= 0.5f;
 	    }
 	    if(Keyboard.isKeyDown(Keyboard.KEY_R)) {
-	    	cam.position = cam.position.add(new Vec3f(0, cameraSpeed, 0));
+	    	cam.position = cam.position.add(new Vec3f(0, movementSpeed, 0));
 	    }
 	    if(Keyboard.isKeyDown(Keyboard.KEY_F)) {
-	    	cam.position = cam.position.add(new Vec3f(0, -cameraSpeed, 0));
+	    	cam.position = cam.position.add(new Vec3f(0, -movementSpeed, 0));
 	    }
 	    
 	    if (Keyboard.isKeyDown(Keyboard.KEY_T)) {
@@ -142,6 +141,15 @@ public class GuiNavigation extends GuiScreen {
 		
 		cam.front = cam.front.normalize();
 		//Mouse.setCursorPosition(10, 10);
+		
+		int mouseMove = Mouse.getDWheel();
+		
+		System.out.println(mouseMove);
+		
+		if (mouseMove != 0) {
+			
+		}
+		
     }
 	
 	/**

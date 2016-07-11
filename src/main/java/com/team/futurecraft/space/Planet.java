@@ -312,7 +312,6 @@ public class Planet extends CelestialObject {
         	model = model.rotate(-90, 0F, 0F, 1F);
         	model = model.rotate(-((time - this.orbit.epoch) / this.physical.rotationPeriod * 360) - this.physical.rotationOffset, 0F, 0F, 1F);
         	
-        	//System.out.println(this.physical.rotationOffset);
 	        Assets.planetSurfaceShader.bind();
 	        Assets.planetSurfaceShader.uniformMat4("model", model);
 	        Assets.planetSurfaceShader.uniformMat4("view", cam.getViewSkybox().translate((-cam.position.x + PlanetPos.x) / SpaceRenderer.SCALE, (-cam.position.y + PlanetPos.y) / SpaceRenderer.SCALE, (-cam.position.z + PlanetPos.z) / SpaceRenderer.SCALE));

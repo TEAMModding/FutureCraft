@@ -84,7 +84,7 @@ public class SpaceRenderer {
 		
 		Assets.defaultShader.bind();
 		
-		renderGrid(cam);
+		//renderGrid(cam);
 		
 		Shader.unbind();
 		
@@ -111,8 +111,9 @@ public class SpaceRenderer {
 		Assets.gridShader.bind();
 		
 		Assets.gridShader.uniformMat4("view", cam.getViewSkybox().translate(-cam.position.x / SCALE + (int)(cam.position.x / SCALE), -cam.position.y / SCALE, -cam.position.z / SCALE + (int)(cam.position.z / SCALE)));
-		Assets.gridShader.uniformMat4("projection", cam.getProjection(0.1f, 100));
-		Assets.gridShader.uniformMat4("model", new Mat4f().translate(0, 0, 0));
+		Assets.gridShader.uniformMat4("projection", cam.getProjection(1f, 100000));
+		Assets.gridShader.uniformMat4("model", new Mat4f().translate(0, 0, 0).scale(1000));
+		Assets.gridShader.uniformFloat("scale", 1000);
 		
 		int size = 20;
 		
